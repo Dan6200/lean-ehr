@@ -24,12 +24,6 @@ export interface Resident {
   resident_id: string;
   residence_id: string;
   resident_name: Nullable<string>;
-}
-
-export interface ResidentData {
-  resident_id: string;
-  residence_id: string;
-  resident_name: Nullable<string>;
   document_id?: Nullable<string>;
   emergencyContacts: Nullable<
     {
@@ -42,7 +36,7 @@ export interface ResidentData {
   >;
 }
 
-export const isTypeResidentData = (data: unknown): data is ResidentData => {
+export const isTypeResidentData = (data: unknown): data is Resident => {
   return (
     !!data &&
     typeof data === "object" &&
@@ -66,7 +60,7 @@ export const isTypeResidentData = (data: unknown): data is ResidentData => {
           (typeof (contact as any).home_phone === "string" ||
             (contact as any).home_phone === null) &&
           (typeof (contact as any).relationship === "string" ||
-            (contact as any).relationship === null)
+            (contact as any).relationship === null),
       )) ||
       (data as any).emergencyContacts === null)
   );
@@ -100,7 +94,7 @@ export interface EmergencyContact {
 //}
 
 export const isTypeEmergencyContact = (
-  data: unknown
+  data: unknown,
 ): data is EmergencyContact =>
   !!data &&
   typeof data === "object" &&
@@ -127,7 +121,7 @@ export interface RoomData {
           document_id: string;
           resident_id: string;
           resident_name: Nullable<string>;
-        }
+        },
       ]
     | null;
 }
@@ -155,7 +149,7 @@ export const isTypeRoomData = (data: unknown): data is RoomData =>
           typeof resident.resident_id === "string" &&
           "resident_name" in resident &&
           (typeof resident.resident_name === "string" ||
-            resident.resident_name === null)
+            resident.resident_name === null),
       )));
 
 // Converters...
