@@ -1,8 +1,8 @@
 "use client";
-import { getResidentData } from "@/app/admin/residents/data-actions";
+import { getResidentData } from "@/app/admin/residents/actions/get";
 import { GoBackLink } from "@/components/go-back-link";
 import { ResidentForm } from "@/components/residents/form";
-import { isTypeResidentData, ResidentData } from "@/types/resident";
+import { isTypeResident, Resident } from "@/types/resident";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -12,11 +12,11 @@ export default async function EditResidentPage({
   params: { id: string; resId: string };
 }) {
   const room = useSearchParams().get("room");
-  const [residentData, setResidentData] = useState<ResidentData | null>(null);
+  const [residentData, setResidentData] = useState<Resident | null>(null);
   useEffect(() => {
     (async () => setResidentData(await getResidentData(resId)))();
   });
-  if (!residentData && !isTypeResidentData(residentData))
+  if (!residentData && !isTypeResident(residentData))
     throw new Error("Invalid Data from Server");
   return (
     <main className="flex flex-col gap-5 bg-background container w-full md:w-2/3 mx-auto py-32">

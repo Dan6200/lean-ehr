@@ -5,7 +5,7 @@ import {
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
-} from "firebase/firestore";
+} from "firebase-admin/firestore";
 
 export interface Residence {
   residence_id: string;
@@ -164,11 +164,18 @@ export const emergencyContactConverter: FirestoreDataConverter<EmergencyContact>
   };
 
 export const residentConverter: FirestoreDataConverter<Resident> = {
-  toFirestore(contact: Resident): DocumentData {
-    return { ...contact }; // Map Resident fields to Firestore
+  toFirestore(resident: Resident): DocumentData {
+    return { ...resident };
   },
-  fromFirestore(snapshot: QueryDocumentSnapshot): Resident {
-    return snapshot.data() as Resident; // Map Firestore data to EmergencyContact
+  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): Resident {
+    const data = snapshot.data();
+    return {
+      resident_id: data.resident_id,
+      residence_id: data.residence_id,
+      resident_name: data.resident_name,
+      document_id: snapshot.id,
+      emergencyContacts: data.emergencyContacts || null,
+    };
   },
 };
 

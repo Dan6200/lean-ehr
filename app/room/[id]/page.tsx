@@ -1,11 +1,9 @@
 import { notFound, redirect } from "next/navigation";
-import {
-  addNewResident,
-  getRoomData,
-} from "@/app/admin/residents/data-actions";
 import Room from "@/components/room";
 import { isTypeRoomData } from "@/types/resident";
 import util from "node:util";
+import { addNewResident } from "@/app/admin/residents/actions/add";
+import { getRoomData } from "@/app/admin/residents/actions/get";
 
 export default async function RoomPage({
   params: { id },

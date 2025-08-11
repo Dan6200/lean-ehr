@@ -21,11 +21,11 @@ import type {
   EmergencyContact,
   Nullable,
   Resident,
-  ResidentData,
 } from "@/types/resident";
 import { Minus, Plus } from "lucide-react";
 import { isError } from "@/app/utils";
-import { mutateResidentData } from "@/app/admin/residents/data-actions";
+import { addNewResident } from "@/app/admin/residents/actions/add";
+import { updateResident } from "@/app/admin/residents/actions/update";
 
 const emergencyContactSchema = z.object({
   contact_name: z
@@ -45,15 +45,6 @@ const ResidentFormSchema = z.object({
   resident_name: z.string().nullable(),
   emergencyContacts: z.array(emergencyContactSchema).nullable().optional(),
 });
-
-export type MutateResidents =
-  | ((
-      resident: Resident,
-      residentId?: string
-    ) => Promise<{ result?: string; success: boolean; message: string }>)
-  | ((
-      resident: Resident
-    ) => Promise<{ result: string; success: boolean; message: string }>);
 
 interface ResidentFormProps {
   resident_name?: Nullable<string>;
@@ -106,37 +97,28 @@ export function ResidentForm({
   });
 
   async function onSubmit(data: z.infer<typeof ResidentFormSchema>) {
-    let residentData: ResidentData = {} as any;
-    residentData.resident_name = null;
-    if (!emergencyContacts) residentData.emergencyContacts = null;
-    else
-      residentData.emergencyContacts = { ...emergencyContacts } as Omit<
-        EmergencyContact,
-        "resident_id" | "residence_id"
-      >[];
+    let residentData: Resident = {} as Resident;
+    residentData.resident_name = data.resident_name ?? null;
+    residentData.residence_id = residence_id;
+    residentData.resident_id = resident_id ?? "";
+
+    if (data.emergencyContacts) {
+      residentData.emergencyContacts = data.emergencyContacts.map((contact) => ({
+        work_phone: contact.work_phone ?? null,
+        home_phone: contact.home_phone ?? null,
+        contact_name: contact.contact_name ?? null,
+        relationship: contact.relationship ?? null,
+        cell_phone: contact.cell_phone,
+      }));
+    } else {
+      residentData.emergencyContacts = null;
+    }
+
     try {
       if (document_id && resident_id) {
         // Edit Resident Information
-        if (data.emergencyContacts) {
-          // Initialize all values to null
-          const _emergencyContacts = data.emergencyContacts.map((contact) => ({
-            work_phone: contact.work_phone ?? null,
-            home_phone: contact.home_phone ?? null,
-            contact_name: contact.contact_name ?? null,
-            relationship: contact.relationship ?? null,
-            cell_phone: contact.cell_phone,
-            residence_id,
-          }));
-
-          residentData = {
-            ...data,
-            residence_id,
-            resident_id,
-            emergencyContacts: [...(_emergencyContacts as any)],
-          };
-        }
-        const { message, success } = await mutateResidentData(
-          { ...residentData },
+        const { message, success } = await updateResident(
+          residentData,
           document_id
         );
         toast({
@@ -146,24 +128,9 @@ export function ResidentForm({
         router.back();
       } else {
         // Add new residents
-        residentData = { ...residentData, ...data } as any;
-        if (data.emergencyContacts) {
-          // Initialize all values to null
-          const _emergencyContacts = data.emergencyContacts.map((contact) => ({
-            work_phone: contact.work_phone ?? null,
-            home_phone: contact.home_phone ?? null,
-            contact_name: contact.contact_name ?? null,
-            relationship: contact.relationship ?? null,
-            cell_phone: contact.cell_phone,
-            residence_id,
-          }));
-
-          residentData.emergencyContacts = [...(_emergencyContacts as any)];
-        }
-        const { message, success } = await mutateResidentData({
-          ...residentData,
-          residence_id,
-        });
+        const { message, success } = await addNewResident(
+          residentData
+        );
         if (!success) {
           toast({
             title: success ? "Unable to Add New Resident" : message,

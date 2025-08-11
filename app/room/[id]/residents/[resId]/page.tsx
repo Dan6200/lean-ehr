@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { getResidentData } from "@/app/admin/residents/data-actions";
+import { getResidentData } from "@/app/admin/residents/actions/get";
 import { isTypeResidentData } from "@/types/resident";
 import util from "node:util";
 import Resident from "@/components/resident";

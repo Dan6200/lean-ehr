@@ -1,4 +1,4 @@
-import { getAllRooms } from "./admin/residents/data-actions";
+import { getAllRooms } from "./admin/residents/actions/get";
 import { redirect } from "next/navigation";
 import RoomList from "@/components/room-list";
 

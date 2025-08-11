@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import Image from "next/image";
-import { deleteResidentData } from "@/app/admin/residents/data-actions";
+import { deleteResidentData } from "@/app/admin/residents/actions/delete";
 import DeleteResident from "@/app/room/[id]/residents/delete";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, User } from "firebase/auth";

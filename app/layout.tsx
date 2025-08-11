@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
 import "@/firebase/auth/state";
-import { Inter } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import Header from "@/components/header/index";
 import Providers from "./providers";
-import { getAllRooms } from "./admin/residents/data-actions";
+import { getAllRooms } from "./admin/residents/actions/get";
 
-const inter = Inter({ subsets: ["latin"], display: "swap" });
+let inter;
+if (process.env.NODE_ENV !== 'production') {
+  const { Inter } = require("next/font/google");
+  inter = Inter({ subsets: ["latin"], display: "swap" });
+}
 
 export const metadata: Metadata = {
   title: "LinkID",
