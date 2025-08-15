@@ -6,14 +6,14 @@ import { notFound } from "next/navigation";
 
 export async function updateResident(
   newResidentData: Resident,
-  documentId: string
+  documentId: string,
 ) {
   try {
     await db.runTransaction(async (transaction) => {
       const residentRef = collectionWrapper("residents").doc(documentId);
       const resSnap = await transaction.get(residentRef);
       if (!resSnap.exists) throw notFound();
-      transaction.update(residentRef, newResidentData);
+      transaction.update(residentRef, { ...newResidentData });
     });
     return {
       success: true,

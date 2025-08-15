@@ -7,8 +7,8 @@ import Header from "@/components/header/index";
 import Providers from "./providers";
 import { getAllRooms } from "./admin/residents/actions/get";
 
-let inter;
-if (process.env.NODE_ENV !== 'production') {
+let inter: any;
+if (process.env.NODE_ENV !== "production") {
   const { Inter } = require("next/font/google");
   inter = Inter({ subsets: ["latin"], display: "swap" });
 }

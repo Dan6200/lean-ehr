@@ -1,7 +1,6 @@
 "use server";
 import { collectionWrapper } from "@/firebase/firestore";
 import {
-  isTypeEmergencyContact,
   isTypeResidence,
   isTypeResident,
   Resident,
@@ -35,8 +34,7 @@ export async function getResidents() {
         throw new Error("Object is not of type Resident  -- Tag:19");
       return resident;
     });
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error("Failed to fetch All Residents Data.\n\t\t" + error);
   }
 }
@@ -52,8 +50,7 @@ export async function getAllRooms() {
         throw new Error("Object is not of type Residence  -- Tag:19");
       return { document_id: doc.id, ...residence };
     });
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error("Failed to fetch All Room Data.\n\t\t" + error);
   }
 }
@@ -67,7 +64,7 @@ export async function getRoomData(residenceId: string) {
   try {
     const addressCollection = collectionWrapper("residence");
     const addressSnap = await addressCollection.doc(residenceId).get();
-    const residents_map: { [key: string]: Resident } = {};
+    const residents_map: { [key: string]: Omit<Resident, "residence_id"> } = {};
     const room_map: { [key: string]: RoomData } = {};
     if (!addressSnap.exists) throw notFound();
     const address = {
@@ -87,7 +84,7 @@ export async function getRoomData(residenceId: string) {
     const resQ = residentsCollection.where(
       "residence_id",
       "==",
-      address.residence_id
+      address.residence_id,
     );
     const residentsData = await resQ.get();
     for (const doc of residentsData.docs) {
@@ -112,7 +109,7 @@ export async function getRoomData(residenceId: string) {
         residents: [
           ...(room_map[resident.residence_id].residents ?? []),
           residents_map[resident.resident_id],
-        ],
+        ] as any,
       };
     }
 
@@ -120,8 +117,7 @@ export async function getRoomData(residenceId: string) {
       throw new Error("Duplicate Room Data! -- Tag:28");
     const roomData = Object.values(room_map)[0];
     return roomData;
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error("Failed to fetch All Residents Data:\n\t\t" + error);
   }
 }

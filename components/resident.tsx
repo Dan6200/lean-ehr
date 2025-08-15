@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import type { Resident, ResidentData } from "@/types/resident";
+import type { Resident } from "@/types/resident";
 import { PhoneCall } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export default function Resident({
   residentData,
 }: {
   resId: string;
-  residentData: ResidentData;
+  residentData: Resident;
 }) {
   const [admin, setAdmin] = useState<User | null>(null),
     router = useRouter();
