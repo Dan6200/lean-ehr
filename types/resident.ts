@@ -36,7 +36,7 @@ export interface Resident {
   >;
 }
 
-export const isTypeResidentData = (data: unknown): data is Resident => {
+export const isTypeResident = (data: unknown): data is Resident => {
   return (
     !!data &&
     typeof data === "object" &&
@@ -65,13 +65,6 @@ export const isTypeResidentData = (data: unknown): data is Resident => {
       (data as any).emergencyContacts === null)
   );
 };
-
-export const isTypeResident = (data: unknown): data is Resident =>
-  !!data &&
-  typeof data === "object" &&
-  "resident_id" in data &&
-  "resident_name" in data &&
-  "residence_id" in data;
 
 export interface EmergencyContact {
   residence_id: string;

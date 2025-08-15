@@ -6,12 +6,9 @@ import "./globals.css";
 import Header from "@/components/header/index";
 import Providers from "./providers";
 import { getAllRooms } from "./admin/residents/actions/get";
+import { Inter } from "next/font/google";
 
-let inter: any;
-if (process.env.NODE_ENV !== "production") {
-  const { Inter } = require("next/font/google");
-  inter = Inter({ subsets: ["latin"], display: "swap" });
-}
+const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "LinkID",

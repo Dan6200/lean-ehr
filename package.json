@@ -5,7 +5,7 @@
   "type": "module",
   "module": "nodenext",
   "scripts": {
-    "dev": "next dev",
+    "dev": "FIRESTORE_EMULATOR_HOST=\"localhost:1027\" next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

@@ -1,5 +1,6 @@
 import { getAuth } from "firebase/auth";
 import { getApp, getApps, initializeApp } from "firebase/app";
+import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
 
 const appName = "linkID-client";
 export const firebaseConfig = {
@@ -13,4 +14,12 @@ export const firebaseConfig = {
 
 if (!getApps().find((app) => app?.name === appName))
   initializeApp(firebaseConfig, appName);
+
 export const auth = getAuth(getApp(appName));
+export const db = getFirestore(getApp(appName));
+
+// Connect to Firestore Emulator in development
+if (process.env.NODE_ENV === 'development') {
+  connectFirestoreEmulator(db, 'localhost', 1027);
+  console.log('Client: Connected to Firestore emulator!');
+}
