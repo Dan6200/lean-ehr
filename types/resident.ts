@@ -1,182 +1,92 @@
 //import { FieldValue } from "firebase/firestore";
 export type Nullable<T> = T | null | undefined;
 
+import { z } from 'zod';
+
+export const EmergencyContactSchema = z.object({
+  residence_id: z.string(),
+  resident_id: z.string(),
+  contact_name: z.string().nullable().optional(),
+  cell_phone: z.string(),
+  work_phone: z.string().nullable().optional(),
+  home_phone: z.string().nullable().optional(),
+  relationship: z.string().nullable().optional(),
+});
+
+export type EmergencyContact = z.infer<typeof EmergencyContactSchema>;
+
 import {
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from "firebase-admin/firestore";
 
-export interface Residence {
-  residence_id: string;
-  roomNo: string;
-  address: string;
-}
+// --- Residence Schema and Type ---
+export const ResidenceSchema = z.object({
+  residence_id: z.string(),
+  roomNo: z.string(),
+  address: z.string(),
+});
+export type Residence = z.infer<typeof ResidenceSchema>;
 
-export const isTypeResidence = (data: unknown): data is Residence =>
-  !!data &&
-  typeof data === "object" &&
-  "residence_id" in data &&
-  "roomNo" in data &&
-  "address" in data;
+// --- Resident Schema and Type ---
+export const ResidentSchema = z.object({
+  resident_id: z.string(),
+  residence_id: z.string(),
+  resident_name: z.string().nullable().optional(),
+  document_id: z.string().nullable().optional(),
+  emergencyContacts: z.array(EmergencyContactSchema).nullable().optional(),
+});
+export type Resident = z.infer<typeof ResidentSchema>;
 
-export interface Resident {
-  resident_id: string;
-  residence_id: string;
-  resident_name: Nullable<string>;
-  document_id?: Nullable<string>;
-  emergencyContacts: Nullable<
-    {
-      contact_name: Nullable<string>;
-      cell_phone: string;
-      work_phone: Nullable<string>;
-      home_phone: Nullable<string>;
-      relationship: Nullable<string>;
-    }[]
-  >;
-}
+// --- RoomData Schema and Type ---
+export const RoomResidentSchema = z.object({
+  document_id: z.string(),
+  resident_id: z.string(),
+  resident_name: z.string().nullable().optional(),
+});
+export const RoomDataSchema = z.object({
+  document_id: z.string(),
+  residence_id: z.string(),
+  roomNo: z.string(),
+  address: z.string(),
+  residents: z.array(RoomResidentSchema).nullable().optional(),
+});
+export type RoomData = z.infer<typeof RoomDataSchema>;
 
-export const isTypeResident = (data: unknown): data is Resident => {
-  return (
-    !!data &&
-    typeof data === "object" &&
-    "resident_id" in data &&
-    typeof data.resident_id === "string" &&
-    "residence_id" in data &&
-    typeof data.residence_id === "string" &&
-    "document_id" in data &&
-    typeof data.document_id === "string" &&
-    (("resident_name" in data && typeof data.resident_name === "string") ||
-      (data as any).resident_name === null) &&
-    "emergencyContacts" in data &&
-    ((Array.isArray(data.emergencyContacts) &&
-      data.emergencyContacts.every(
-        (contact: unknown) =>
-          typeof (contact as any).cell_phone === "string" &&
-          (typeof (contact as any).contact_name === "string" ||
-            (contact as any).contact_name === null) &&
-          (typeof (contact as any).work_phone === "string" ||
-            (contact as any).work_phone === null) &&
-          (typeof (contact as any).home_phone === "string" ||
-            (contact as any).home_phone === null) &&
-          (typeof (contact as any).relationship === "string" ||
-            (contact as any).relationship === null),
-      )) ||
-      (data as any).emergencyContacts === null)
-  );
-};
-
-export interface EmergencyContact {
-  residence_id: string;
-  resident_id: string;
-  contact_name: Nullable<string>;
-  cell_phone: string;
-  work_phone: Nullable<string>;
-  home_phone: Nullable<string>;
-  relationship: Nullable<string>;
-}
-
-//export interface EmergencyContact {
-//  residence_id: string | FieldValue;
-//  resident_id: string | FieldValue;
-//  contact_name?: string | FieldValue;
-//  cell_phone: string | FieldValue;
-//  work_phone?: string | FieldValue;
-//  home_phone?: string | FieldValue;
-//  relationship?: string | FieldValue;
-//}
-
-export const isTypeEmergencyContact = (
-  data: unknown,
-): data is EmergencyContact =>
-  !!data &&
-  typeof data === "object" &&
-  typeof (data as any).residence_id === "string" &&
-  typeof (data as any).resident_id === "string" &&
-  typeof (data as any).cell_phone === "string" &&
-  (typeof (data as any).contact_name === "string" ||
-    (data as any).contact_name === null) &&
-  (typeof (data as any).work_phone === "string" ||
-    (data as any).work_phone === null) &&
-  (typeof (data as any).home_phone === "string" ||
-    (data as any).home_phone === null) &&
-  (typeof (data as any).relationship === "string" ||
-    (data as any).relationship === null);
-
-export interface RoomData {
-  document_id: string;
-  residence_id: string;
-  roomNo: string;
-  address: string;
-  residents:
-    | [
-        {
-          document_id: string;
-          resident_id: string;
-          resident_name: Nullable<string>;
-        },
-      ]
-    | null;
-}
-
-export const isTypeRoomData = (data: unknown): data is RoomData =>
-  !!data &&
-  typeof data === "object" &&
-  "document_id" in data &&
-  typeof (data as any).document_id === "string" &&
-  "residence_id" in data &&
-  typeof (data as any).residence_id === "string" &&
-  "roomNo" in data &&
-  typeof (data as any).roomNo === "string" &&
-  "address" in data &&
-  typeof (data as any).address === "string" &&
-  "residents" in data &&
-  ((data as any).residents === null ||
-    (Array.isArray((data as any).residents) &&
-      (data as any).residents.every(
-        (resident: any) =>
-          typeof resident === "object" &&
-          "document_id" in data &&
-          typeof (data as any).document_id === "string" &&
-          "resident_id" in resident &&
-          typeof resident.resident_id === "string" &&
-          "resident_name" in resident &&
-          (typeof resident.resident_name === "string" ||
-            resident.resident_name === null),
-      )));
 
 // Converters...
 export const emergencyContactConverter: FirestoreDataConverter<EmergencyContact> =
   {
     toFirestore(contact: EmergencyContact): DocumentData {
-      return { ...contact }; // Map EmergencyContact fields to Firestore
+      return EmergencyContactSchema.parse(contact);
     },
     fromFirestore(snapshot: QueryDocumentSnapshot): EmergencyContact {
-      return snapshot.data() as EmergencyContact; // Map Firestore data to EmergencyContact
+      return EmergencyContactSchema.parse(snapshot.data());
     },
   };
 
 export const residentConverter: FirestoreDataConverter<Resident> = {
   toFirestore(resident: Resident): DocumentData {
-    return { ...resident };
+    return ResidentSchema.parse(resident);
   },
   fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): Resident {
     const data = snapshot.data();
-    return {
+    return ResidentSchema.parse({
       resident_id: data.resident_id,
       residence_id: data.residence_id,
       resident_name: data.resident_name,
       document_id: snapshot.id,
       emergencyContacts: data.emergencyContacts || null,
-    };
+    });
   },
 };
 
 export const residenceConverter: FirestoreDataConverter<Residence> = {
   toFirestore(contact: Residence): DocumentData {
-    return { ...contact }; // Map Residence fields to Firestore
+    return ResidenceSchema.parse(contact);
   },
   fromFirestore(snapshot: QueryDocumentSnapshot): Residence {
-    return snapshot.data() as Residence; // Map Firestore data to EmergencyContact
+    return ResidenceSchema.parse(snapshot.data());
   },
 };
