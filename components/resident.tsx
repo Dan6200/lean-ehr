@@ -30,7 +30,7 @@ export default function Resident({
   }, [setAdmin]);
 
   return (
-    <main className="bg-background flex flex-col gap-5 container md:px-16 mx-auto text-center py-32 sm:py-64 h-fit">
+    <main className="bg-background flex flex-col gap-5 container md:px-16 mx-auto text-center py-32 sm:py-48 lg:py-56 h-fit">
       <section className="flex flex-col items-center gap-4 mb-4">
         <Image
           src="/profile.svg"
