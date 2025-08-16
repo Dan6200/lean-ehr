@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Edit } from "lucide-react";
 
 import { toast } from "@/components/ui/use-toast";
 import { isError } from "@/app/utils";
@@ -57,6 +58,7 @@ export function ResidentFormEdit({
   const [noOfEmContacts, setNoOfEmContacts] = useState(
     emergencyContacts?.length ?? 0
   );
+  const [isEditing, setIsEditing] = useState(false); // Added isEditing state
 
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
@@ -120,7 +122,18 @@ export function ResidentFormEdit({
       noOfEmContacts={noOfEmContacts}
       setNoOfEmContacts={setNoOfEmContacts}
       onSubmit={onSubmit}
-      formTitle="Edit Resident Information"
+      formTitle={
+        <div className="flex items-center gap-2">
+          Edit Resident Information
+          <span
+            onClick={() => setIsEditing(!isEditing)}
+            className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
+          >
+            <Edit />
+          </span>
+        </div>
+      }
+      isEditing={isEditing} // Pass isEditing prop
     />
   );
 }
