@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getResidentData } from "@/app/admin/residents/actions/get";
-import { isTypeResident } from "@/types/resident";
+import { ResidentSchema } from "@/types/resident";
 import Resident from "@/components/resident";
 
 export default async function ResidentPage({
@@ -15,7 +15,10 @@ export default async function ResidentPage({
       `Unable to pass props to Resident Component -- Tag:22.\n\t${e}`,
     );
   });
-  console.log(residentData);
-  if (!isTypeResident(residentData)) throw new Error("Invalid Resident Data");
+  try {
+    ResidentSchema.parse(residentData);
+  } catch (error: any) {
+    throw new Error("Invalid Resident Data -- Tag:30: " + error.message);
+  }
   return <Resident {...{ residentData, resId }} />;
 }

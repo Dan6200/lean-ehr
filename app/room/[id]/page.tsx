@@ -1,8 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import Room from "@/components/room";
-import { isTypeRoomData } from "@/types/resident";
-import util from "node:util";
-import { addNewResident } from "@/app/admin/residents/actions/add";
+import { RoomDataSchema } from "@/types/resident";
 import { getRoomData } from "@/app/admin/residents/actions/get";
 
 export default async function RoomPage({
@@ -14,9 +12,13 @@ export default async function RoomPage({
     if (e.message.match(/not_found/i)) throw notFound();
     if (e.message.match(/insufficient permissions/)) redirect("/admin/sign-in");
     throw new Error(
-      `Unable to pass props to Resident Component -- Tag:22.\n\t${e}`
+      `Unable to pass props to Resident Component -- Tag:22.\n\t${e}`,
     );
   });
-  if (!isTypeRoomData(roomData)) throw new Error("Invalid Room Data");
+  try {
+    RoomDataSchema.parse(roomData);
+  } catch (error: any) {
+    throw new Error("Invalid Room Data -- Tag:29: " + error.message);
+  }
   return <Room {...{ roomData }}></Room>;
 }

@@ -1,11 +1,10 @@
 //import { FieldValue } from "firebase/firestore";
 export type Nullable<T> = T | null | undefined;
 
-import { z } from 'zod';
+import { z } from "zod";
 
 export const EmergencyContactSchema = z.object({
   residence_id: z.string(),
-  resident_id: z.string(),
   contact_name: z.string().nullable().optional(),
   cell_phone: z.string(),
   work_phone: z.string().nullable().optional(),
@@ -54,7 +53,6 @@ export const RoomDataSchema = z.object({
 });
 export type RoomData = z.infer<typeof RoomDataSchema>;
 
-
 // Converters...
 export const emergencyContactConverter: FirestoreDataConverter<EmergencyContact> =
   {
@@ -90,3 +88,4 @@ export const residenceConverter: FirestoreDataConverter<Residence> = {
     return ResidenceSchema.parse(snapshot.data());
   },
 };
+

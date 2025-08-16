@@ -1,11 +1,12 @@
 "use server";
 import { collectionWrapper } from "@/firebase/firestore";
 import {
-  isTypeResidence,
-  isTypeResident,
   Resident,
   Residence,
   RoomData,
+  ResidentSchema,
+  ResidenceSchema,
+  RoomDataSchema,
 } from "@/types/resident";
 import { notFound } from "next/navigation";
 
@@ -15,8 +16,13 @@ export async function getResidentData(documentId: string) {
     const residentsSnap = await residentsColRef.doc(documentId).get();
     if (!residentsSnap.exists) throw notFound();
     const resident = residentsSnap.data();
-    if (!isTypeResident(resident))
-      throw new Error("Object is not of type Resident  -- Tag:16");
+    try {
+      ResidentSchema.parse(resident);
+    } catch (error: any) {
+      throw new Error(
+        "Object is not of type Resident  -- Tag:16: " + error.message,
+      );
+    }
 
     return { ...resident, document_id: residentsSnap.id };
   } catch (error) {
@@ -30,8 +36,13 @@ export async function getResidents() {
     const residentsSnap = await residentsCollection.get();
     return residentsSnap.docs.map((doc) => {
       const resident = doc.data();
-      if (!isTypeResident(resident))
-        throw new Error("Object is not of type Resident  -- Tag:19");
+      try {
+        ResidentSchema.parse(resident);
+      } catch (error: any) {
+        throw new Error(
+          "Object is not of type Resident  -- Tag:19: " + error.message,
+        );
+      }
       return resident;
     });
   } catch (error) {
@@ -46,8 +57,13 @@ export async function getAllRooms() {
     if (!roomsSnap.size) throw notFound();
     return roomsSnap.docs.map((doc) => {
       const residence = doc.data();
-      if (!isTypeResidence(residence))
-        throw new Error("Object is not of type Residence  -- Tag:19");
+      try {
+        ResidenceSchema.parse(residence);
+      } catch (error: any) {
+        throw new Error(
+          "Object is not of type Residence  -- Tag:19: " + error.message,
+        );
+      }
       return { document_id: doc.id, ...residence };
     });
   } catch (error) {
@@ -71,8 +87,13 @@ export async function getRoomData(residenceId: string) {
       ...(addressSnap.data() as Residence),
       document_id: addressSnap.id,
     };
-    if (!isTypeResidence(address))
-      throw new Error("Object is not of type Residence -- Tag:10");
+    try {
+      ResidenceSchema.parse(address);
+    } catch (error: any) {
+      throw new Error(
+        "Object is not of type Residence -- Tag:10: " + error.message,
+      );
+    }
     room_map[address.residence_id] = {
       ...room_map[address.residence_id],
       ...address,
@@ -90,8 +111,14 @@ export async function getRoomData(residenceId: string) {
     for (const doc of residentsData.docs) {
       if (!doc.exists) throw notFound();
       let resident = doc.data();
-      if (!isTypeResident(resident))
-        throw new Error("Object is not of type Resident -- Tag:9");
+      console.log(resident);
+      try {
+        ResidentSchema.parse(resident);
+      } catch (error: any) {
+        throw new Error(
+          "Object is not of type Resident -- Tag:9: " + error.message,
+        );
+      }
 
       // Add each resident to the residents map
       // Handle duplicates
@@ -116,6 +143,13 @@ export async function getRoomData(residenceId: string) {
     if (Object.values(room_map).length > 1)
       throw new Error("Duplicate Room Data! -- Tag:28");
     const roomData = Object.values(room_map)[0];
+    try {
+      RoomDataSchema.parse(roomData);
+    } catch (error: any) {
+      throw new Error(
+        "Object is not of type RoomData -- Tag:28: " + error.message,
+      );
+    }
     return roomData;
   } catch (error) {
     throw new Error("Failed to fetch All Residents Data:\n\t\t" + error);
