@@ -1,21 +1,10 @@
 "use client";
-import { useForm, useFormContext } from "react-hook-form";
-import { z } from "zod";
+import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Form } from "@/components/ui/form";
 import { Minus, Plus } from "lucide-react";
 import { Dispatch, SetStateAction, useRef } from "react";
-import type { Nullable } from "@/types/resident";
 import { EditableFormField } from "./EditableFormField";
 import { EmergencyContactBlock } from "./EmergencyContactBlock";
 
@@ -26,6 +15,7 @@ interface ResidentFormBaseProps {
   onSubmit: (data: any) => Promise<void>;
   formTitle: string | React.ReactNode;
   isFormEditing: boolean; // Global form editing state
+  setIsFormEditing: Dispatch<SetStateAction<boolean>>;
 }
 
 export function ResidentFormBase({
@@ -34,14 +24,15 @@ export function ResidentFormBase({
   setNoOfEmContacts,
   onSubmit,
   formTitle,
-  isFormEditing, // Destructure isFormEditing
+  isFormEditing,
+  setIsFormEditing,
 }: ResidentFormBaseProps) {
   const originalNoOfEmContacts = useRef(noOfEmContacts);
 
   const handleRemoveEmergencyContact = (indexToRemove: number) => {
     const currentContacts = form.getValues("emergencyContacts") || [];
     const updatedContacts = currentContacts.filter(
-      (_: any, i: number) => i !== indexToRemove
+      (_: any, i: number) => i !== indexToRemove,
     );
     form.setValue("emergencyContacts", updatedContacts);
     setNoOfEmContacts(updatedContacts.length);
@@ -92,14 +83,17 @@ export function ResidentFormBase({
           </h4>
         </div>
         {noOfEmContacts > 0 &&
-          new Array(noOfEmContacts).fill(null).map((_, i) => (
-            <EmergencyContactBlock
-              key={i}
-              index={i}
-              isFormEditing={isFormEditing}
-              onDelete={handleRemoveEmergencyContact}
-            />
-          ))}
+          new Array(noOfEmContacts)
+            .fill(null)
+            .map((_, i) => (
+              <EmergencyContactBlock
+                key={i}
+                index={i}
+                onDelete={handleRemoveEmergencyContact}
+                isFormEditing={isFormEditing}
+                setIsFormEditing={setIsFormEditing}
+              />
+            ))}
         {isFormEditing && ( // Only show submit button when form is globally editing
           <Button type="submit" className="w-full sm:w-[10vw]">
             Submit
@@ -109,3 +103,4 @@ export function ResidentFormBase({
     </Form>
   );
 }
+

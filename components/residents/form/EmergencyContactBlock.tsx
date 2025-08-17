@@ -1,33 +1,41 @@
 "use client";
-import { useFormContext } from "react-hook-form";
-import { Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 
 import { EditableFormField } from "./EditableFormField";
+import { Dispatch, SetStateAction } from "react";
 
 interface EmergencyContactBlockProps {
   index: number;
   isFormEditing: boolean;
   onDelete: (index: number) => void; // Callback to remove this contact
+  setIsFormEditing: Dispatch<SetStateAction<boolean>>;
 }
 
 export function EmergencyContactBlock({
   index,
   isFormEditing,
   onDelete,
+  setIsFormEditing,
 }: EmergencyContactBlockProps) {
-  const { control } = useFormContext();
-
   return (
     <div className="mb-8 border-b py-4">
       <h3 className="font-semibold mb-8 flex items-center justify-between">
         Emergency Contact {index > 0 ? index + 1 : ""}
         {isFormEditing && (
-          <span
-            onClick={() => onDelete(index)}
-            className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
-          >
-            <Trash2 />
-          </span>
+          <div className="flex gap-2">
+            <span
+              onClick={() => setIsFormEditing(!isFormEditing)}
+              className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
+            >
+              <Edit />
+            </span>
+            <span
+              onClick={() => onDelete(index)}
+              className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
+            >
+              <Trash2 />
+            </span>
+          </div>
         )}
       </h3>
       <div className="space-y-6">

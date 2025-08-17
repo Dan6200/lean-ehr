@@ -37,6 +37,7 @@ interface ResidentFormAddProps {
 export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
   const router = useRouter();
   const [noOfEmContacts, setNoOfEmContacts] = useState(0);
+  const [isFormEditing, setIsFormEditing] = useState(true);
 
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
@@ -88,6 +89,8 @@ export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
       setNoOfEmContacts={setNoOfEmContacts}
       onSubmit={onSubmit}
       formTitle="Add A New Resident"
+      isFormEditing={isFormEditing}
+      setIsFormEditing={setIsFormEditing}
     />
   );
 }
