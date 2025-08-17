@@ -56,9 +56,10 @@ export function ResidentFormEdit({
 }: ResidentFormEditProps) {
   const router = useRouter();
   const [noOfEmContacts, setNoOfEmContacts] = useState(
-    emergencyContacts?.length ?? 0
+    emergencyContacts?.length ?? 0,
   );
-  const [isEditing, setIsEditing] = useState(false); // Added isEditing state
+  console.log(noOfEmContacts);
+  const [isFormEditing, setIsFormEditing] = useState(false); // Added isFormEditing state
 
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
@@ -78,7 +79,7 @@ export function ResidentFormEdit({
             home_phone: home_phone ?? undefined,
             work_phone: work_phone ?? undefined,
             relationship: relationship ?? undefined,
-          })
+          }),
         ) ?? [],
     },
   });
@@ -90,13 +91,15 @@ export function ResidentFormEdit({
     residentData.resident_id = resident_id; // Use existing resident_id
 
     if (data.emergencyContacts) {
-      residentData.emergencyContacts = data.emergencyContacts.map((contact) => ({
-        work_phone: contact.work_phone ?? null,
-        home_phone: contact.home_phone ?? null,
-        contact_name: contact.contact_name ?? null,
-        relationship: contact.relationship ?? null,
-        cell_phone: contact.cell_phone,
-      }));
+      residentData.emergencyContacts = data.emergencyContacts.map(
+        (contact) => ({
+          work_phone: contact.work_phone ?? null,
+          home_phone: contact.home_phone ?? null,
+          contact_name: contact.contact_name ?? null,
+          relationship: contact.relationship ?? null,
+          cell_phone: contact.cell_phone,
+        }),
+      );
     } else {
       residentData.emergencyContacts = null;
     }
@@ -104,7 +107,7 @@ export function ResidentFormEdit({
     try {
       const { message, success } = await updateResident(
         residentData,
-        document_id
+        document_id,
       );
       toast({
         title: message,
@@ -126,14 +129,15 @@ export function ResidentFormEdit({
         <div className="flex items-center gap-2">
           Edit Resident Information
           <span
-            onClick={() => setIsEditing(!isEditing)}
+            onClick={() => setIsFormEditing(!isFormEditing)}
             className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
           >
             <Edit />
           </span>
         </div>
       }
-      isEditing={isEditing} // Pass isEditing prop
+      isFormEditing={isFormEditing}
+      setIsFormEditing={setIsFormEditing}
     />
   );
 }

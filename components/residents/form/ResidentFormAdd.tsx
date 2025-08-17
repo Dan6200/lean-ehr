@@ -2,7 +2,6 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { toast } from "@/components/ui/use-toast";
@@ -35,7 +34,6 @@ interface ResidentFormAddProps {
 }
 
 export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
-  const router = useRouter();
   const [noOfEmContacts, setNoOfEmContacts] = useState(0);
   const [isFormEditing, setIsFormEditing] = useState(true);
 
