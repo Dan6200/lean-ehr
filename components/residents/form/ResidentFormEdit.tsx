@@ -58,8 +58,6 @@ export function ResidentFormEdit({
   const [noOfEmContacts, setNoOfEmContacts] = useState(
     emergencyContacts?.length ?? 0,
   );
-  console.log(noOfEmContacts);
-  const [isFormEditing, setIsFormEditing] = useState(false); // Added isFormEditing state
 
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
@@ -126,18 +124,8 @@ export function ResidentFormEdit({
       setNoOfEmContacts={setNoOfEmContacts}
       onSubmit={onSubmit}
       formTitle={
-        <div className="flex items-center gap-2">
-          Edit Resident Information
-          <span
-            onClick={() => setIsFormEditing(!isFormEditing)}
-            className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
-          >
-            <Edit />
-          </span>
-        </div>
+        <div className="flex items-center gap-2">Edit Resident Information</div>
       }
-      isFormEditing={isFormEditing}
-      setIsFormEditing={setIsFormEditing}
     />
   );
 }

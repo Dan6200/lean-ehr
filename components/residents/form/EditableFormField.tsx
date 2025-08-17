@@ -18,7 +18,6 @@ interface EditableFormFieldProps {
   name: string;
   label: string;
   description: string;
-  isFormEditing: boolean; // Global form editing state
   onDelete?: () => void; // Optional delete handler for the field
   renderInput?: (field: any, disabled: boolean) => React.ReactNode; // Custom input render
 }
@@ -27,7 +26,6 @@ export function EditableFormField({
   name,
   label,
   description,
-  isFormEditing,
   onDelete,
   renderInput,
 }: EditableFormFieldProps) {
@@ -35,7 +33,6 @@ export function EditableFormField({
   const [isFieldEditing, setIsFieldEditing] = useState(false);
 
   const fieldValue = getValues(name);
-  const isDisabled = !isFormEditing || (!isFieldEditing && isFormEditing); // Disabled if form not editing, or if form is editing but field is not locally editing
 
   return (
     <FormField
@@ -45,39 +42,32 @@ export function EditableFormField({
         <FormItem>
           <div className="flex items-center justify-between">
             <FormLabel>{label}</FormLabel>
-            {isFormEditing && ( // Only show icons if the form is globally editable
-              <div className="flex gap-2">
+            <div className="flex gap-2">
+              <span
+                onClick={() => setIsFieldEditing(!isFieldEditing)}
+                className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
+              >
+                <Edit />
+              </span>
+              {onDelete && (
                 <span
-                  onClick={() => setIsFieldEditing(!isFieldEditing)}
+                  onClick={() => {
+                    setValue(name, ""); // Clear field value on delete
+                    onDelete(); // Call optional delete handler
+                  }}
                   className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
                 >
-                  <Edit />
+                  <Trash2 />
                 </span>
-                {onDelete && (
-                  <span
-                    onClick={() => {
-                      setValue(name, ""); // Clear field value on delete
-                      onDelete(); // Call optional delete handler
-                    }}
-                    className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
-                  >
-                    <Trash2 />
-                  </span>
-                )}
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <FormControl>
-            {renderInput ? (
-              renderInput(field, isDisabled)
-            ) : (
-              <Input
-                {...field}
-                value={field.value ?? ""}
-                disabled={isDisabled}
-                className={field.value ? "border-2 border-blue-500" : ""}
-              />
-            )}
+            <Input
+              {...field}
+              value={field.value ?? ""}
+              className={field.value ? "border-2 border-blue-500" : ""}
+            />
           </FormControl>
           <FormDescription>{description}</FormDescription>
           <FormMessage />

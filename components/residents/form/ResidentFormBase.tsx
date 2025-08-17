@@ -14,8 +14,6 @@ interface ResidentFormBaseProps {
   setNoOfEmContacts: Dispatch<SetStateAction<number>>;
   onSubmit: (data: any) => Promise<void>;
   formTitle: string | React.ReactNode;
-  isFormEditing: boolean; // Global form editing state
-  setIsFormEditing: Dispatch<SetStateAction<boolean>>;
 }
 
 export function ResidentFormBase({
@@ -24,8 +22,6 @@ export function ResidentFormBase({
   setNoOfEmContacts,
   onSubmit,
   formTitle,
-  isFormEditing,
-  setIsFormEditing,
 }: ResidentFormBaseProps) {
   const originalNoOfEmContacts = useRef(noOfEmContacts);
 
@@ -49,33 +45,30 @@ export function ResidentFormBase({
           name="resident_name"
           label="Name"
           description="Residents Name."
-          isFormEditing={isFormEditing}
         />
         <div className="flex justify-end border-b w-full">
           <h4 className="gap-2 flex items-center pb-4">
             {(noOfEmContacts < 1 ? "Add " : "") + "Emergency Contacts"}
             <span
               onClick={() =>
-                isFormEditing && // Only clickable when form is globally editing
                 setNoOfEmContacts(
                   noOfEmContacts < 10 ? noOfEmContacts + 1 : noOfEmContacts,
                 )
               }
-              className={`p-1 border hover:bg-primary/10 rounded-md ${!isFormEditing ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`} // Disabled styling
+              className={`p-1 border hover:bg-primary/10 rounded-md cursor-pointer`}
             >
               <Plus />
             </span>
             {noOfEmContacts > originalNoOfEmContacts.current && (
               <span
                 onClick={() =>
-                  isFormEditing && // Only clickable when form is globally editing
                   setNoOfEmContacts(
                     noOfEmContacts > originalNoOfEmContacts.current
                       ? noOfEmContacts - 1
                       : noOfEmContacts,
                   )
                 }
-                className={`p-1 border hover:bg-primary/10 rounded-md ${!isFormEditing ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`} // Disabled styling
+                className={`p-1 border hover:bg-primary/10 rounded-md cursor-pointer`}
               >
                 <Minus />
               </span>
@@ -90,15 +83,11 @@ export function ResidentFormBase({
                 key={i}
                 index={i}
                 onDelete={handleRemoveEmergencyContact}
-                isFormEditing={isFormEditing}
-                setIsFormEditing={setIsFormEditing}
               />
             ))}
-        {isFormEditing && ( // Only show submit button when form is globally editing
-          <Button type="submit" className="w-full sm:w-[10vw]">
-            Submit
-          </Button>
-        )}
+        <Button type="submit" className="w-full sm:w-[10vw]">
+          Submit
+        </Button>
       </form>
     </Form>
   );
