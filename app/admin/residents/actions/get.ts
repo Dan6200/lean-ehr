@@ -19,15 +19,16 @@ export async function getResidentData(
     const residentsSnap = await residentsColRef.doc(documentId).get();
     if (!residentsSnap.exists) throw notFound();
     const resident = residentsSnap.data();
+    let validatedResident: Resident;
     try {
-      ResidentSchema.parse(resident);
+      validatedResident = ResidentSchema.parse(resident);
     } catch (error: any) {
       throw new Error(
         "Object is not of type Resident  -- Tag:16: " + error.message,
       );
     }
 
-    return { ...resident, document_id: residentsSnap.id };
+    return { ...validatedResident, document_id: residentsSnap.id };
   } catch (error) {
     throw new Error("Failed to fetch resident.\n\t\t" + error);
   }
@@ -113,10 +114,10 @@ export async function getRoomData(residenceId: string) {
     const residentsData = await resQ.get();
     for (const doc of residentsData.docs) {
       if (!doc.exists) throw notFound();
-      let resident = doc.data();
-      console.log(resident);
+      let resident = doc.data(),
+        validatedResident: Resident;
       try {
-        ResidentSchema.parse(resident);
+        validatedResident = ResidentSchema.parse(resident);
       } catch (error: any) {
         throw new Error(
           "Object is not of type Resident -- Tag:9: " + error.message,
@@ -125,10 +126,10 @@ export async function getRoomData(residenceId: string) {
 
       // Add each resident to the residents map
       // Handle duplicates
-      if (residents_map[resident.resident_id])
+      if (residents_map[validatedResident.resident_id])
         throw new Error("Duplicate Resident Data! -- Tag:28");
-      const { residence_id, ...newResident } = resident;
-      residents_map[resident.resident_id] = {
+      const { residence_id, ...newResident } = validatedResident;
+      residents_map[validatedResident.resident_id] = {
         ...newResident,
         document_id: doc.id,
       };

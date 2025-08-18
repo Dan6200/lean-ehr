@@ -1,9 +1,8 @@
 import { notFound, redirect } from "next/navigation";
 import { getResidentData } from "@/app/admin/residents/actions/get";
-import { ResidentSchema } from "@/types/resident";
+import { ResidentSchema, Resident as ResidentType } from "@/types/resident";
 import Resident from "@/components/resident";
 import { GoBackLink } from "@/components/go-back-link";
-import { z } from "zod";
 
 export default async function ResidentPage({
   params: { id, resId },
@@ -17,7 +16,7 @@ export default async function ResidentPage({
       `Unable to pass props to Resident Component -- Tag:22.\n\t${e}`,
     );
   });
-  let validatedResidentData: z.infer<typeof ResidentSchema>;
+  let validatedResidentData: ResidentType;
   try {
     validatedResidentData = ResidentSchema.parse(rawResidentData);
   } catch (error: any) {
