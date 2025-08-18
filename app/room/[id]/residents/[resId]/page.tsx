@@ -30,7 +30,7 @@ export default async function ResidentPage({
       >
         Go To Previous Page
       </GoBackLink>
-      <Resident {...{ residentData, resId }} />;
+      <Resident {...{ residentData, resId }} />
     </main>
   );
 }

@@ -58,36 +58,36 @@ export function EmergencyContactBlock({
           name={`emergencyContacts.${index}.contact_name`}
           label="Name"
           description="Emergency Contact's Name"
-          isEmContactBlockEditing={isEmContactBlockEditing}
-          alwaysEditable
+          isInputDisabled={!isEmContactBlockEditing}
+          showLocalEditingControls={false}
         />
         <EditableFormField
           name={`emergencyContacts.${index}.relationship`}
           label="Relationship"
           description="Emergency Contact's Relationship"
-          isEmContactBlockEditing={isEmContactBlockEditing}
-          alwaysEditable
+          isInputDisabled={!isEmContactBlockEditing}
+          showLocalEditingControls={false}
         />
         <EditableFormField
           name={`emergencyContacts.${index}.cell_phone`}
           label="Cell Phone"
           description="Emergency Contact's Cell Phone Number"
-          isEmContactBlockEditing={isEmContactBlockEditing}
-          alwaysEditable
+          isInputDisabled={!isEmContactBlockEditing}
+          showLocalEditingControls={false}
         />
         <EditableFormField
           name={`emergencyContacts.${index}.home_phone`}
           label="Home Phone"
           description="Emergency Contact's Home Phone Number"
-          isEmContactBlockEditing={isEmContactBlockEditing}
-          alwaysEditable
+          isInputDisabled={!isEmContactBlockEditing}
+          showLocalEditingControls={false}
         />
         <EditableFormField
           name={`emergencyContacts.${index}.work_phone`}
           label="Work Phone"
           description="Emergency Contact's Work Phone Number"
-          isEmContactBlockEditing={isEmContactBlockEditing}
-          alwaysEditable
+          isInputDisabled={!isEmContactBlockEditing}
+          showLocalEditingControls={false}
         />
       </div>
     </div>

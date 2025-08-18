@@ -34,8 +34,6 @@ interface ResidentFormAddProps {
 }
 
 export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
-  const [noOfEmContacts, setNoOfEmContacts] = useState(0);
-
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
     defaultValues: {
@@ -82,11 +80,9 @@ export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
   return (
     <ResidentFormBase
       form={form}
-      noOfEmContacts={noOfEmContacts}
-      setNoOfEmContacts={setNoOfEmContacts}
       onSubmit={onSubmit}
       formTitle="Add A New Resident"
-      alwaysEditable
+      isResidentNameEditableByDefault={true}
     />
   );
 }

@@ -17,8 +17,8 @@ interface EditableFormFieldProps {
   name: string;
   label: string;
   description: string;
-  alwaysEditable: boolean;
-  isEmContactBlockEditing?: boolean;
+  isInputDisabledByDefault: boolean; // Directly controls input disabled state
+  showLocalEditingControls?: boolean; // Controls visibility of local edit/lock icons
   renderInput?: (field: any, disabled: boolean) => React.ReactNode; // Custom input render
 }
 
@@ -26,14 +26,19 @@ export function EditableFormField({
   name,
   label,
   description,
-  alwaysEditable,
+  isInputDisabledByDefault,
+  showLocalEditingControls = true,
   renderInput,
-  isEmContactBlockEditing = true,
 }: EditableFormFieldProps) {
   const { control, getValues, setValue } = useFormContext();
-  const [isFieldEditing, setIsFieldEditing] = useState(alwaysEditable);
+  // isFieldEditing is only relevant if showLocalEditingControls is true
+  const [isFieldEditing, setIsFieldEditing] = useState(
+    showLocalEditingControls ? !isInputDisabledByDefault : true,
+  );
 
-  const isDisabled = !isFieldEditing || !isEmContactBlockEditing;
+  const isDisabled = showLocalEditingControls
+    ? isInputDisabled || !isFieldEditing
+    : isInputDisabledByDefault;
 
   return (
     <FormField
@@ -43,16 +48,16 @@ export function EditableFormField({
         <FormItem>
           <div className="flex items-center justify-between">
             <FormLabel>{label}</FormLabel>
-            <div className="flex gap-2">
-              {!alwaysEditable && (
+            {showLocalEditingControls && (
+              <div className="flex gap-2">
                 <span
                   onClick={() => setIsFieldEditing(!isFieldEditing)}
                   className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
                 >
                   {!isFieldEditing ? <Edit /> : <Lock />}
                 </span>
-              )}
-            </div>
+              </div>
+            )}
           </div>
           <FormControl>
             {renderInput ? (

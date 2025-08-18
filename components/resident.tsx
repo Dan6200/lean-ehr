@@ -30,7 +30,7 @@ export default function Resident({
   }, [setAdmin]);
 
   return (
-    <div className="py-8 md:py-16 space-y-8 sm:space-y-12 md:space-y-16">
+    <div className="py-8 md:py-16 space-y-16 sm:space-y-18 md:space-y-24">
       <section className="flex flex-col items-center gap-4 sm:gap-6 md:gap-8">
         <Image
           src="/profile.svg"
@@ -41,9 +41,10 @@ export default function Resident({
         />
         <h1 className="text-5xl font-bold">{resident_name}</h1>
       </section>
-      <section>
-        <h3 className="text-xl font-bold">Contacts</h3>
-        <section className="flex justify-center flex-col sm:flex-wrap sm:flex-row gap-6 w-full">
+      <section className="space-y-12 sm:space-y-18">
+        <h3 className="text-2xl font-bold">Contacts</h3>
+        {/*<section className="flex justify-center flex-col sm:flex-wrap sm:flex-row gap-6 w-full">*/}
+        <section className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full md:w-fit mx-auto">
           {emergencyContacts ? (
             emergencyContacts.map((contact: any, index: number) => (
               <Link
@@ -51,7 +52,7 @@ export default function Resident({
                 href={`tel:${contact.cell_phone}`}
                 className="w-full sm:w-fit"
               >
-                <Card className="justify-between hover:bg-green-700/10 active:bg-green-700/10 flex shadow-md p-4 w-full md:p-6 items-center md:h-[20vh] sm:w-[45vw] md:w-[30vw]">
+                <Card className="justify-between hover:bg-green-700/10 active:bg-green-700/10 flex shadow-md p-4 w-full md:p-6 items-center md:h-[15vh] sm:w-[45vw] md:w-[30vw]">
                   <CardContent className="p-0 flex flex-col justify-between text-left ">
                     <h3 className="capitalize font-semibold md:text-xl">
                       {contact.contact_name}
@@ -87,17 +88,17 @@ export default function Resident({
             <p>No Emergency Contacts On Record</p>
           )}
         </section>
-        {admin && (
-          <section className="mb-8 flex justify-center flex-wrap gap-6 w-full md:w-4/5 lg:w-2/3 mx-auto">
-            <Button
-              className="sm:w-64"
-              onMouseDown={() => router.push(`/admin/residents/${resId}/edit`)}
-            >
-              Edit Resident Information
-            </Button>
-          </section>
-        )}
       </section>
+      {admin && (
+        <section className="mt-32 flex justify-center flex-wrap gap-6 w-full md:w-4/5 lg:w-2/3 mx-auto">
+          <Button
+            className="sm:w-64"
+            onMouseDown={() => router.push(`/admin/residents/${resId}/edit`)}
+          >
+            Edit Resident Information
+          </Button>
+        </section>
+      )}
     </div>
   );
 }

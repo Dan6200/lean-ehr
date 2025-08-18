@@ -1,39 +1,33 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
+import { v4 as uuid } from "uuid";
 
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { Minus, Plus } from "lucide-react";
-import { Dispatch, SetStateAction, useRef } from "react";
 import { EditableFormField } from "./EditableFormField";
 import { EmergencyContactBlock } from "./EmergencyContactBlock";
 
 interface ResidentFormBaseProps {
   form: ReturnType<typeof useForm<any>>;
-  noOfEmContacts: number;
-  setNoOfEmContacts: Dispatch<SetStateAction<number>>;
   onSubmit: (data: any) => Promise<void>;
   formTitle: string | React.ReactNode;
-  alwaysEditable: boolean;
+  isResidentNameEditableByDefault: boolean; // Renamed from alwaysEditable
 }
 
 export function ResidentFormBase({
   form,
-  noOfEmContacts,
-  setNoOfEmContacts,
   onSubmit,
-  alwaysEditable,
+  isResidentNameEditableByDefault,
   formTitle,
 }: ResidentFormBaseProps) {
-  const originalNoOfEmContacts = useRef(noOfEmContacts);
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "emergencyContacts",
+  });
 
   const handleRemoveEmergencyContact = (indexToRemove: number) => {
-    const currentContacts = form.getValues("emergencyContacts") || [];
-    const updatedContacts = currentContacts.filter(
-      (_: any, i: number) => i !== indexToRemove,
-    );
-    form.setValue("emergencyContacts", updatedContacts);
-    setNoOfEmContacts(updatedContacts.length);
+    remove(indexToRemove);
   };
 
   return (
@@ -47,30 +41,29 @@ export function ResidentFormBase({
           name="resident_name"
           label="Name"
           description="Residents Name."
-          alwaysEditable={alwaysEditable}
+          isInputDisabledByDefault={!isResidentNameEditableByDefault} // Pass as isInputDisabled
         />
         <div className="flex justify-end border-b w-full">
           <h4 className="gap-2 flex items-center pb-4">
-            {(noOfEmContacts < 1 ? "Add " : "") + "Emergency Contacts"}
+            {(fields.length < 1 ? "Add " : "") + "Emergency Contacts"}
             <span
               onClick={() =>
-                setNoOfEmContacts(
-                  noOfEmContacts < 10 ? noOfEmContacts + 1 : noOfEmContacts,
-                )
+                append({
+                  contact_name: "",
+                  cell_phone: "",
+                  home_phone: "",
+                  work_phone: "",
+                  relationship: "",
+                  id: uuid(),
+                })
               }
               className={`p-1 border hover:bg-primary/10 rounded-md cursor-pointer`}
             >
               <Plus />
             </span>
-            {noOfEmContacts > originalNoOfEmContacts.current && (
+            {fields.length > 0 && (
               <span
-                onClick={() =>
-                  setNoOfEmContacts(
-                    noOfEmContacts > originalNoOfEmContacts.current
-                      ? noOfEmContacts - 1
-                      : noOfEmContacts,
-                  )
-                }
+                onClick={() => remove(fields.length - 1)}
                 className={`p-1 border hover:bg-primary/10 rounded-md cursor-pointer`}
               >
                 <Minus />
@@ -78,16 +71,13 @@ export function ResidentFormBase({
             )}
           </h4>
         </div>
-        {noOfEmContacts > 0 &&
-          new Array(noOfEmContacts)
-            .fill(null)
-            .map((_, i) => (
-              <EmergencyContactBlock
-                key={i}
-                index={i}
-                onDelete={handleRemoveEmergencyContact}
-              />
-            ))}
+        {fields.map((field, i) => (
+          <EmergencyContactBlock
+            key={field.id}
+            index={i}
+            onDelete={handleRemoveEmergencyContact}
+          />
+        ))}
         <Button type="submit" className="w-full sm:w-[10vw]">
           Submit
         </Button>
@@ -95,4 +85,3 @@ export function ResidentFormBase({
     </Form>
   );
 }
-

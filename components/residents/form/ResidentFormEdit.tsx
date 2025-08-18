@@ -55,10 +55,6 @@ export function ResidentFormEdit({
   emergencyContacts,
 }: ResidentFormEditProps) {
   const router = useRouter();
-  const [noOfEmContacts, setNoOfEmContacts] = useState(
-    emergencyContacts?.length ?? 0,
-  );
-
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
     defaultValues: {
@@ -77,7 +73,7 @@ export function ResidentFormEdit({
             home_phone: home_phone ?? undefined,
             work_phone: work_phone ?? undefined,
             relationship: relationship ?? undefined,
-          }),
+          })
         ) ?? [],
     },
   });
@@ -120,13 +116,11 @@ export function ResidentFormEdit({
   return (
     <ResidentFormBase
       form={form}
-      noOfEmContacts={noOfEmContacts}
-      setNoOfEmContacts={setNoOfEmContacts}
       onSubmit={onSubmit}
       formTitle={
         <div className="flex items-center gap-2">Edit Resident Information</div>
       }
-      alwaysEditable={false}
+      isResidentNameEditableByDefault={false}
     />
   );
 }
