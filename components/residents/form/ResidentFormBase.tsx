@@ -13,6 +13,7 @@ interface ResidentFormBaseProps {
   onSubmit: (data: any) => Promise<void>;
   formTitle: string | React.ReactNode;
   isResidentNameEditableByDefault: boolean; // Renamed from alwaysEditable
+  originalNoOfEmContacts: number;
 }
 
 export function ResidentFormBase({
@@ -20,6 +21,7 @@ export function ResidentFormBase({
   onSubmit,
   isResidentNameEditableByDefault,
   formTitle,
+  originalNoOfEmContacts,
 }: ResidentFormBaseProps) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -41,7 +43,7 @@ export function ResidentFormBase({
           name="resident_name"
           label="Name"
           description="Residents Name."
-          isInputDisabledByDefault={!isResidentNameEditableByDefault} // Pass as isInputDisabled
+          isInputDisabled={!isResidentNameEditableByDefault} // Pass as isInputDisabled
         />
         <div className="flex justify-end border-b w-full">
           <h4 className="gap-2 flex items-center pb-4">
@@ -61,7 +63,7 @@ export function ResidentFormBase({
             >
               <Plus />
             </span>
-            {fields.length > 0 && (
+            {fields.length > originalNoOfEmContacts && (
               <span
                 onClick={() => remove(fields.length - 1)}
                 className={`p-1 border hover:bg-primary/10 rounded-md cursor-pointer`}

@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Edit, Lock } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 
@@ -17,28 +17,28 @@ interface EditableFormFieldProps {
   name: string;
   label: string;
   description: string;
-  isInputDisabledByDefault: boolean; // Directly controls input disabled state
+  isInputDisabled: boolean; // Directly controls input disabled state
   showLocalEditingControls?: boolean; // Controls visibility of local edit/lock icons
   renderInput?: (field: any, disabled: boolean) => React.ReactNode; // Custom input render
 }
 
-export function EditableFormField({
+export const EditableFormField = memo(function EditableFormField({
   name,
   label,
   description,
-  isInputDisabledByDefault,
+  isInputDisabled,
   showLocalEditingControls = true,
   renderInput,
 }: EditableFormFieldProps) {
   const { control, getValues, setValue } = useFormContext();
   // isFieldEditing is only relevant if showLocalEditingControls is true
   const [isFieldEditing, setIsFieldEditing] = useState(
-    showLocalEditingControls ? !isInputDisabledByDefault : true,
+    showLocalEditingControls ? !isInputDisabled : true,
   );
 
   const isDisabled = showLocalEditingControls
-    ? isInputDisabled || !isFieldEditing
-    : isInputDisabledByDefault;
+    ? !isFieldEditing
+    : isInputDisabled;
 
   return (
     <FormField
@@ -77,4 +77,4 @@ export function EditableFormField({
       )}
     />
   );
-}
+});

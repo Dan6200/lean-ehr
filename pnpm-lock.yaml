@@ -146,6 +146,9 @@ importers:
       undici:
         specifier: ^6.19.0
         version: 6.19.0
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
       zod:
         specifier: ^3.23.8
         version: 3.23.8
@@ -8280,8 +8283,7 @@ snapshots:
   uuid@8.3.2:
     optional: true
 
-  uuid@9.0.1:
-    optional: true
+  uuid@9.0.1: {}
 
   webidl-conversions@3.0.1:
     optional: true

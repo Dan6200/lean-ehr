@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Edit } from "lucide-react";
 
 import { toast } from "@/components/ui/use-toast";
@@ -73,10 +73,11 @@ export function ResidentFormEdit({
             home_phone: home_phone ?? undefined,
             work_phone: work_phone ?? undefined,
             relationship: relationship ?? undefined,
-          })
+          }),
         ) ?? [],
     },
   });
+  const originalNoOfEmContacts = useRef(emergencyContacts?.length ?? 0);
 
   async function onSubmit(data: z.infer<typeof ResidentFormSchema>) {
     let residentData: Resident = {} as Resident;
@@ -117,10 +118,9 @@ export function ResidentFormEdit({
     <ResidentFormBase
       form={form}
       onSubmit={onSubmit}
-      formTitle={
-        <div className="flex items-center gap-2">Edit Resident Information</div>
-      }
+      formTitle="Edit Resident Information"
       isResidentNameEditableByDefault={false}
+      originalNoOfEmContacts={originalNoOfEmContacts.current}
     />
   );
 }
