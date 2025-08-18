@@ -40,14 +40,15 @@ export async function getResidents() {
     const residentsSnap = await residentsCollection.get();
     return residentsSnap.docs.map((doc) => {
       const resident = doc.data();
+      let validatedResident: Resident;
       try {
-        ResidentSchema.parse(resident);
+        validatedResident = ResidentSchema.parse(resident);
       } catch (error: any) {
         throw new Error(
           "Object is not of type Resident  -- Tag:19: " + error.message,
         );
       }
-      return resident;
+      return validatedResident;
     });
   } catch (error) {
     throw new Error("Failed to fetch All Residents Data.\n\t\t" + error);
@@ -61,14 +62,15 @@ export async function getAllRooms() {
     if (!roomsSnap.size) throw notFound();
     return roomsSnap.docs.map((doc) => {
       const residence = doc.data();
+      let validatedResidence: Residence;
       try {
-        ResidenceSchema.parse(residence);
+        validatedResidence = ResidenceSchema.parse(residence);
       } catch (error: any) {
         throw new Error(
           "Object is not of type Residence  -- Tag:19: " + error.message,
         );
       }
-      return { document_id: doc.id, ...residence };
+      return { document_id: doc.id, ...validatedResidence };
     });
   } catch (error) {
     throw new Error("Failed to fetch All Room Data.\n\t\t" + error);
@@ -91,16 +93,17 @@ export async function getRoomData(residenceId: string) {
       ...(addressSnap.data() as Residence),
       document_id: addressSnap.id,
     };
+    let validatedAddress: Residence;
     try {
-      ResidenceSchema.parse(address);
+      validatedAddress = ResidenceSchema.parse(address);
     } catch (error: any) {
       throw new Error(
         "Object is not of type Residence -- Tag:10: " + error.message,
       );
     }
-    room_map[address.residence_id] = {
-      ...room_map[address.residence_id],
-      ...address,
+    room_map[validatedAddress.residence_id] = {
+      ...room_map[validatedAddress.residence_id],
+      ...validatedAddress,
       residents: null,
     };
 
@@ -147,14 +150,15 @@ export async function getRoomData(residenceId: string) {
     if (Object.values(room_map).length > 1)
       throw new Error("Duplicate Room Data! -- Tag:28");
     const roomData = Object.values(room_map)[0];
+    let validatedRoomData: RoomData;
     try {
-      RoomDataSchema.parse(roomData);
+      validatedRoomData = RoomDataSchema.parse(roomData);
     } catch (error: any) {
       throw new Error(
         "Object is not of type RoomData -- Tag:28: " + error.message,
       );
     }
-    return roomData;
+    return validatedRoomData;
   } catch (error) {
     throw new Error("Failed to fetch All Residents Data:\n\t\t" + error);
   }
