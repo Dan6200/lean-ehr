@@ -12,13 +12,13 @@ export default async function RoomPage({
     if (e.message.match(/not_found/i)) throw notFound();
     if (e.message.match(/insufficient permissions/)) redirect("/admin/sign-in");
     throw new Error(
-      `Unable to pass props to Resident Component -- Tag:22.\n\t${e}`,
+      `Unable to pass props to Resident Component -- Tag:21.\n\t${e}`,
     );
   });
   try {
     RoomDataSchema.parse(roomData);
   } catch (error: any) {
-    throw new Error("Invalid Room Data -- Tag:29: " + error.message);
+    throw new Error("Invalid Room Data -- Tag:30: " + error.message);
   }
   return <Room {...{ roomData }}></Room>;
 }

@@ -21,6 +21,7 @@ import {
 
 // --- Residence Schema and Type ---
 export const ResidenceSchema = z.object({
+  document_id: z.string(),
   residence_id: z.string(),
   roomNo: z.string(),
   address: z.string(),
@@ -87,4 +88,3 @@ export const residenceConverter: FirestoreDataConverter<Residence> = {
     return ResidenceSchema.parse(snapshot.data());
   },
 };
-

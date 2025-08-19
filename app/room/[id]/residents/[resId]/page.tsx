@@ -20,14 +20,13 @@ export default async function ResidentPage({
   try {
     validatedResidentData = ResidentSchema.parse(rawResidentData);
   } catch (error: any) {
-    throw new Error("Invalid Resident Data -- Tag:30: " + error.message);
+    throw new Error("Invalid Resident Data -- Tag:31: " + error.message);
   }
   return (
     <main className="bg-background flex flex-col gap-16 container md:px-16 mx-auto text-center py-8 sm:py-16 lg:py-24 h-fit">
       <GoBackLink
         url={`/room/${id}/`}
-        className="cursor-pointer text-blue-700 flex w-full sm:w-3/5 gap-2 sm:gap-5"
-        refresh
+        className="cursor-pointer text-blue-700 flex w-full gap-2 sm:gap-5"
       >
         Go To Previous Page
       </GoBackLink>

@@ -9,6 +9,7 @@
     "build": "next build",
     "build:prod": "env-cmd -f .env.production next build",
     "start": "next start",
+    "start:prod": "env-cmd -f .env.production next start",
     "lint": "next lint",
     "build-service-worker": "pnpx esbuild auth-service-worker.ts --bundle --outfile=public/auth-service-worker.js",
     "build-web-worker": "pnpx esbuild workers/pdfWorker.ts --bundle --outfile=public/pdfWorker.js"

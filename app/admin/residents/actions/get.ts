@@ -45,7 +45,7 @@ export async function getResidents() {
         validatedResident = ResidentSchema.parse(resident);
       } catch (error: any) {
         throw new Error(
-          "Object is not of type Resident  -- Tag:19: " + error.message,
+          "Object is not of type Resident  -- Tag:20: " + error.message,
         );
       }
       return validatedResident;
@@ -61,23 +61,24 @@ export async function getAllRooms() {
     const roomsSnap = await roomsCollection.get();
     if (!roomsSnap.size) throw notFound();
     return roomsSnap.docs.map((doc) => {
-      const residence = doc.data();
+      const residence = { document_id: doc.id, ...doc.data() };
       let validatedResidence: Residence;
       try {
         validatedResidence = ResidenceSchema.parse(residence);
       } catch (error: any) {
+        console.log(residence);
         throw new Error(
           "Object is not of type Residence  -- Tag:19: " + error.message,
         );
       }
-      return { document_id: doc.id, ...validatedResidence };
+      return validatedResidence;
     });
   } catch (error) {
     throw new Error("Failed to fetch All Room Data.\n\t\t" + error);
   }
 }
 
-export async function getRoomData(residenceId: string) {
+export async function getRoomData(residenceDocId: string) {
   /******************************************
    * Creates a Join Between Residence,
    * Emergency Contacts and Resident documents on residenceId
@@ -85,7 +86,7 @@ export async function getRoomData(residenceId: string) {
 
   try {
     const addressCollection = collectionWrapper("residence");
-    const addressSnap = await addressCollection.doc(residenceId).get();
+    const addressSnap = await addressCollection.doc(residenceDocId).get();
     const residents_map: { [key: string]: Omit<Resident, "residence_id"> } = {};
     const room_map: { [key: string]: RoomData } = {};
     if (!addressSnap.exists) throw notFound();
@@ -155,7 +156,7 @@ export async function getRoomData(residenceId: string) {
       validatedRoomData = RoomDataSchema.parse(roomData);
     } catch (error: any) {
       throw new Error(
-        "Object is not of type RoomData -- Tag:28: " + error.message,
+        "Object is not of type RoomData -- Tag:29: " + error.message,
       );
     }
     return validatedRoomData;
