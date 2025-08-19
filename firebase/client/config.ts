@@ -21,10 +21,12 @@ if (!getApps().find((app) => app?.name === appName))
   initializeApp(firebaseConfig, appName);
 
 export const auth = getAuth(getApp(appName));
-export const db = getFirestore(getApp(appName), databaseId);
+export const db = databaseId
+  ? getFirestore(getApp(appName), databaseId)
+  : getFirestore(getApp(appName));
 
 // Connect to Firestore Emulator in development
-if (process.env.NODE_ENV === 'development') {
-  connectFirestoreEmulator(db, 'localhost', 1027);
-  console.log('Client: Connected to Firestore emulator!');
+if (process.env.NODE_ENV === "development") {
+  connectFirestoreEmulator(db, "localhost", 1027);
+  console.log("Client: Connected to Firestore emulator!");
 }

@@ -25,11 +25,9 @@ if (!fbAdmin.apps.find((app) => app?.name === appName)) {
       appName,
     );
   } else {
-    // Initialize without credentials for development/emulator
-    // The FIRESTORE_EMULATOR_HOST env var will direct traffic to the emulator
     initializeApp(
       {
-        projectId: process.env.FB_PROJECT_ID, // Still good to specify project ID for clarity
+        projectId: process.env.FB_PROJECT_ID,
       },
       appName,
     );
@@ -39,12 +37,13 @@ if (!fbAdmin.apps.find((app) => app?.name === appName)) {
 export const auth = getAuth(getApp(appName));
 let db: Firestore;
 if (process.env.NODE_ENV === "production") {
-  db = initializeFirestore(getApp(appName), {}, databaseId);
+  db = databaseId
+    ? initializeFirestore(getApp(appName), {}, databaseId)
+    : initializeFirestore(getApp(appName), {});
 } else {
-  // For firebase-admin, connecting to the emulator is done by setting the
-  // FIRESTORE_EMULATOR_HOST environment variable (e.g., FIRESTORE_EMULATOR_HOST="localhost:8080")
-  // before starting your Node.js process.
-  db = initializeFirestore(getApp(appName), {}, databaseId);
+  db = databaseId
+    ? initializeFirestore(getApp(appName), {}, databaseId)
+    : initializeFirestore(getApp(appName), {});
   if (process.env.FIRESTORE_EMULATOR_HOST) {
     console.log(
       `Server: Connected to Firestore emulator at ${process.env.FIRESTORE_EMULATOR_HOST}`,

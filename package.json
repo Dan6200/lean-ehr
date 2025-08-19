@@ -7,6 +7,7 @@
   "scripts": {
     "dev": "FIRESTORE_EMULATOR_HOST=\"localhost:1027\" next dev",
     "build": "next build",
+    "build:prod": "env-cmd -f .env.production next build",
     "start": "next start",
     "lint": "next lint",
     "build-service-worker": "pnpx esbuild auth-service-worker.ts --bundle --outfile=public/auth-service-worker.js",
@@ -68,6 +69,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "dotenv": "^16.4.5",
+    "env-cmd": "^10.1.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.3",
     "fast-csv": "^5.0.1",
