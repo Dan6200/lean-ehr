@@ -1,7 +1,0 @@
-onlyBuiltDependencies:
-  - core-js
-  - protobufjs
-  - sharp
-  - unrs-resolver
-ignoredBuiltDependencies:
-  - puppeteer
