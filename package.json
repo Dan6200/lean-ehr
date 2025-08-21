@@ -11,7 +11,7 @@
     "start": "next start",
     "start:prod": "env-cmd -f .env.production next start",
     "lint": "next lint",
-    "test": "jest",
+    "test": "FIRESTORE_EMULATOR_HOST=\"localhost:1027\" jest",
     "build-service-worker": "pnpx esbuild auth-service-worker.ts --bundle --outfile=public/auth-service-worker.js",
     "build-web-worker": "pnpx esbuild workers/pdfWorker.ts --bundle --outfile=public/pdfWorker.js"
   },
