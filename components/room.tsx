@@ -52,7 +52,7 @@ export default function Room({ roomData }: { roomData: RoomData }) {
                       height={64}
                     />
                   </CardHeader>
-                  <CardContent className="grow p-0 flex flex-col justify-center h-3/5 text-left">
+                  <CardContent className="grow p-0 flex flex-col justify-center h-3/5 text-center">
                     <h3 className="capitalize items-center md:text-xl">
                       {resident.resident_name}
                     </h3>
@@ -85,7 +85,7 @@ export default function Room({ roomData }: { roomData: RoomData }) {
               className="sm:w-64 w-full"
               onMouseDown={() =>
                 router.push(
-                  `/admin/room/${roomData.document_id}/residents/add?room=${roomData.residence_id}`
+                  `/admin/room/${roomData.document_id}/residents/add?room=${roomData.residence_id}`,
                 )
               }
             >
