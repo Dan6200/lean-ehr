@@ -54,7 +54,7 @@ export default function Room({ roomData }: { roomData: RoomData }) {
                   </CardHeader>
                   <CardContent className="grow p-0 flex flex-col justify-center h-3/5 text-center">
                     <h3 className="capitalize items-center md:text-xl">
-                      {resident.resident_name}
+                      {resident.encrypted_resident_name}
                     </h3>
                   </CardContent>
                 </Link>
@@ -62,7 +62,7 @@ export default function Room({ roomData }: { roomData: RoomData }) {
                   <CardFooter className="w-full p-0">
                     <DeleteResident
                       {...{
-                        resident_name: resident.resident_name,
+                        resident_name: resident.encrypted_resident_name,
                         resident_id: resident.document_id,
                         deleteResidentData,
                       }}

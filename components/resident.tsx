@@ -20,7 +20,7 @@ export default function Resident({
   const [admin, setAdmin] = useState<User | null>(null),
     router = useRouter();
 
-  const { resident_name, emergencyContacts } = residentData;
+  const { encrypted_resident_name, emergencyContacts } = residentData;
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -50,7 +50,7 @@ export default function Resident({
           width={96}
           height={96}
         />
-        <h1 className="text-5xl font-bold">{resident_name}</h1>
+        <h1 className="text-5xl font-bold">{encrypted_resident_name}</h1>
       </section>
       <section className="space-y-12 sm:space-y-18">
         <h3 className="text-2xl font-bold">Contacts</h3>
@@ -60,31 +60,31 @@ export default function Resident({
           {emergencyContacts ? (
             emergencyContacts.map((contact: any, index: number) => (
               <Link
-                key={index + contact.contact_name.split(" ")[0]}
-                href={`tel:${contact.cell_phone}`}
+                key={index + contact.encrypted_contact_name.split(" ")[0]}
+                href={`tel:${contact.encrypted_cell_phone}`}
                 className="w-full sm:w-fit"
               >
                 <Card className="justify-between hover:bg-green-700/10 active:bg-green-700/10 flex shadow-md p-4 w-full md:p-6 items-center md:h-[15vh] sm:w-[45vw] md:w-[30vw]">
                   <CardContent className="p-0 flex flex-col justify-between text-left ">
                     <h3 className="capitalize font-semibold md:text-xl">
-                      {contact.contact_name}
+                      {contact.encrypted_contact_name}
                     </h3>
-                    {contact.relationship && (
-                      <p className="capitalize">{contact.relationship}</p>
+                    {contact.encrypted_relationship && (
+                      <p className="capitalize">{contact.encrypted_relationship}</p>
                     )}
-                    {contact.cell_phone && (
+                    {contact.encrypted_cell_phone && (
                       <p className="text-green-700 font-semibold">
-                        {contact.cell_phone}
+                        {contact.encrypted_cell_phone}
                       </p>
                     )}
-                    {contact.home_phone && (
+                    {contact.encrypted_home_phone && (
                       <p className="text-green-700 font-semibold">
-                        {contact.home_phone}
+                        {contact.encrypted_home_phone}
                       </p>
                     )}
-                    {contact.work_phone && (
+                    {contact.encrypted_work_phone && (
                       <p className="text-green-700 font-semibold">
-                        {contact.work_phone}
+                        {contact.encrypted_work_phone}
                       </p>
                     )}
                   </CardContent>

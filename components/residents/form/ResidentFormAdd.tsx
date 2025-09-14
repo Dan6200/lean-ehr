@@ -2,7 +2,8 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getAuth, onAuthStateChanged } from "firebase/auth"; // Added imports
 
 import { toast } from "@/components/ui/use-toast";
 import { isError } from "@/app/utils";
@@ -11,21 +12,21 @@ import { ResidentFormBase } from "./ResidentFormBase";
 import type { Resident } from "@/types/resident";
 
 const emergencyContactSchema = z.object({
-  contact_name: z
+  encrypted_contact_name: z
     .string()
     .min(3, {
       message: "contact name must be at least 3 characters.",
     })
     .nullable()
     .optional(),
-  cell_phone: z.string(),
-  home_phone: z.string().nullable().optional(),
-  work_phone: z.string().nullable().optional(),
-  relationship: z.string().nullable().optional(),
+  encrypted_cell_phone: z.string(),
+  encrypted_home_phone: z.string().nullable().optional(),
+  encrypted_work_phone: z.string().nullable().optional(),
+  encrypted_relationship: z.string().nullable().optional(),
 });
 
 const ResidentFormSchema = z.object({
-  resident_name: z.string().nullable(),
+  encrypted_resident_name: z.string().nullable(),
   emergencyContacts: z.array(emergencyContactSchema).nullable().optional(),
 });
 
@@ -34,27 +35,51 @@ interface ResidentFormAddProps {
 }
 
 export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
+  const [idToken, setIdToken] = useState<string | null>(null); // State to hold idToken
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const token = await user.getIdToken();
+        setIdToken(token);
+      } else {
+        setIdToken(null);
+      }
+    });
+    return () => unsubscribe();
+  }, []);
+
   const form = useForm<z.infer<typeof ResidentFormSchema>>({
     resolver: zodResolver(ResidentFormSchema),
     defaultValues: {
-      resident_name: "",
+      encrypted_resident_name: "", // Changed from resident_name
       emergencyContacts: [],
     },
   });
 
   async function onSubmit(data: z.infer<typeof ResidentFormSchema>) {
+    if (!idToken) {
+      toast({
+        title: "Authentication Error",
+        description: "User not authenticated. Please log in again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     let residentData: Resident = {} as Resident;
-    residentData.resident_name = data.resident_name ?? null;
+    residentData.encrypted_resident_name = data.encrypted_resident_name ?? null; // Changed from resident_name
     residentData.residence_id = residence_id;
 
     if (data.emergencyContacts) {
       residentData.emergencyContacts = data.emergencyContacts.map(
         (contact) => ({
-          work_phone: contact.work_phone ?? null,
-          home_phone: contact.home_phone ?? null,
-          contact_name: contact.contact_name ?? null,
-          relationship: contact.relationship ?? null,
-          cell_phone: contact.cell_phone,
+          encrypted_work_phone: contact.encrypted_work_phone ?? null, // Changed
+          encrypted_home_phone: contact.encrypted_home_phone ?? null, // Changed
+          encrypted_contact_name: contact.encrypted_contact_name ?? null, // Changed
+          encrypted_relationship: contact.encrypted_relationship ?? null, // Changed
+          encrypted_cell_phone: contact.encrypted_cell_phone, // Changed
         }),
       );
     } else {
@@ -62,7 +87,7 @@ export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
     }
 
     try {
-      const { message, success } = await addNewResident(residentData);
+      const { message, success } = await addNewResident(residentData, idToken); // Pass idToken
       if (!success) {
         toast({
           title: success ? "Unable to Add New Resident" : message,
@@ -71,7 +96,7 @@ export function ResidentFormAdd({ residence_id }: ResidentFormAddProps) {
         return;
       }
       toast({ title: message });
-      form.reset({ resident_name: "", emergencyContacts: [] });
+      form.reset({ encrypted_resident_name: "", emergencyContacts: [] }); // Changed
     } catch (err) {
       if (isError(err)) toast({ title: err.message, variant: "destructive" });
     }

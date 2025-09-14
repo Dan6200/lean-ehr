@@ -4,23 +4,23 @@ import { ResidentFormEdit } from "./ResidentFormEdit";
 import type { Nullable } from "@/types/resident";
 
 interface ResidentFormProps {
-  resident_name?: Nullable<string>;
+  encrypted_resident_name?: Nullable<string>; // Changed from resident_name
   document_id?: Nullable<string>;
   resident_id?: Nullable<string>;
   residence_id: string;
   emergencyContacts?: Nullable<
     {
-      contact_name?: Nullable<string>;
-      cell_phone: string;
-      home_phone?: Nullable<string>;
-      work_phone?: Nullable<string>;
-      relationship?: Nullable<string>;
+      encrypted_contact_name?: Nullable<string>; // Changed
+      encrypted_cell_phone: string; // Changed
+      encrypted_home_phone?: Nullable<string>; // Changed
+      encrypted_work_phone?: Nullable<string>; // Changed
+      encrypted_relationship?: Nullable<string>; // Changed
     }[]
   >;
 }
 
 export function ResidentForm({
-  resident_name,
+  encrypted_resident_name, // Changed
   document_id,
   resident_id,
   residence_id,
@@ -29,7 +29,7 @@ export function ResidentForm({
   if (document_id && resident_id) {
     return (
       <ResidentFormEdit
-        resident_name={resident_name}
+        encrypted_resident_name={encrypted_resident_name} // Changed
         document_id={document_id}
         resident_id={resident_id}
         residence_id={residence_id}
