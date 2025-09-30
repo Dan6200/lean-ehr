@@ -1,7 +1,8 @@
 "use client";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { Provider as JotaiProvider } from "jotai";
-import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/firebase/client/config";
 import { getEncryptionKey } from "@/app/admin/actions/get-encryption-key"; // Our Server Action
 
 // Define the shape of our context value
@@ -29,7 +30,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
   const [errorKey, setErrorKey] = useState<string | null>(null);
 
   useEffect(() => {
-    const auth = getAuth();
+
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         try {
