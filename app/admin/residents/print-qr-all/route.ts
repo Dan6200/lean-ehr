@@ -3,7 +3,7 @@ export {};
 /***** Moved To A Standalone Application *******************/
 /*
 import { getAllRooms } from "@/app/admin/residents/data-actions";
-import { Residence } from "@/types/resident";
+import { Facility } from "@/types";
 import jsPDF from "jspdf";
 import { NextResponse } from "next/server";
 import logo from "./logo";
@@ -35,7 +35,7 @@ export async function GET() {
 
   await Promise.all(
     rooms.map(
-      async ({ id, roomNo, address }: Residence & { id: string }, idx) => {
+      async ({ id, roomNo, address }: Facility & { id: string }, idx) => {
         const qrCodeDataUri = await QRcode.toDataURL(
           new URL(`/room/${id}/`, process.env.DOMAIN).toString()
         );

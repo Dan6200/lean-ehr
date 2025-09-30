@@ -2,12 +2,12 @@
 import { collectionWrapper } from "@/firebase/firestore";
 import {
   Resident,
-  Residence,
+  Facility,
   RoomData,
   ResidentSchema,
-  ResidenceSchema,
+  FacilitySchema,
   RoomDataSchema,
-} from "@/types/resident";
+} from "@/types";
 import { notFound } from "next/navigation";
 import { z } from "zod";
 
@@ -57,53 +57,53 @@ export async function getResidents() {
 
 export async function getAllRooms() {
   try {
-    const roomsCollection = collectionWrapper("residence");
+    const roomsCollection = collectionWrapper("providers/GYRHOME/facilities");
     const roomsSnap = await roomsCollection.get();
     if (!roomsSnap.size) throw notFound();
     return roomsSnap.docs.map((doc) => {
-      const residence = { document_id: doc.id, ...doc.data() };
-      let validatedResidence: Residence;
+      const facility = { document_id: doc.id, ...doc.data() };
+      let validatedFacility: Facility;
       try {
-        validatedResidence = ResidenceSchema.parse(residence);
+        validatedFacility = FacilitySchema.parse(facility);
       } catch (error: any) {
-        console.log(residence);
+        console.log(facility);
         throw new Error(
-          "Object is not of type Residence  -- Tag:19: " + error.message,
+          "Object is not of type Facility  -- Tag:19: " + error.message,
         );
       }
-      return validatedResidence;
+      return validatedFacility;
     });
   } catch (error) {
     throw new Error("Failed to fetch All Room Data.\n\t\t" + error);
   }
 }
 
-export async function getRoomData(residenceDocId: string) {
+export async function getRoomData(facilityDocId: string) {
   /******************************************
-   * Creates a Join Between Residence,
-   * Emergency Contacts and Resident documents on residenceId
+   * Creates a Join Between Facility,
+   * Emergency Contacts and Resident documents on facilityId
    * *********************************************************/
 
   try {
-    const addressCollection = collectionWrapper("residence");
-    const addressSnap = await addressCollection.doc(residenceDocId).get();
-    const residents_map: { [key: string]: Omit<Resident, "residence_id"> } = {};
+    const addressCollection = collectionWrapper("providers/GYRHOME/facilities");
+    const addressSnap = await addressCollection.doc(facilityDocId).get();
+    const residents_map: { [key: string]: Omit<Resident, "facility_id"> } = {};
     const room_map: { [key: string]: RoomData } = {};
     if (!addressSnap.exists) throw notFound();
     const address = {
-      ...(addressSnap.data() as Residence),
+      ...(addressSnap.data() as Facility),
       document_id: addressSnap.id,
     };
-    let validatedAddress: Residence;
+    let validatedAddress: Facility;
     try {
-      validatedAddress = ResidenceSchema.parse(address);
+      validatedAddress = FacilitySchema.parse(address);
     } catch (error: any) {
       throw new Error(
-        "Object is not of type Residence -- Tag:10: " + error.message,
+        "Object is not of type Facility -- Tag:10: " + error.message,
       );
     }
-    room_map[validatedAddress.residence_id] = {
-      ...room_map[validatedAddress.residence_id],
+    room_map[validatedAddress.facility_id] = {
+      ...room_map[validatedAddress.facility_id],
       ...validatedAddress,
       residents: null,
     };
@@ -111,9 +111,9 @@ export async function getRoomData(residenceDocId: string) {
     // Fetch and join resident data...
     const residentsCollection = collectionWrapper("residents");
     const resQ = residentsCollection.where(
-      "residence_id",
+      "facility_id",
       "==",
-      address.residence_id,
+      address.facility_id,
     );
     const residentsData = await resQ.get();
     for (const doc of residentsData.docs) {
@@ -132,17 +132,17 @@ export async function getRoomData(residenceDocId: string) {
       // Handle duplicates
       if (residents_map[validatedResident.resident_id])
         throw new Error("Duplicate Resident Data! -- Tag:28");
-      const { residence_id, ...newResident } = validatedResident;
+      const { facility_id, ...newResident } = validatedResident;
       residents_map[validatedResident.resident_id] = {
         ...newResident,
         document_id: doc.id,
       };
 
       // Add all residents in the resident map to the room map
-      room_map[resident.residence_id] = {
-        ...room_map[resident.residence_id],
+      room_map[resident.facility_id] = {
+        ...room_map[resident.facility_id],
         residents: [
-          ...(room_map[resident.residence_id].residents ?? []),
+          ...(room_map[resident.facility_id].residents ?? []),
           residents_map[resident.resident_id],
         ] as any,
       };

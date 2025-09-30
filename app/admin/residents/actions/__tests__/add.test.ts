@@ -32,7 +32,7 @@ describe("addNewResident", () => {
   it("should add a new resident and increment resident_id", async () => {
     const newResident = {
       resident_name: "New Test Resident",
-      residence_id: "CC9999",
+      facility_id: "CC9999",
       emergencyContacts: [
         {
           contact_name: "New Contact",
@@ -64,16 +64,20 @@ describe("addNewResident", () => {
     expect(residentsSnap.docs.length).toBe(1);
     const addedResident = residentsSnap.docs[0].data();
     expect(addedResident.resident_id).toBe("323");
-    expect(addedResident.residence_id).toBe("CC9999");
+    expect(addedResident.facility_id).toBe("CC9999");
   });
 
   it("should return success: false if lastResidentID metadata is missing", async () => {
     // Clear metadata to simulate missing lastResidentID
-    await admin.firestore().collection("metadata").doc("lastResidentID").delete();
+    await admin
+      .firestore()
+      .collection("metadata")
+      .doc("lastResidentID")
+      .delete();
 
     const newResident = {
       resident_name: "Another Test Resident",
-      residence_id: "CC8888",
+      facility_id: "CC8888",
       emergencyContacts: [],
     };
 

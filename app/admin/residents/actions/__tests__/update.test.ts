@@ -21,7 +21,7 @@ describe("updateResident", () => {
     const updatedName = "John Doe Updated";
     const updatedResidentData = {
       resident_name: updatedName,
-      residence_id: "CC1101",
+      facility_id: "CC1101",
       resident_id: "1",
       emergencyContacts: [
         {
@@ -51,7 +51,7 @@ describe("updateResident", () => {
     const nonExistentDocumentId = "nonExistentDoc";
     const updatedResidentData = {
       resident_name: "Non Existent",
-      residence_id: "CC0000",
+      facility_id: "CC0000",
       resident_id: "0",
       emergencyContacts: [],
     };

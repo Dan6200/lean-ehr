@@ -22,10 +22,10 @@ export default async function EditResidentPage({
         Go To Previous Page
       </GoBackLink>
       <ResidentForm
-                        encrypted_resident_name={residentData.encrypted_resident_name}
+        encrypted_resident_name={residentData.encrypted_resident_name}
         document_id={residentData.document_id}
         resident_id={residentData.resident_id}
-        residence_id={residentData.residence_id}
+        facility_id={residentData.facility_id}
         emergencyContacts={residentData.emergencyContacts}
       />
     </main>

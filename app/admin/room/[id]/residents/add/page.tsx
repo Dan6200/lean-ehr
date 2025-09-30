@@ -22,7 +22,7 @@ export default function AddResidentPage({
       <ResidentForm
         {...{
           resident_name: "",
-          residence_id: room as string,
+          facility_id: room as string,
           emergencyContacts: [],
         }}
       />

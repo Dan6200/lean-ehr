@@ -1,4 +1,9 @@
-import { getResidentData, getResidents, getAllRooms, getRoomData } from "../get";
+import {
+  getResidentData,
+  getResidents,
+  getAllRooms,
+  getRoomData,
+} from "../get";
 import { loadInitialData, clearFirestore } from "@/test-data/emulatorSetup";
 import admin from "firebase-admin";
 
@@ -38,14 +43,22 @@ describe("Get Actions", () => {
 
     it("should throw notFound if resident does not exist", async () => {
       const nonExistentDocumentId = "nonExistentResident";
-      await expect(getResidentData(nonExistentDocumentId)).rejects.toThrow("not_found");
+      await expect(getResidentData(nonExistentDocumentId)).rejects.toThrow(
+        "not_found",
+      );
     });
 
     it("should throw error for invalid resident data structure", async () => {
       // Corrupt data in emulator to test validation
-      await admin.firestore().collection("residents").doc("residentDoc1").update({ resident_name: 123 });
+      await admin
+        .firestore()
+        .collection("residents")
+        .doc("residentDoc1")
+        .update({ resident_name: 123 });
 
-      await expect(getResidentData("residentDoc1")).rejects.toThrow("Object is not of type Resident");
+      await expect(getResidentData("residentDoc1")).rejects.toThrow(
+        "Object is not of type Resident",
+      );
     });
   });
 
@@ -55,8 +68,8 @@ describe("Get Actions", () => {
 
       expect(residents).toBeDefined();
       expect(residents.length).toBeGreaterThan(0);
-      expect(residents.some(r => r.resident_id === "1")).toBe(true);
-      expect(residents.some(r => r.resident_id === "2")).toBe(true);
+      expect(residents.some((r) => r.resident_id === "1")).toBe(true);
+      expect(residents.some((r) => r.resident_id === "2")).toBe(true);
     });
 
     it("should return empty array if no residents exist", async () => {
@@ -67,9 +80,15 @@ describe("Get Actions", () => {
 
     it("should throw error for invalid resident data structure in list", async () => {
       // Corrupt data in emulator to test validation
-      await admin.firestore().collection("residents").doc("residentDoc2").update({ resident_name: null });
+      await admin
+        .firestore()
+        .collection("residents")
+        .doc("residentDoc2")
+        .update({ resident_name: null });
 
-      await expect(getResidents()).rejects.toThrow("Object is not of type Resident");
+      await expect(getResidents()).rejects.toThrow(
+        "Object is not of type Resident",
+      );
     });
   });
 
@@ -79,8 +98,8 @@ describe("Get Actions", () => {
 
       expect(rooms).toBeDefined();
       expect(rooms.length).toBeGreaterThan(0);
-      expect(rooms.some(r => r.residence_id === "CC1147")).toBe(true);
-      expect(rooms.some(r => r.roomNo === "224")).toBe(true);
+      expect(rooms.some((r) => r.facility_id === "CC1147")).toBe(true);
+      expect(rooms.some((r) => r.roomNo === "224")).toBe(true);
     });
 
     it("should throw notFound if no rooms exist", async () => {
@@ -88,48 +107,68 @@ describe("Get Actions", () => {
       await expect(getAllRooms()).rejects.toThrow("not_found");
     });
 
-    it("should throw error for invalid residence data structure", async () => {
+    it("should throw error for invalid facility data structure", async () => {
       // Corrupt data in emulator to test validation
-      await admin.firestore().collection("residence").doc("0dHmwPP2DKr8gqAjw4Gc").update({ roomNo: 123 });
+      await admin
+        .firestore()
+        .collection("facility")
+        .doc("0dHmwPP2DKr8gqAjw4Gc")
+        .update({ roomNo: 123 });
 
-      await expect(getAllRooms()).rejects.toThrow("Object is not of type Residence");
+      await expect(getAllRooms()).rejects.toThrow(
+        "Object is not of type Facility",
+      );
     });
   });
 
   describe("getRoomData", () => {
     it("should return room data with joined residents", async () => {
-      const residenceDocId = "0dHmwPP2DKr8gqAjw4Gc"; // CC1147
-      const roomData = await getRoomData(residenceDocId);
+      const facilityDocId = "0dHmwPP2DKr8gqAjw4Gc"; // CC1147
+      const roomData = await getRoomData(facilityDocId);
 
       expect(roomData).toBeDefined();
-      expect(roomData.residence_id).toBe("CC1147");
+      expect(roomData.facility_id).toBe("CC1147");
       expect(roomData.roomNo).toBe("224");
       expect(roomData.residents).toBeDefined();
       expect(roomData.residents?.length).toBeGreaterThan(0);
-      expect(roomData.residents?.some(r => r.resident_id === "1")).toBe(true); // John Doe is in CC1101, not CC1147
+      expect(roomData.residents?.some((r) => r.resident_id === "1")).toBe(true); // John Doe is in CC1101, not CC1147
       // This test needs more specific data setup to ensure correct resident joining
     });
 
-    it("should throw notFound if residence does not exist", async () => {
-      const nonExistentResidenceDocId = "nonExistentRoom";
-      await expect(getRoomData(nonExistentResidenceDocId)).rejects.toThrow("not_found");
+    it("should throw notFound if facility does not exist", async () => {
+      const nonExistentFacilityDocId = "nonExistentRoom";
+      await expect(getRoomData(nonExistentFacilityDocId)).rejects.toThrow(
+        "not_found",
+      );
     });
 
     it("should throw error for invalid room data structure", async () => {
       // Corrupt data in emulator to test validation
-      await admin.firestore().collection("residence").doc("0dHmwPP2DKr8gqAjw4Gc").update({ roomNo: 123 });
+      await admin
+        .firestore()
+        .collection("facility")
+        .doc("0dHmwPP2DKr8gqAjw4Gc")
+        .update({ roomNo: 123 });
 
-      await expect(getRoomData("0dHmwPP2DKr8gqAjw4Gc")).rejects.toThrow("Object is not of type Residence");
+      await expect(getRoomData("0dHmwPP2DKr8gqAjw4Gc")).rejects.toThrow(
+        "Object is not of type Facility",
+      );
     });
 
     it("should throw error for invalid resident data structure during join", async () => {
       // Corrupt a resident that would be joined
-      await admin.firestore().collection("residents").doc("residentDoc1").update({ resident_name: 123 });
+      await admin
+        .firestore()
+        .collection("residents")
+        .doc("residentDoc1")
+        .update({ resident_name: 123 });
 
-      // This test needs to target a residence that has residentDoc1 associated
-      // For now, it will likely fail if residentDoc1 is not linked to the tested residence
-      const residenceDocId = "0dHmwPP2DKr8gqAjw4Gc"; // CC1147
-      await expect(getRoomData(residenceDocId)).rejects.toThrow("Object is not of type Resident");
+      // This test needs to target a facility that has residentDoc1 associated
+      // For now, it will likely fail if residentDoc1 is not linked to the tested facility
+      const facilityDocId = "0dHmwPP2DKr8gqAjw4Gc"; // CC1147
+      await expect(getRoomData(facilityDocId)).rejects.toThrow(
+        "Object is not of type Resident",
+      );
     });
   });
 });

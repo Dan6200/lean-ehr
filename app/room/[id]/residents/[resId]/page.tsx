@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import { getResidentData } from "@/app/admin/residents/actions/get";
-import { ResidentSchema, Resident as ResidentType } from "@/types/resident";
+import { ResidentSchema, Resident as ResidentType } from "@/types";
 import Resident from "@/components/resident";
 import { GoBackLink } from "@/components/go-back-link";
 

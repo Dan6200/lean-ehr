@@ -1,6 +1,6 @@
 import { notFound, redirect } from "next/navigation";
 import Room from "@/components/room";
-import { RoomDataSchema } from "@/types/resident";
+import { RoomDataSchema } from "@/types";
 import { getRoomData } from "@/app/admin/residents/actions/get";
 
 export default async function RoomPage({

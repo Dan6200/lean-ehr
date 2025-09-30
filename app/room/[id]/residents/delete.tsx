@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/components/ui/use-toast";
-import { Nullable } from "@/types/resident";
+import { Nullable } from "@/types";
 import { useRouter } from "next/navigation";
 
 export default function DeleteResident({

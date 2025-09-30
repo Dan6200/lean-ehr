@@ -1,7 +1,7 @@
 "use server";
 import { collectionWrapper } from "@/firebase/firestore";
 import db from "@/firebase/server/config";
-import { Resident, createResidentConverter } from "@/types/resident"; // Import createResidentConverter
+import { Resident, createResidentConverter } from "@/types"; // Import createResidentConverter
 import { notFound } from "next/navigation";
 import { getEncryptionKey } from "@/app/admin/actions/get-encryption-key"; // Import getEncryptionKey
 
