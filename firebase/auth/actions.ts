@@ -1,39 +1,42 @@
 import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-} from "firebase/auth";
-import { auth } from "../client/config";
+} from 'firebase/auth'
+import { auth } from '../client/config'
 
+// TODO: Set the tenant ID...
+// auth.tenantId = "Foo";
+//
 export async function createUserWithEmailAndPasswordWrapper(
   email: string,
-  password: string
+  password: string,
 ) {
   return createUserWithEmailAndPassword(auth, email, password).catch((e) => {
-    throw new Error("Failed to Create User. -- Tag:3\n\t" + e);
-  });
+    throw new Error('Failed to Create User. -- Tag:3\n\t' + e)
+  })
 }
 
 export async function signInWithEmailAndPasswordWrapper(
   email: string,
-  password: string
+  password: string,
 ) {
   return signInWithEmailAndPassword(auth, email, password)
     .then(({ user }) => ({
       result: JSON.stringify(user),
-      message: "User Signed In Successfully",
+      message: 'User Signed In Successfully',
       success: true,
     }))
     .catch((error: Error) => {
       return {
         result: error.toString(),
-        message: "Failed to Sign In User.",
+        message: 'Failed to Sign In User.',
         success: false,
-      };
-    });
+      }
+    })
 }
 
 export async function signOutWrapper() {
   auth.signOut().catch(function (e) {
-    throw new Error("Error signing out -- Tag:27\n\t" + e);
-  });
+    throw new Error('Error signing out -- Tag:27\n\t' + e)
+  })
 }

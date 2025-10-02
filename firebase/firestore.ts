@@ -1,15 +1,15 @@
 //cspell:ignore firestore
-import db from "./server/config";
+import db from './server/config'
 
 export const collectionWrapper = (path: string) => {
   try {
-    return db.collection(path);
+    return db.collection(path)
   } catch (e) {
     throw new Error(
-      `Could not retrieve the ${path} Collection -- Tag:15.\n\t` + e
-    );
+      `Could not retrieve the ${path} Collection -- Tag:15.\n\t` + e,
+    )
   }
-};
+}
 
 //export const addDocWrapper = async (
 //  reference: CollectionReference<any, DocumentData>,

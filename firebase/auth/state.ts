@@ -1,5 +1,5 @@
-"use client";
-export {};
+'use client'
+export {}
 //import { onAuthStateChanged } from "firebase/auth";
 //import { auth } from "../client/config";
 //
