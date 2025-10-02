@@ -1,10 +1,34 @@
-//import { FieldValue } from "firebase/firestore";
 export type Nullable<T> = T | null | undefined
 
 import { z } from 'zod'
-import { encrypt, decrypt } from '@/lib/encryption' // Import encryption functions
+import { encrypt, decrypt } from '@/lib/encryption'
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+} from 'firebase-admin/firestore'
 
+// --- Plaintext Schemas (for Application Use) ---
 export const EmergencyContactSchema = z.object({
+  contact_name: z.string().nullable().optional(),
+  cell_phone: z.string(),
+  work_phone: z.string().nullable().optional(),
+  home_phone: z.string().nullable().optional(),
+  relationship: z.string().nullable().optional(),
+})
+
+export const ResidentSchema = z.object({
+  resident_id: z.string(),
+  resident_name: z.string().nullable().optional(),
+  document_id: z.string(),
+  facility_id: z.string(),
+  roomNo: z.string(),
+  avatarUrl: z.string(),
+  emergencyContacts: z.array(EmergencyContactSchema).nullable().optional(),
+})
+
+// --- Encrypted Schemas (for Firestore Storage) ---
+const EncryptedEmergencyContactSchema = z.object({
   encrypted_contact_name: z.string().nullable().optional(),
   encrypted_cell_phone: z.string(),
   encrypted_work_phone: z.string().nullable().optional(),
@@ -12,36 +36,33 @@ export const EmergencyContactSchema = z.object({
   encrypted_relationship: z.string().nullable().optional(),
 })
 
-export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
-
-import {
-  DocumentData,
-  FirestoreDataConverter,
-  QueryDocumentSnapshot,
-} from 'firebase-admin/firestore'
-
-// --- Facility Schema and Type ---
-export const FacilitySchema = z.object({
-  document_id: z.string(),
-  address: z.string(),
-})
-export type Facility = z.infer<typeof FacilitySchema>
-
-// --- Resident Schema and Type ---
-export const ResidentSchema = z.object({
+const EncryptedResidentSchema = z.object({
   resident_id: z.string(),
   encrypted_resident_name: z.string().nullable().optional(),
   document_id: z.string(),
   facility_id: z.string(),
   roomNo: z.string(),
   avatarUrl: z.string(),
-  emergencyContacts: z.array(EmergencyContactSchema).nullable().optional(),
+  emergencyContacts: z
+    .array(EncryptedEmergencyContactSchema)
+    .nullable()
+    .optional(),
 })
+
+// --- Types ---
+export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
 export type Resident = z.infer<typeof ResidentSchema>
+
+// --- Other Schemas & Types (unchanged) ---
+export const FacilitySchema = z.object({
+  document_id: z.string(),
+  address: z.string(),
+})
+export type Facility = z.infer<typeof FacilitySchema>
 
 export const ResidentDataSchema = z.object({
   resident_id: z.string(),
-  encrypted_resident_name: z.string().nullable().optional(),
+  resident_name: z.string().nullable().optional(),
   document_id: z.string(),
   address: z.string(),
   facility_id: z.string(),
@@ -51,109 +72,109 @@ export const ResidentDataSchema = z.object({
 })
 export type ResidentData = z.infer<typeof ResidentDataSchema>
 
-// Converters...
-// Modified residentConverter to accept encryptionKey
+// --- Converters ---
 export const createResidentConverter = (
   encryptionKey: string,
 ): FirestoreDataConverter<Resident> => ({
   toFirestore(resident: Resident): DocumentData {
-    const encryptedResident = { ...resident }
+    const dataToEncrypt: any = { ...resident }
+    const encryptedData: any = {}
 
-    // Encrypt resident_name
-    if (encryptedResident.encrypted_resident_name) {
-      encryptedResident.encrypted_resident_name = encrypt(
-        encryptedResident.encrypted_resident_name,
+    // Map and encrypt fields
+    encryptedData.resident_id = dataToEncrypt.resident_id
+    encryptedData.facility_id = dataToEncrypt.facility_id
+    encryptedData.roomNo = dataToEncrypt.roomNo
+    encryptedData.avatarUrl = dataToEncrypt.avatarUrl
+    if (dataToEncrypt.document_id)
+      encryptedData.document_id = dataToEncrypt.document_id
+
+    if (dataToEncrypt.resident_name) {
+      encryptedData.encrypted_resident_name = encrypt(
+        dataToEncrypt.resident_name,
         encryptionKey,
       )
     }
 
-    // Encrypt emergency contacts
-    if (encryptedResident.emergencyContacts) {
-      encryptedResident.emergencyContacts =
-        encryptedResident.emergencyContacts.map((contact) => {
-          const encryptedContact = { ...contact }
-          if (encryptedContact.encrypted_contact_name) {
+    if (dataToEncrypt.emergencyContacts) {
+      encryptedData.emergencyContacts = dataToEncrypt.emergencyContacts.map(
+        (contact: any) => {
+          const encryptedContact: any = {}
+          if (contact.contact_name)
             encryptedContact.encrypted_contact_name = encrypt(
-              encryptedContact.encrypted_contact_name,
+              contact.contact_name,
               encryptionKey,
             )
-          }
-          if (encryptedContact.encrypted_cell_phone) {
+          if (contact.cell_phone)
             encryptedContact.encrypted_cell_phone = encrypt(
-              encryptedContact.encrypted_cell_phone,
+              contact.cell_phone,
               encryptionKey,
             )
-          }
-          if (encryptedContact.encrypted_work_phone) {
+          if (contact.work_phone)
             encryptedContact.encrypted_work_phone = encrypt(
-              encryptedContact.encrypted_work_phone,
+              contact.work_phone,
               encryptionKey,
             )
-          }
-          if (encryptedContact.encrypted_home_phone) {
+          if (contact.home_phone)
             encryptedContact.encrypted_home_phone = encrypt(
-              encryptedContact.encrypted_home_phone,
+              contact.home_phone,
               encryptionKey,
             )
-          }
-          if (encryptedContact.encrypted_relationship) {
+          if (contact.relationship)
             encryptedContact.encrypted_relationship = encrypt(
-              encryptedContact.encrypted_relationship,
+              contact.relationship,
               encryptionKey,
             )
-          }
-          return encryptedContact
-        })
+          return EncryptedEmergencyContactSchema.parse(encryptedContact)
+        },
+      )
     }
 
-    return ResidentSchema.parse(encryptedResident)
+    return EncryptedResidentSchema.parse(encryptedData)
   },
+
   fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): Resident {
     const data = snapshot.data()
-    const decryptedData: any = {
-      resident_id: data.resident_id,
-      document_id: snapshot.id,
-      emergencyContacts: data.emergencyContacts || null,
-    }
+    const decryptedData: any = { ...data }
 
-    // Decrypt resident_name
+    // Decrypt and map fields
     if (data.encrypted_resident_name) {
-      decryptedData.encrypted_resident_name = decrypt(
+      decryptedData.resident_name = decrypt(
         data.encrypted_resident_name,
         encryptionKey,
       )
+      delete decryptedData.encrypted_resident_name
     }
 
-    // Decrypt emergency contacts
     if (data.emergencyContacts && Array.isArray(data.emergencyContacts)) {
       decryptedData.emergencyContacts = data.emergencyContacts.map(
         (contact: any) => {
-          const decryptedContact: any = { ...contact }
-          if (contact.encrypted_contact_name) {
-            decryptedContact.encrypted_contact_name = decrypt(
+          const decryptedContact: any = {}
+          if (contact.encrypted_contact_name)
+            decryptedContact.contact_name = decrypt(
               contact.encrypted_contact_name,
               encryptionKey,
             )
-          }
-          if (contact.encrypted_cell_phone) {
-            decryptedContact.encrypted_cell_phone = decrypt(
+          if (contact.encrypted_cell_phone)
+            decryptedContact.cell_phone = decrypt(
               contact.encrypted_cell_phone,
               encryptionKey,
             )
-          }
-          if (contact.encrypted_work_phone) {
-            decryptedContact.encrypted_work_phone = decrypt(
+          if (contact.encrypted_work_phone)
+            decryptedContact.work_phone = decrypt(
               contact.encrypted_work_phone,
               encryptionKey,
             )
-          }
-          if (contact.encrypted_home_phone) {
-            decryptedContact.encrypted_home_phone = decrypt(
+          if (contact.encrypted_home_phone)
+            decryptedContact.home_phone = decrypt(
               contact.encrypted_home_phone,
               encryptionKey,
             )
-          }
-          return decryptedContact
+          if (contact.encrypted_relationship)
+            decryptedContact.relationship = decrypt(
+              contact.encrypted_relationship,
+              encryptionKey,
+            )
+          return EmergencyContactSchema.parse(decryptedContact)
         },
       )
     }
