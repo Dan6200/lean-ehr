@@ -1,10 +1,12 @@
 'use server'
 
 import { auth } from '@/firebase/server/config' // Firebase Admin SDK auth
+import { IdTokenResult } from 'firebase/auth'
 
 export async function getEncryptionKey(
-  idToken: string,
+  idToken: IdTokenResult,
 ): Promise<{ key?: string; error?: string }> {
+  // console.log(idToken)
   try {
     if (!idToken) {
       return { error: 'Unauthorized: No ID token provided' }
@@ -12,7 +14,7 @@ export async function getEncryptionKey(
 
     let decodedToken
     try {
-      decodedToken = await auth.verifyIdToken(idToken)
+      decodedToken = await auth.verifyIdToken(idToken?.token)
     } catch (error) {
       console.error('Error verifying ID token:', error)
       return { error: 'Unauthorized: Invalid ID token' }
