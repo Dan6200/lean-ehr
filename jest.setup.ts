@@ -3,9 +3,9 @@
 
 // Used for __tests__/testing-library.js
 // Learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom";
+import '@testing-library/jest-dom'
 // @ts-ignore
-import { jest } from "@jest/globals";
+import { jest } from '@jest/globals'
 
 /* TODO setup firebase-admin and initialize here:
  *
@@ -27,11 +27,11 @@ import { jest } from "@jest/globals";
 // process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN = 'mock-auth-domain';
 // ... add other necessary env vars
 
-jest.mock("next/navigation", () => ({
+jest.mock('next/navigation', () => ({
   notFound: jest.fn(() => {
-    const error = new Error("not_found");
-    (error as any).digest = "NEXT_NOT_FOUND";
-    throw error;
+    const error = new Error('not_found')
+    ;(error as any).digest = 'NEXT_NOT_FOUND'
+    throw error
   }),
   redirect: jest.fn(),
   useRouter: () => ({
@@ -39,15 +39,15 @@ jest.mock("next/navigation", () => ({
     back: jest.fn(),
     refresh: jest.fn(),
   }),
-  usePathname: jest.fn(() => "/mock-path"),
+  usePathname: jest.fn(() => '/mock-path'),
   useSearchParams: jest.fn(() => ({
     get: jest.fn(),
   })),
-}));
+}))
 
-jest.mock("@vercel/analytics/react", () => ({
+jest.mock('@vercel/analytics/react', () => ({
   Analytics: () => null, // Mock Analytics component
-}));
+}))
 
 // Mock other external dependencies or browser APIs if necessary
 // For example, mocking fetch:
