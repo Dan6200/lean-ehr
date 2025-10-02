@@ -15,9 +15,9 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
 export default function residentDataList({
-  residentDatas,
+  residentsData,
 }: {
-  residentDatas: (Facility & { document_id: string })[]
+  residentsData: ResidentData[]
 }) {
   const [admin, setAdmin] = useState<User | null>(null)
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function residentDataList({
     admin && (
       <div className="w-fit rounded-md border-2 mx-auto">
         <Table className="text-base w-[90vw] md:w-[70vw] lg:w-[60vw]">
-          <TableCaption>All residentDatas In The Facility.</TableCaption>
+          <TableCaption>All Residents In The Facility.</TableCaption>
           <TableHeader className="bg-foreground/20 font-bold rounded-md">
             <TableRow>
               <TableHead className="text-center md:w-[5vw]">Keyword</TableHead>
@@ -43,9 +43,14 @@ export default function residentDataList({
           </TableHeader>
           <TableBody>
             {residentsData?.map(
-              ({ document_id, residentData, address }: ResidentData) => {
+              ({
+                document_id,
+                facility_id,
+                encrypted_resident_name,
+                address,
+              }: ResidentData) => {
                 return (
-                  <TableRow key={document_id}>
+                  <TableRow key={facility_id}>
                     <TableCell className="text-center">
                       <Link
                         href={`/residents/${document_id}`}
@@ -59,7 +64,7 @@ export default function residentDataList({
                         href={`/residents/${document_id}`}
                         className="w-full block"
                       >
-                        {residentData}
+                        {encrypted_resident_name}
                       </Link>
                     </TableCell>
                     <TableCell className="text-center">
