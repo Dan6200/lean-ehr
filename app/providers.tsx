@@ -2,8 +2,8 @@
 import React, { useState, useEffect, createContext, useContext } from 'react'
 import { Provider as JotaiProvider } from 'jotai'
 import { onAuthStateChanged } from 'firebase/auth'
-import { auth } from '@/firebase/client/config'
 import { getEncryptionKey } from '@/app/admin/actions/get-encryption-key' // Our Server Action
+import { auth } from '@/firebase/auth/client/config'
 
 // Define the shape of our context value
 interface EncryptionKeyContextType {
