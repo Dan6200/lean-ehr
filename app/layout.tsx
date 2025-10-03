@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import '@/firebase/auth/state'
 import { Toaster } from '@/components/ui/toaster'
 import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
