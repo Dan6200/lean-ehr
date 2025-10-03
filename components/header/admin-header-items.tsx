@@ -7,8 +7,6 @@ import React, {
 } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { onAuthStateChanged, User } from 'firebase/auth'
-import { auth } from '@/firebase/client/config'
-import { signOutWrapper } from '@/firebase/auth/client'
 import { getAllResidentsData } from '@/app/admin/residents/actions/get'
 import { ResidentData } from '@/types'
 import Search from './search/index'
@@ -24,6 +22,8 @@ import {
 import { Button } from '@/components/ui/button'
 import { QrCode, SearchIcon, UserRound, UserRoundPlus } from 'lucide-react'
 import { toast } from '@/components/ui/use-toast'
+import { signOutWrapper } from '@/firebase/auth/client/definitions'
+import { auth } from '@/firebase/auth/client/config'
 
 export default function AdminHeaderItems() {
   const [admin, setAdmin] = useState<User | null>(null)
@@ -38,22 +38,17 @@ export default function AdminHeaderItems() {
       setAdmin(currentUser)
       if (currentUser) {
         // User is logged in, fetch the rooms
-        const fetchedData = await getAllResidentsData(
-          await currentUser.getIdTokenResult(),
-        ).catch((e) => {
-          console.log('Failed to Retrieve Rooms -- Tag:14.\n\t' + e)
+        const fetchedData = await getAllResidentsData().catch((e) => {
+          console.error('Failed to Fetch Residents -- Tag:14.\n\t' + e)
+          toast({ title: 'Failed To Fetch Residents', variant: 'destructive' })
           return null
         })
         setResidentsData(fetchedData)
       } else {
         // User is not logged in
         setResidentsData(null)
-        if (
-          !pathname.includes('residents') &&
-          !pathname.includes('room') &&
-          pathname !== '/admin/sign-in'
-        ) {
-          router.push('/admin/sign-in')
+        if (!pathname.includes('residents') && pathname !== '/sign-in') {
+          router.push('/sign-in')
         }
       }
     })
@@ -100,7 +95,7 @@ export default function AdminHeaderItems() {
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <span
-                  onClick={() => router.push('/admin/new')}
+                  onClick={() => router.push('/admin/create-new-user')}
                   className="cursor-pointer h-9 items-center flex justify-between mx-auto w-full"
                 >
                   Add New Admin
