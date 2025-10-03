@@ -1,24 +1,27 @@
 import { getAllResidentsData } from './residents/actions/get'
-import PaginatedResidentList from '@/components/paginated-resident-list'
+import ResidentDataList from '@/components/resident-list'
+import ServerPagination from '@/components/ui/server-pagination'
 
-export default async function Home() {
-  const residentsData = await getAllResidentsData().catch((e) => {
-    console.error('Failed to fetch residentData:', e)
-    return null // Handle error gracefully
-  })
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: { page?: string }
+}) {
+  const currentPage = Number((await searchParams)?.page) || 1
 
-  if (!residentsData) {
-    // This can be a more specific error message or component
-    return (
-      <main className="sm:container bg-background text-center mx-auto py-48 md:py-32">
-        Error loading residents.
-      </main>
-    )
-  }
+  const { residents, total } = await getAllResidentsData(currentPage).catch(
+    (e) => {
+      console.error('Failed to fetch residentData:', e)
+      // return { residents: [], total: 0 } // Handle error gracefully
+    },
+  )
+
+  const totalPages = Math.ceil(total / 50)
 
   return (
     <main className="sm:container bg-background text-center mx-auto py-48 md:py-32">
-      <PaginatedResidentList {...{ residentsData }} />
+      <ResidentDataList {...{ residentsData: residents }} />
+      <ServerPagination {...{ totalPages, currentPage }} />
     </main>
   )
 }
