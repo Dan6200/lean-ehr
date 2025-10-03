@@ -14,7 +14,7 @@ const SearchValueSchema = z.object({
 })
 
 interface SearchBarProps {
-  residentsData: ResidentData[]
+  residentsData: ResidentData[] | null
   matchingResidentsData: ResidentData[] | null
   setMatchingResidentsData: Dispatch<SetStateAction<ResidentData[] | null>>
   setOpen: Dispatch<SetStateAction<boolean>>
@@ -58,22 +58,24 @@ export const SearchBar = ({
   async function Send(searchValue: string) {
     let matchingResidentsData: ResidentData[] = []
     if (searchValue) {
-      matchingResidentsData = residentsData.filter(
-        (residentsData) =>
-          residentsData.address
-            .toLowerCase() // Ignore case
-            .replaceAll(/[^a-zA-Z0-9]/g, '') // Ignore non-alnum chars
-            .slice(0, 25)
-            .includes(
-              searchValue.toLowerCase().replaceAll(/[^a-zA-Z0-9]/g, ''),
-            ) ||
-          residentsData.roomNo
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()) ||
-          residentsData.facility_id
-            .toLowerCase()
-            .includes(searchValue.toLowerCase()),
-      )
+      matchingResidentsData =
+        residentsData?.filter(
+          (residentsData) =>
+            (residentsData.address
+              .toLowerCase() // Ignore case
+              .replaceAll(/[^a-zA-Z0-9]/g, '') // Ignore non-alnum chars
+              .slice(0, 25)
+              .includes(
+                searchValue.toLowerCase().replaceAll(/[^a-zA-Z0-9]/g, ''),
+              ) ||
+              residentsData.roomNo
+                .toLowerCase()
+                .includes(searchValue.toLowerCase()) ||
+              residentsData.resident_name
+                ?.toLowerCase()
+                .includes(searchValue.toLowerCase())) ??
+            [],
+        ) ?? []
     }
 
     // Update matchingResidentsData state
@@ -81,7 +83,7 @@ export const SearchBar = ({
   }
 
   async function onSubmit() {
-    router.push(`/residentsDatas/${matchingResidentsData?.[0].document_id}`)
+    router.push(`/residentsData/${matchingResidentsData?.[0].document_id}`)
     setOpen(!open)
   }
 
@@ -107,6 +109,7 @@ export const SearchBar = ({
                     ref={nameRef}
                     type="text"
                     className="p-0 m-0 block space-y-0 w-full focus-visible:outline-none overscroll-none border-0 focus-visible:ring-0 focus-visible:ring-offset-0"
+                    autoComplete="off"
                   />
                 </FormControl>
                 <Search />

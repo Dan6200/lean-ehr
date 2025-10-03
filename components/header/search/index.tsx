@@ -6,7 +6,7 @@ import { SearchBar } from './search-bar'
 import { cn } from '@/lib/utils'
 
 interface SearchProps {
-  residentsData: ResidentData[]
+  residentsData: ResidentData[] | null
   className: string
 }
 
