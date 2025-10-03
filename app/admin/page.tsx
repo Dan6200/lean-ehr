@@ -8,15 +8,17 @@ export default async function Home({
   searchParams: { page?: string }
 }) {
   const currentPage = Number((await searchParams)?.page) || 1
+  const LIMIT = 25
 
-  const { residents, total } = await getAllResidentsData(currentPage).catch(
-    (e) => {
-      console.error('Failed to fetch residentData:', e)
-      // return { residents: [], total: 0 } // Handle error gracefully
-    },
-  )
+  const { residents, total } = await getAllResidentsData(
+    currentPage,
+    LIMIT,
+  ).catch((e) => {
+    console.error('Failed to fetch residentData:', e)
+    return { residents: [], total: 0 } // Handle error gracefully
+  })
 
-  const totalPages = Math.ceil(total / 50)
+  const totalPages = Math.ceil(total / LIMIT)
 
   return (
     <main className="sm:container bg-background text-center mx-auto py-48 md:py-32">
