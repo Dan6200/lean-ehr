@@ -3,7 +3,6 @@ import { collectionWrapper } from '@/firebase/firestore'
 import {
   Resident,
   Facility,
-  ResidentData,
   ResidentSchema,
   FacilitySchema,
   ResidentDataSchema,
@@ -13,12 +12,19 @@ import {
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
 import { getEncryptionKey } from '../../actions/get-encryption-key'
+import { verifySessionCookie } from '@/firebase/auth/server/definitions'
 
 export async function getResidentData(
   documentId: string,
-): Promise<z.infer<typeof ResidentSchema>> {
+): Promise<z.infer<typeof ResidentDataSchema>> {
   try {
-    const residentsColRef = collectionWrapper('residents')
+    const idToken = await verifySessionCookie()
+    if (!idToken) throw new Error('Failed to verify session token')
+    const { key: encryptionKey } = await getEncryptionKey()
+    if (!encryptionKey) throw new Error('failed to retrieve encryption key')
+    const residentsColRef = collectionWrapper('residents').withConverter(
+      createResidentConverter(encryptionKey),
+    )
     const residentsSnap = await residentsColRef.doc(documentId).get()
     if (!residentsSnap.exists) throw notFound()
     const resident = residentsSnap.data()
@@ -30,8 +36,15 @@ export async function getResidentData(
         'Object is not of type Resident  -- Tag:16: ' + error.message,
       )
     }
+    const facilitySnap = await collectionWrapper('facilites')
+      .withConverter(facilityConverter)
+      .where('facility_id', '==', validatedResident.facility_id)
+      .limit(1)
+      .get()
 
-    return { ...validatedResident, document_id: residentsSnap.id }
+    const { address } = facilitySnap.docs[0].data()
+
+    return { ...validatedResident, document_id: residentsSnap.id, address }
   } catch (error) {
     throw new Error('Failed to fetch resident.\n\t\t' + error)
   }
@@ -82,92 +95,15 @@ export async function getAllFacilities() {
   }
 }
 
-export async function getAllResidentsData(idToken: string) {
+export async function getAllResidentsData() {
   try {
-    // const facilityCollection = collectionWrapper(
-    //   "providers/GYRHOME/facilities",
-    // );
-    // const facilitySnap = await facilityCollection.doc(facilityDocId).get();
-    // const facility_map: { [key: string]: Facility } = {};
-    // const residents_map: { [key: string]: Resident } = {};
-    // if (!facilitySnap.exists) throw notFound();
-    // const facility = {
-    //   ...(facilitySnap.data() as Facility),
-    //   document_id: facilitySnap.id,
-    // };
-    // let validatedFacility: Facility;
-    // try {
-    //   validatedFacility = FacilitySchema.parse(facility);
-    // } catch (error: any) {
-    //   throw new Error(
-    //     "Object is not of type Facility -- Tag:10: " + error.message,
-    //   );
-    // }
-    // facility_map[validatedFacility.document_id] = {
-    //   ...facility_map[validatedFacility.document_id],
-    //   ...validatedFacility,
-    //   residents: null,
-    // };
-    //
-    // // Fetch and join resident data...
-    // const residentsCollection = collectionWrapper(
-    //   `providers/GYRHOME/residents`,
-    // );
-    // const resQ = residentsCollection;
-    // const residentsData = await resQ.get();
-    //
-    // for (const doc of residentsData.docs) {
-    //   if (!doc.exists) throw notFound();
-    //   let resident = doc.data(),
-    //     validatedResident: Resident;
-    //   try {
-    //     validatedResident = ResidentSchema.parse(resident);
-    //   } catch (error: any) {
-    //     throw new Error(
-    //       "Object is not of type Resident -- Tag:9: " + error.message,
-    //     );
-    //   }
-    //
-    //   // Add each resident to the residents map
-    //   // Handle duplicates
-    //   if (residents_map[doc.id])
-    //     throw new Error("Duplicate Resident Data! -- Tag:28");
-    //   residents_map[validatedResident.resident_id] = {
-    //     ...validatedResident,
-    //     document_id: doc.id,
-    //   };
-    //
-    //   // Add all residents in the resident map to the facility map
-    //   facility_map[resident.document_id] = {
-    //     ...facility_map[resident.document_id],
-    //     residents: [
-    //       ...(facility_map[resident.document_id].residents ?? []),
-    //       residents_map[resident.resident_id],
-    //     ] as any,
-    //   };
-    // }
-    //
-    // if (Object.values(facility_map).length > 1)
-    //   throw new Error("Duplicate Facility Data! -- Tag:28");
-    // const facilityData = Object.values(facility_map)[0];
-    // let validatedFacilityData: FacilityData;
-    // try {
-    //   validatedFacilityData = FacilityDataSchema.parse(facilityData);
-    // } catch (error: any) {
-    //   throw new Error(
-    //     "Object is not of type FacilityData -- Tag:29: " + error.message,
-    //   );
-    // }
-    // return validatedFacilityData
-  } catch (error) {
-    throw new Error('Failed to fetch All Residents Data:\n\t\t' + error)
-  }
-  try {
-    // Fetch and join address data...
-    const { key: encryptionKey } = await getEncryptionKey(idToken)
+    const idToken = await verifySessionCookie()
+    if (!idToken) throw new Error('Failed to verify session token')
+    const { key: encryptionKey } = await getEncryptionKey()
     if (!encryptionKey) throw new Error('failed to retrieve encryption key')
+    // Fetch and join address data...
     const facilitiesCollection = collectionWrapper(
-      'providers/GYRHOME/facilities',
+      'providers/GYRHOME/facilites',
     ).withConverter(facilityConverter)
     const facilitiesData = await facilitiesCollection.get()
     const residentsCollection = collectionWrapper(
@@ -175,10 +111,12 @@ export async function getAllResidentsData(idToken: string) {
     ).withConverter(createResidentConverter(encryptionKey))
     const resQ = residentsCollection
     const residentsData = await resQ.get()
-    const facility_lookup: { [id: string]: Facility } =
+    const facility_lookup: { [id: string]: string } =
       facilitiesData.docs.reduce(
-        (lookup: { [id: string]: any }, facility) =>
-          (lookup[facility.id] = facility.data()),
+        (lookup: { [id: string]: any }, facility) => ({
+          ...lookup,
+          [facility.id]: facility.data().address,
+        }),
         {},
       )
     return residentsData.docs.reduce((residents: any, resident) => {
