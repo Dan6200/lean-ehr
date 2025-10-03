@@ -19,7 +19,7 @@ export async function signInWithEmailAndPasswordWrapper(
 ) {
   return signInWithEmailAndPassword(auth, email, password)
     .then(({ user }) => ({
-      result: JSON.stringify(user),
+      result: user,
       message: 'User Signed In Successfully',
       success: true,
     }))
