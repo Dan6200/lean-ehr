@@ -1,6 +1,7 @@
 import { getAuth, connectAuthEmulator } from 'firebase/auth'
 import { getApp, getApps, initializeApp } from 'firebase/app'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
+import { getAnalytics } from 'firebase/analytics'
 
 const appName = 'linkID-client'
 export const firebaseConfig = {
@@ -21,6 +22,7 @@ if (!getApps().find((app) => app?.name === appName))
   initializeApp(firebaseConfig, appName)
 
 export const auth = getAuth(getApp(appName))
+export const analytics = getAnalytics(getApp(appName))
 export const db = databaseId
   ? getFirestore(getApp(appName), databaseId)
   : getFirestore(getApp(appName))
