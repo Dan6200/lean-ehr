@@ -25,7 +25,7 @@ export default async function EditResidentPage({
         resident_name={residentData.resident_name}
         document_id={residentData.id}
         facility_id={residentData.facility_id}
-        emergencyContacts={residentData.emergencyContacts}
+        emergency_contacts={residentData.emergency_contacts}
       />
     </main>
   )

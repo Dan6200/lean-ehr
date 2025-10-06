@@ -32,7 +32,7 @@ export default function Resident({
   const router = useRouter()
   console.log(user)
 
-  const { resident_name, roomNo, facility_id, address } = residentData
+  const { resident_name, room_no, facility_id, address } = residentData
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -45,9 +45,9 @@ export default function Resident({
     <div className="py-8 md:py-16 w-full">
       <section className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
         <div className="md:col-span-1 flex flex-col items-center md:items-start gap-4">
-          {residentData.avatarUrl ? (
+          {residentData.avatar_url ? (
             <Image
-              src={residentData.avatarUrl}
+              src={residentData.avatar_url}
               alt="resident avatar"
               className="rounded-full"
               width={128}
@@ -70,7 +70,7 @@ export default function Resident({
           <h2 className="text-2xl font-bold mb-4 border-b pb-2">
             Resident Information
           </h2>
-          <ResidentInfoRow label="Room" value={roomNo} />
+          <ResidentInfoRow label="Room" value={room_no} />
           <ResidentInfoRow label="Facility ID" value={facility_id} />
           <ResidentInfoRow label="Facility Address" value={address} />
           <ResidentInfoRow label="Patient Contact" value="" />

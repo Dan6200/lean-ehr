@@ -23,7 +23,7 @@ describe('updateResident', () => {
       resident_name: updatedName,
       facility_id: 'CC1101',
       resident_id: '1',
-      emergencyContacts: [
+      emergency_contacts: [
         {
           contact_name: 'Jane Doe Updated',
           cell_phone: '999-888-7777',
@@ -39,7 +39,7 @@ describe('updateResident', () => {
     // Verify the resident was updated
     const updatedResident = await getResidentData(documentIdToUpdate)
     expect(updatedResident.resident_name).toBe(updatedName)
-    expect(updatedResident.emergencyContacts?.[0]?.contact_name).toBe(
+    expect(updatedResident.emergency_contacts?.[0]?.contact_name).toBe(
       'Jane Doe Updated',
     )
   })
@@ -50,7 +50,7 @@ describe('updateResident', () => {
       resident_name: 'Non Existent',
       facility_id: 'CC0000',
       resident_id: '0',
-      emergencyContacts: [],
+      emergency_contacts: [],
     }
 
     const result = await updateResident(

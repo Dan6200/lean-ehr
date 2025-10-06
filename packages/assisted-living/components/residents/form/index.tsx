@@ -8,7 +8,7 @@ interface ResidentFormProps {
   document_id?: Nullable<string>
   resident_id?: Nullable<string>
   facility_id: string
-  emergencyContacts?: Nullable<
+  emergency_contacts?: Nullable<
     {
       contact_name?: Nullable<string> // Changed
       cell_phone: string // Changed
@@ -24,7 +24,7 @@ export function ResidentForm({
   document_id,
   resident_id,
   facility_id,
-  emergencyContacts,
+  emergency_contacts,
 }: ResidentFormProps) {
   if (document_id && resident_id) {
     return (
@@ -33,7 +33,7 @@ export function ResidentForm({
         document_id={document_id}
         resident_id={resident_id}
         facility_id={facility_id}
-        emergencyContacts={emergencyContacts}
+        emergency_contacts={emergency_contacts}
       />
     )
   } else {

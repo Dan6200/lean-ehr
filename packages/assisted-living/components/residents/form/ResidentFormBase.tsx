@@ -25,7 +25,7 @@ export function ResidentFormBase({
 }: ResidentFormBaseProps) {
   const { fields, append, remove } = useFieldArray({
     control: form.control,
-    name: 'emergencyContacts',
+    name: 'emergency_contacts',
   })
 
   const handleRemoveEmergencyContact = (indexToRemove: number) => {

@@ -20,9 +20,9 @@ export const EmergencyContactSchema = z.object({
 export const ResidentSchema = z.object({
   resident_name: z.string().nullable().optional(),
   facility_id: z.string(),
-  roomNo: z.string(),
-  avatarUrl: z.string(),
-  emergencyContacts: z.array(EmergencyContactSchema).nullable().optional(),
+  room_no: z.string(),
+  avatar_url: z.string(),
+  emergency_contacts: z.array(EmergencyContactSchema).nullable().optional(),
 })
 
 // --- Encrypted Schemas (for Firestore Storage) ---
@@ -37,9 +37,9 @@ const EncryptedEmergencyContactSchema = z.object({
 const EncryptedResidentSchema = z.object({
   encrypted_resident_name: z.string().nullable().optional(),
   facility_id: z.string(),
-  roomNo: z.string(),
-  avatarUrl: z.string(),
-  emergencyContacts: z
+  room_no: z.string(),
+  avatar_url: z.string(),
+  emergency_contacts: z
     .array(EncryptedEmergencyContactSchema)
     .nullable()
     .optional(),
@@ -60,9 +60,9 @@ export const ResidentDataSchema = z.object({
   id: z.string(),
   address: z.string(),
   facility_id: z.string(),
-  roomNo: z.string(),
-  avatarUrl: z.string(),
-  emergencyContacts: z.array(EmergencyContactSchema).nullable().optional(),
+  room_no: z.string(),
+  avatar_url: z.string(),
+  emergency_contacts: z.array(EmergencyContactSchema).nullable().optional(),
 })
 export type ResidentData = z.infer<typeof ResidentDataSchema>
 
@@ -77,8 +77,8 @@ export const createResidentConverter = (
     // Map and encrypt fields
     encryptedData.resident_id = dataToEncrypt.resident_id
     encryptedData.facility_id = dataToEncrypt.facility_id
-    encryptedData.roomNo = dataToEncrypt.roomNo
-    encryptedData.avatarUrl = dataToEncrypt.avatarUrl
+    encryptedData.room_no = dataToEncrypt.room_no
+    encryptedData.avatar_url = dataToEncrypt.avatar_url
 
     if (dataToEncrypt.resident_name) {
       encryptedData.encrypted_resident_name = encrypt(
@@ -87,8 +87,8 @@ export const createResidentConverter = (
       )
     }
 
-    if (dataToEncrypt.emergencyContacts) {
-      encryptedData.emergencyContacts = dataToEncrypt.emergencyContacts.map(
+    if (dataToEncrypt.emergency_contacts) {
+      encryptedData.emergency_contacts = dataToEncrypt.emergency_contacts.map(
         (contact: any) => {
           const encryptedContact: any = {}
           if (contact.contact_name)
@@ -137,8 +137,8 @@ export const createResidentConverter = (
       delete decryptedData.encrypted_resident_name
     }
 
-    if (data.emergencyContacts && Array.isArray(data.emergencyContacts)) {
-      decryptedData.emergencyContacts = data.emergencyContacts.map(
+    if (data.emergency_contacts && Array.isArray(data.emergency_contacts)) {
+      decryptedData.emergency_contacts = data.emergency_contacts.map(
         (contact: any) => {
           const decryptedContact: any = {}
           if (contact.encrypted_contact_name)

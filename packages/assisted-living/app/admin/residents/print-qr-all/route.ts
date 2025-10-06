@@ -35,7 +35,7 @@ export async function GET() {
 
   await Promise.all(
     rooms.map(
-      async ({ id, roomNo, address }: Facility & { id: string }, idx) => {
+      async ({ id, room_no, address }: Facility & { id: string }, idx) => {
         const qrCodeDataUri = await QRcode.toDataURL(
           new URL(`/room/${id}/`, process.env.DOMAIN).toString()
         );
@@ -73,7 +73,7 @@ export async function GET() {
         doc.setFont("Helvetica", "normal");
         doc.text(streetName.join(""), 75, 173); // Adjust position
         doc.text("-", 112, 173); // Adjust position
-        doc.text("#" + roomNo, 120, 173); // Adjust position
+        doc.text("#" + room_no, 120, 173); // Adjust position
 
         if (idx < rooms.length - 1) doc.addPage(); // Add new page for next resident
       }

@@ -17,7 +17,7 @@ export function EmergencyContactBlock({
   const { getValues } = useFormContext()
 
   const initialIsEmContactBlockEditing = () => {
-    const contactPath = `emergencyContacts.${index}`
+    const contactPath = `emergency_contacts.${index}`
     const contact = getValues(contactPath)
 
     return (
@@ -55,35 +55,35 @@ export function EmergencyContactBlock({
       </h3>
       <div className="space-y-6">
         <EditableFormField
-          name={`emergencyContacts.${index}.contact_name`}
+          name={`emergency_contacts.${index}.contact_name`}
           label="Name"
           description="Emergency Contact's Name"
           isInputDisabled={!isEmContactBlockEditing}
           showLocalEditingControls={false}
         />
         <EditableFormField
-          name={`emergencyContacts.${index}.relationship`}
+          name={`emergency_contacts.${index}.relationship`}
           label="Relationship"
           description="Emergency Contact's Relationship"
           isInputDisabled={!isEmContactBlockEditing}
           showLocalEditingControls={false}
         />
         <EditableFormField
-          name={`emergencyContacts.${index}.cell_phone`}
+          name={`emergency_contacts.${index}.cell_phone`}
           label="Cell Phone"
           description="Emergency Contact's Cell Phone Number"
           isInputDisabled={!isEmContactBlockEditing}
           showLocalEditingControls={false}
         />
         <EditableFormField
-          name={`emergencyContacts.${index}.home_phone`}
+          name={`emergency_contacts.${index}.home_phone`}
           label="Home Phone"
           description="Emergency Contact's Home Phone Number"
           isInputDisabled={!isEmContactBlockEditing}
           showLocalEditingControls={false}
         />
         <EditableFormField
-          name={`emergencyContacts.${index}.work_phone`}
+          name={`emergency_contacts.${index}.work_phone`}
           label="Work Phone"
           description="Emergency Contact's Work Phone Number"
           isInputDisabled={!isEmContactBlockEditing}

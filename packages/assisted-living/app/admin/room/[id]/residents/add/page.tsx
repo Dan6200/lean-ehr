@@ -23,7 +23,7 @@ export default function AddResidentPage({
         {...{
           resident_name: '',
           facility_id: room as string,
-          emergencyContacts: [],
+          emergency_contacts: [],
         }}
       />
     </main>

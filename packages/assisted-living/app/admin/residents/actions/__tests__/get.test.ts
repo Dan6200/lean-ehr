@@ -94,7 +94,7 @@ describe('Get Actions', () => {
       expect(rooms).toBeDefined()
       expect(rooms.length).toBeGreaterThan(0)
       expect(rooms.some((r) => r.facility_id === 'CC1147')).toBe(true)
-      expect(rooms.some((r) => r.roomNo === '224')).toBe(true)
+      expect(rooms.some((r) => r.room_no === '224')).toBe(true)
     })
 
     it('should throw notFound if no rooms exist', async () => {
@@ -108,7 +108,7 @@ describe('Get Actions', () => {
         .firestore()
         .collection('facility')
         .doc('0dHmwPP2DKr8gqAjw4Gc')
-        .update({ roomNo: 123 })
+        .update({ room_no: 123 })
 
       await expect(getAllRooms()).rejects.toThrow(
         'Object is not of type Facility',
@@ -123,7 +123,7 @@ describe('Get Actions', () => {
 
       expect(roomData).toBeDefined()
       expect(roomData.facility_id).toBe('CC1147')
-      expect(roomData.roomNo).toBe('224')
+      expect(roomData.room_no).toBe('224')
       expect(roomData.residents).toBeDefined()
       expect(roomData.residents?.length).toBeGreaterThan(0)
       expect(roomData.residents?.some((r) => r.resident_id === '1')).toBe(true) // John Doe is in CC1101, not CC1147
@@ -143,7 +143,7 @@ describe('Get Actions', () => {
         .firestore()
         .collection('facility')
         .doc('0dHmwPP2DKr8gqAjw4Gc')
-        .update({ roomNo: 123 })
+        .update({ room_no: 123 })
 
       await expect(getRoomData('0dHmwPP2DKr8gqAjw4Gc')).rejects.toThrow(
         'Object is not of type Facility',

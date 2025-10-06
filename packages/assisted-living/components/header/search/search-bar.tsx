@@ -68,7 +68,7 @@ export const SearchBar = ({
               .includes(
                 searchValue.toLowerCase().replaceAll(/[^a-zA-Z0-9]/g, ''),
               ) ||
-              residentsData.roomNo
+              residentsData.room_no
                 .toLowerCase()
                 .includes(searchValue.toLowerCase()) ||
               residentsData.resident_name

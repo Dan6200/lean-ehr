@@ -33,7 +33,7 @@ describe('addNewResident', () => {
     const newResident = {
       resident_name: 'New Test Resident',
       facility_id: 'CC9999',
-      emergencyContacts: [
+      emergency_contacts: [
         {
           contact_name: 'New Contact',
           cell_phone: '123-456-7890',
@@ -78,7 +78,7 @@ describe('addNewResident', () => {
     const newResident = {
       resident_name: 'Another Test Resident',
       facility_id: 'CC8888',
-      emergencyContacts: [],
+      emergency_contacts: [],
     }
 
     const result = await addNewResident(newResident)

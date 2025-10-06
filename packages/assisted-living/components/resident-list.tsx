@@ -52,7 +52,7 @@ export default function ResidentList({
                     href={`/admin/residents/${data.id}`}
                     className="w-full block"
                   >
-                    {data.roomNo}
+                    {data.room_no}
                   </Link>
                 </TableCell>
                 <TableCell className="text-center">

@@ -32,7 +32,7 @@ export const Suggestions = ({
                   <p className="font-semibold">{residents.resident_name}</p>
                   <p>{residents.address}</p>
                   <p className="text-sm font-semibold">
-                    Rm: {residents.roomNo}
+                    Rm: {residents.room_no}
                   </p>
                 </Link>
               ))}

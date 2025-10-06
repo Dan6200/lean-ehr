@@ -27,7 +27,7 @@ const emergencyContactSchema = z.object({
 
 const ResidentFormSchema = z.object({
   encrypted_resident_name: z.string().nullable(),
-  emergencyContacts: z.array(emergencyContactSchema).nullable().optional(),
+  emergency_contacts: z.array(emergencyContactSchema).nullable().optional(),
 })
 
 interface ResidentFormAddProps {
@@ -54,7 +54,7 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
     resolver: zodResolver(ResidentFormSchema),
     defaultValues: {
       encrypted_resident_name: '', // Changed from resident_name
-      emergencyContacts: [],
+      emergency_contacts: [],
     },
   })
 
@@ -72,8 +72,8 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
     residentData.encrypted_resident_name = data.encrypted_resident_name ?? null // Changed from resident_name
     residentData.facility_id = facility_id
 
-    if (data.emergencyContacts) {
-      residentData.emergencyContacts = data.emergencyContacts.map(
+    if (data.emergency_contacts) {
+      residentData.emergency_contacts = data.emergency_contacts.map(
         (contact) => ({
           encrypted_work_phone: contact.encrypted_work_phone ?? null, // Changed
           encrypted_home_phone: contact.encrypted_home_phone ?? null, // Changed
@@ -83,7 +83,7 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
         }),
       )
     } else {
-      residentData.emergencyContacts = null
+      residentData.emergency_contacts = null
     }
 
     try {
@@ -96,7 +96,7 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
         return
       }
       toast({ title: message })
-      form.reset({ encrypted_resident_name: '', emergencyContacts: [] }) // Changed
+      form.reset({ encrypted_resident_name: '', emergency_contacts: [] }) // Changed
     } catch (err) {
       if (isError(err)) toast({ title: err.message, variant: 'destructive' })
     }

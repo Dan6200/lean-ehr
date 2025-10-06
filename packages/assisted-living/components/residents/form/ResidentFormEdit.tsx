@@ -29,7 +29,7 @@ const emergencyContactSchema = z.object({
 
 const ResidentFormSchema = z.object({
   encrypted_resident_name: z.string().nullable(),
-  emergencyContacts: z.array(emergencyContactSchema).nullable().optional(),
+  emergency_contacts: z.array(emergencyContactSchema).nullable().optional(),
 })
 
 interface ResidentFormEditProps {
@@ -37,7 +37,7 @@ interface ResidentFormEditProps {
   document_id: string // document_id is required for editing
   resident_id: string // resident_id is required for editing
   facility_id: string
-  emergencyContacts?: Nullable<
+  emergency_contacts?: Nullable<
     {
       encrypted_contact_name?: Nullable<string>
       encrypted_cell_phone: string
@@ -53,7 +53,7 @@ export function ResidentFormEdit({
   document_id,
   resident_id,
   facility_id,
-  emergencyContacts,
+  emergency_contacts,
 }: ResidentFormEditProps) {
   const router = useRouter()
   const [idToken, setIdToken] = useState<string | null>(null) // State to hold idToken
@@ -75,8 +75,8 @@ export function ResidentFormEdit({
     resolver: zodResolver(ResidentFormSchema),
     defaultValues: {
       encrypted_resident_name: encrypted_resident_name ?? undefined,
-      emergencyContacts:
-        emergencyContacts?.map(
+      emergency_contacts:
+        emergency_contacts?.map(
           ({
             encrypted_contact_name,
             encrypted_cell_phone,
@@ -93,7 +93,7 @@ export function ResidentFormEdit({
         ) ?? [],
     },
   })
-  const originalNoOfEmContacts = useRef(emergencyContacts?.length ?? 0)
+  const originalNoOfEmContacts = useRef(emergency_contacts?.length ?? 0)
 
   async function onSubmit(data: z.infer<typeof ResidentFormSchema>) {
     if (!idToken) {
@@ -110,8 +110,8 @@ export function ResidentFormEdit({
     residentData.facility_id = facility_id
     residentData.resident_id = resident_id // Use existing resident_id
 
-    if (data.emergencyContacts) {
-      residentData.emergencyContacts = data.emergencyContacts.map(
+    if (data.emergency_contacts) {
+      residentData.emergency_contacts = data.emergency_contacts.map(
         (contact) => ({
           encrypted_work_phone: contact.encrypted_work_phone ?? null,
           encrypted_home_phone: contact.encrypted_home_phone ?? null,
@@ -121,7 +121,7 @@ export function ResidentFormEdit({
         }),
       )
     } else {
-      residentData.emergencyContacts = null
+      residentData.emergency_contacts = null
     }
 
     try {
