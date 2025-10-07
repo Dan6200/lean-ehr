@@ -3,7 +3,7 @@ import { getApp, getApps, initializeApp } from 'firebase/app'
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { getAnalytics, isSupported } from 'firebase/analytics'
 
-const appName = 'linkID-client'
+const appName = 'lean-ehr-assisted-living-client'
 export const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,

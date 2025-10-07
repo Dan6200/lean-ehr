@@ -4,7 +4,7 @@ import { getAuth } from 'firebase-admin/auth'
 import { Firestore, initializeFirestore } from 'firebase-admin/firestore'
 
 const { credential } = fbAdmin
-const appName = 'linkID-server'
+const appName = 'lean-ehr-assisted-living-server'
 
 let databaseId: string | undefined = undefined
 if (process.env.VERCEL_ENV === 'preview') {
@@ -13,17 +13,19 @@ if (process.env.VERCEL_ENV === 'preview') {
 
 if (!fbAdmin.apps.find((app) => app?.name === appName)) {
   if (process.env.NODE_ENV === 'production') {
-    // Use service account key in production
-    initializeApp(
-      {
-        credential: credential.cert({
-          projectId: process.env.FB_PROJECT_ID,
-          clientEmail: process.env.FB_CLIENT_EMAIL,
-          privateKey: process.env.FB_PRIVATE_KEY?.replace(/\\n/g, '\n'),
-        }),
-      },
-      appName,
-    )
+    // using ADC in prod, switch to SA key for non-GCP envs
+    initializeApp(undefined, appName)
+    // SA key auth
+    //     initializeApp(
+    //       {
+    //         credential: credential.cert({
+    //           projectId: process.env.FB_PROJECT_ID,
+    //           clientEmail: process.env.FB_CLIENT_EMAIL,
+    //           privateKey: process.env.FB_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+    //         }),
+    //       },
+    //       appName,
+    //     )
   } else {
     initializeApp(
       {
