@@ -42,9 +42,9 @@ export default function Resident({
   }, [setUser])
 
   return (
-    <div className="py-8 md:py-16 w-full">
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
-        <div className="md:col-span-1 flex flex-col items-center md:items-start gap-4">
+    <div className="py-8 md:py-8 w-full">
+      <section className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-12">
+        <div className="md:col-span-1 flex flex-col items-center md:items-center self-center gap-4">
           {residentData.avatar_url ? (
             <Image
               src={residentData.avatar_url}
@@ -66,14 +66,14 @@ export default function Resident({
             {resident_name}
           </h1>
         </div>
-        <article className="md:col-span-2 text-left flex flex-col gap-2 pt-4">
+        <article className="md:col-span-3 text-left flex flex-col gap-2 pt-4">
           <h2 className="text-2xl font-bold mb-4 border-b pb-2">
             Resident Information
           </h2>
           <ResidentInfoRow label="Room" value={room_no} />
           <ResidentInfoRow label="Facility ID" value={facility_id} />
           <ResidentInfoRow label="Facility Address" value={address} />
-          <ResidentInfoRow label="Patient Contact" value="" />
+          <ResidentInfoRow label="Personal Contact" value="" />
           {user && (
             <div className="mt-6">
               <Button
