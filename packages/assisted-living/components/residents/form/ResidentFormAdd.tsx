@@ -7,7 +7,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth' // Added imports
 
 import { toast } from '@/components/ui/use-toast'
 import { isError } from '@/app/utils'
-import { addNewResident } from '@/app/admin/residents/actions/add'
+import { addNewResident } from '@/actions/residents/add'
 import { ResidentFormBase } from './ResidentFormBase'
 import type { Resident } from '@/types'
 

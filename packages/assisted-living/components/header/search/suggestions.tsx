@@ -3,7 +3,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import type { ResidentData } from '@/types'
 import Link from 'next/link'
 import { Dispatch, SetStateAction } from 'react'
-import { SEARCHBOX_WIDTH } from '../admin-header-items'
+import { SEARCHBOX_WIDTH } from '../protected-header-items'
 
 interface SuggestionProps {
   matchingResidentsData: ResidentData[]

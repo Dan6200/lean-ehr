@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { onAuthStateChanged, User } from 'firebase/auth'
-import { getAllResidentsData } from '@/app/admin/residents/actions/get'
+import { getAllResidentsData } from '@/actions/residents/get'
 import { ResidentData } from '@/types'
 import Search from './search/index'
 import { toast } from '@/components/ui/use-toast'
