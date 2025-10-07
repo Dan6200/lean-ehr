@@ -17,7 +17,10 @@ export default function ResidentListSkeleton() {
           <TableCaption>All Residents.</TableCaption>
           <TableHeader className="bg-foreground/20 font-bold rounded-md">
             <TableRow>
-              <TableHead className="text-center w-[1vw]">Room Number</TableHead>
+              <TableHead className="text-center sm:w-[1vw]">
+                <span className="sm:hidden">Room</span>
+                <span className="hidden sm:inline">Room Number</span>
+              </TableHead>
               <TableHead className="text-center w-[2vw]">Resident</TableHead>
               <TableHead className="text-center w-[10vw]">
                 Facility Address
