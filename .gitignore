@@ -39,7 +39,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 Session.vim
-notes.md
 
 # vscode
 .vscode/*
@@ -50,12 +49,9 @@ web-scraping/screenshots/*
 web-scraping/data/*
 
 # dev utilities
-dev-utils/*.json
 dev-utils/**/.venv
-dev-utils/**/*.json
-dev-utils/**/*.xlsx*
-dev-utils/**/.*.xlsx*
-data/*.json
+
+# secrets
 secret-key/*
 
 # redis config
@@ -122,7 +118,6 @@ change*.json
 # misc
 .DS_Store
 Session.vim
-notes.md
 *.pem
 .live-sync-server.sh
 .rsyncignore
@@ -132,3 +127,4 @@ notes.md
 
 # dev-tool
 /dev-tools/
+**/public/avatars/
