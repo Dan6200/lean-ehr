@@ -1,5 +1,5 @@
 {
-  "name": "emergency-contacts",
+  "name": "assisted-living",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -19,7 +19,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx,json,css,md}": [
-      "git add",
       "prettier --write"
     ]
   },
