@@ -12,8 +12,9 @@ function ResidentInfoRow({
   value,
 }: {
   label: string
-  value: string | number
+  value: string | number | undefined | null
 }) {
+  if (!value) return null // Only render if value is present
   return (
     <p className="text-base">
       {label}:<span className="text-base font-semibold ml-4">{value}</span>
@@ -30,9 +31,9 @@ export default function Resident({
 }) {
   const [user, setUser] = useState<User | null>(null)
   const router = useRouter()
-  console.log(user)
 
-  const { resident_name, room_no, facility_id, address } = residentData
+  const { resident_name, room_no, facility_id, address, dob, pcp } =
+    residentData
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -63,7 +64,7 @@ export default function Resident({
             />
           )}
           <h1 className="text-3xl md:text-4xl font-bold text-center md:text-left">
-            {resident_name}
+            {resident_name ?? 'Resident Name Not Available'}
           </h1>
         </div>
         <article className="md:col-span-3 text-left flex flex-col gap-2 pt-4">
@@ -73,7 +74,8 @@ export default function Resident({
           <ResidentInfoRow label="Room" value={room_no} />
           <ResidentInfoRow label="Facility ID" value={facility_id} />
           <ResidentInfoRow label="Facility Address" value={address} />
-          <ResidentInfoRow label="Personal Contact" value="" />
+          <ResidentInfoRow label="Date of Birth" value={dob} />
+          <ResidentInfoRow label="PCP" value={pcp} />
           {user && (
             <div className="mt-6">
               <Button
