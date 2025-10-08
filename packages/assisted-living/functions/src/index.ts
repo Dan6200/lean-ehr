@@ -72,7 +72,9 @@ export const revokeAllSessionsFunction = onRequest(
       response.status(200).json({ success: true })
     } catch (error: any) {
       logger.error('Error revoking sessions in Cloud Function:', error)
-      response.status(500).json({ success: false, error: error.message })
+      response
+        .status(500)
+        .json({ error: 'Error revoking sessions', details: error.message })
     }
   },
 )
@@ -105,6 +107,39 @@ export const verifySessionCookieFunction = onRequest(
       response
         .status(401)
         .json({ error: 'Session verification failed', details: error.message })
+    }
+  },
+)
+
+export const createSessionCookieFunction = onRequest(
+  async (request, response) => {
+    logger.info('createSessionCookieFunction triggered!', {
+      structuredData: true,
+    })
+
+    if (request.method !== 'POST') {
+      response.status(405).send('Method Not Allowed')
+      return
+    }
+
+    const { expiresIn } = request.body
+    const idToken = request.body.idToken
+
+    if (!idToken) {
+      response.status(400).send('Missing idToken in request body.')
+      return
+    }
+
+    try {
+      const sessionCookie = await admin
+        .auth()
+        .createSessionCookie(idToken, { expiresIn: expiresIn ?? 3600 })
+      response.status(201).json(sessionCookie)
+    } catch (error: any) {
+      logger.error('Session creation failed in Cloud Funciton:', error)
+      response
+        .status(500)
+        .json({ error: 'Session creation failed', details: error.message })
     }
   },
 )
