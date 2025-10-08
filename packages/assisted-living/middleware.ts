@@ -23,6 +23,11 @@ export async function middleware(request: NextRequest) {
     pathname.startsWith(path),
   )
 
+  if (pathname === '/') {
+    const url = request.nextUrl.clone()
+    url.pathname = !sessionCookie ? '/sign-in' : '/admin'
+    return NextResponse.redirect(url)
+  }
   // 1. User is trying to access a protected path (e.g., /dashboard)
   if (isProtectedPath) {
     if (!sessionCookie) {
@@ -33,10 +38,6 @@ export async function middleware(request: NextRequest) {
       // url.searchParams.set('redirect', pathname);
       return NextResponse.redirect(url)
     }
-    // If the cookie exists, allow the request to proceed.
-    // The actual, secure verification (using Admin SDK's verifySessionCookie)
-    // MUST happen in a Server Component or Route Handler (Node.js environment)
-    // for every *data-sensitive* request, as it cannot run in the Edge Middleware.
     return NextResponse.next()
   }
 
@@ -66,7 +67,8 @@ export const config = {
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
      * - /api/auth (our specific auth API, to avoid infinite loops)
+     * - error
      */
-    '/((?!_next/static|_next/image|favicon.ico|api/auth).*)',
+    '/((?!_next/static|_next/image|favicon.ico|api/auth|error).*)',
   ],
 }
