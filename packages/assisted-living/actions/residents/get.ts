@@ -120,7 +120,7 @@ export async function getAllFacilities() {
 }
 
 export async function getAllResidentsData(
-  lastDoc?: DocumentReference,
+  lastDoc?: DocumentReference | number,
   limit?: number,
 ) {
   try {
