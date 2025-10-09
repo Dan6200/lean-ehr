@@ -1,8 +1,9 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-
-// Define the name of the secure session cookie
-const SESSION_COOKIE_NAME = '__session'
+import {
+  getSessionCookie,
+  getVerifySessions,
+} from './firebase/auth/server/definitions'
 
 // Define the public paths that require no authentication
 const PUBLIC_PATHS = ['/sign-in', '/activate-account', '/temp']
@@ -16,7 +17,7 @@ const PROTECTED_PATHS = ['/admin']
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  const sessionCookie = request.cookies.get(SESSION_COOKIE_NAME)?.value
+  const sessionVerified = !!(await getVerifySessions())
 
   const isPublicPath = PUBLIC_PATHS.includes(pathname)
   const isProtectedPath = PROTECTED_PATHS.some((path) =>
@@ -25,12 +26,12 @@ export async function middleware(request: NextRequest) {
 
   if (pathname === '/') {
     const url = request.nextUrl.clone()
-    url.pathname = !sessionCookie ? '/sign-in' : '/admin'
+    url.pathname = !sessionVerified ? '/sign-in' : '/admin'
     return NextResponse.redirect(url)
   }
   // 1. User is trying to access a protected path (e.g., /dashboard)
   if (isProtectedPath) {
-    if (!sessionCookie) {
+    if (!sessionVerified) {
       // Cookie is missing -> Redirect to login
       const url = request.nextUrl.clone()
       url.pathname = '/sign-in'
@@ -43,7 +44,7 @@ export async function middleware(request: NextRequest) {
 
   // 2. User is already authenticated and trying to access a public path (e.g., /login)
   if (isPublicPath) {
-    if (sessionCookie) {
+    if (sessionVerified) {
       // Cookie exists -> Redirect authenticated users from login/register pages to dashboard
       const url = request.nextUrl.clone()
       url.pathname = '/admin'
