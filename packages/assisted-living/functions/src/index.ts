@@ -111,6 +111,44 @@ export const verifySessionCookieFunction = onRequest(
   },
 )
 
+export const verifySessionCookieAndCreateCustomTokenFunction = onRequest(
+  async (request, response) => {
+    logger.info('verifySessionCookieAndCreateCustomTokenFunction triggered!', {
+      structuredData: true,
+    })
+
+    if (request.method !== 'POST') {
+      response.status(405).send('Method Not Allowed')
+      return
+    }
+
+    const sessionCookie = request.body.sessionCookie
+
+    if (!sessionCookie) {
+      response.status(400).send('Missing sessionCookie in request body.')
+      return
+    }
+
+    try {
+      const decodedIdToken = await admin
+        .auth()
+        .verifySessionCookie(sessionCookie, true)
+      const customToken = await admin
+        .auth()
+        .createCustomToken(decodedIdToken.uid)
+      response.status(200).json({ customToken, decodedClaims: decodedIdToken }) // Changed to decodedClaims
+    } catch (error: any) {
+      logger.error(
+        'Session cookie verification/custom token creation failed in Cloud Function:',
+        error,
+      )
+      response
+        .status(401)
+        .json({ error: 'Session verification failed', details: error.message })
+    }
+  },
+)
+
 export const createSessionCookieFunction = onRequest(
   async (request, response) => {
     logger.info('createSessionCookieFunction triggered!', {
