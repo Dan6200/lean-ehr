@@ -79,6 +79,7 @@ export const EncryptedResidentSchema = z.object({
 // --- Types ---
 export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
 export type Resident = z.infer<typeof ResidentSchema>
+export type EncryptedResident = z.infer<typeof EncryptedResidentSchema>
 
 // --- Other Schemas & Types (unchanged) ---
 export const FacilitySchema = z.object({
