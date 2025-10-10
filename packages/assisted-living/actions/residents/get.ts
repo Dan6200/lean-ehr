@@ -4,8 +4,6 @@ import {
   getCount,
   queryWrapper,
   getDocsWrapper,
-  limitQuery,
-  startAfter,
 } from '@/firebase/firestore-server'
 import {
   Resident,
@@ -13,13 +11,13 @@ import {
   ResidentSchema,
   FacilitySchema,
   ResidentDataSchema,
-  facilityConverter,
-  createResidentConverter,
 } from '@/types'
+import { getFacilityConverter, getResidentConverter } from '@/types/converters'
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
 import { getAuthenticatedAppAndClaims } from '@/auth/server/definitions'
 import { DocumentReference } from 'firebase/firestore'
+import { startAfter, limit as limitQuery } from 'firebase/firestore'
 
 // Use a DTO for resident data
 export async function getResidentData(
@@ -34,7 +32,7 @@ export async function getResidentData(
     const residentsColRef = collectionWrapper(
       app,
       'providers/GYRHOME/residents',
-    ).withConverter(createResidentConverter(userRoles))
+    ).withConverter(getResidentConverter(userRoles))
     const residentSnap = await residentsColRef.doc(documentId).get()
     if (!residentSnap.exists) throw notFound()
     const resident = residentSnap.data()
@@ -58,7 +56,9 @@ export async function getResidentData(
       throw new Error('Could not find linked facility for this resident')
     const { address } = facilitySnap.data()
 
-    return { ...validatedResident, id: residentSnap.id, address }
+    console.log(validatedResident)
+    // return { ...validatedResident, id: residentSnap.id, address }
+    return null
   } catch (error: any) {
     throw new Error('Failed to fetch resident.\n\t\t' + error)
   }
@@ -129,48 +129,45 @@ export async function getAllResidentsData(
     const { app, idToken } = authenticatedApp
     const userRoles: string[] = (idToken?.roles as string[]) || []
 
-    const residentsCollection = collectionWrapper(
-      app,
-      `providers/GYRHOME/residents`,
-    ).withConverter(createResidentConverter(userRoles))
+    const residentsCollection = (
+      await collectionWrapper<Resident>(app, `providers/GYRHOME/residents`)
+    ).withConverter(await getResidentConverter(userRoles))
 
     // 1. Get the total count of residents
     const countSnapshot = await getCount(residentsCollection)
     const total = countSnapshot.data().count
 
     // 2. Get the paginated documents if pagination arguments are provided
-    let collectionQuery = queryWrapper(
+    let collectionQuery = await queryWrapper<Resident, Resident>(
       residentsCollection,
-      limit ? limitQuery(limit) : null, // limitQuery and startAfter are not directly available in firestore-server.ts
-      lastDoc ? startAfter(lastDoc) : null,
+      // limit ? limitQuery(limit) : (undefined as any),
+      // lastDoc ? startAfter(lastDoc) : (undefined as any),
     )
-    // if (page && limit)
-    //   collectionQuery = residentsCollection
-    //     .limit(limit)
-    //     .offset((page - 1) * limit) as any
     const residentsSnapshot = await getDocsWrapper<Resident, Resident>(
       collectionQuery,
     )
+    console.log('snap', residentsSnapshot)
     const residentsForPage = residentsSnapshot.docs.map((doc) => ({
       id: doc.id,
-      ...doc.data(),
+      data: doc.data(),
     }))
+    console.log('residents for page', residentsForPage)
 
     // 3. Fetch facility data only for the residents on the current page
-    const facilitiesCollection = collectionWrapper<Facility>(
-      app,
-      'providers/GYRHOME/facilities',
-    ).withConverter(facilityConverter)
+    const facilitiesCollection = (
+      await collectionWrapper<Facility>(app, 'providers/GYRHOME/facilities')
+    ).withConverter(await getFacilityConverter())
     const facilitiesData = await getDocsWrapper(facilitiesCollection)
     const facility_lookup: { [id: string]: string } =
       facilitiesData.docs.reduce(
         (lookup: { [id: string]: any }, facility) => ({
           ...lookup,
-          [facility.id]: facility.data().address,
+          [facility.id]: facility.data(),
         }),
         {},
       )
 
+    console.log(facility_lookup)
     // 4. Join the data
     const residentsWithAddress = residentsForPage.map((resident) => {
       const address =
@@ -178,7 +175,10 @@ export async function getAllResidentsData(
       return { ...resident, address }
     })
 
-    return { residents: residentsWithAddress, total }
+    // console.log(residentsWithAddress)
+
+    // return { residents: residentsWithAddress, total }
+    return null
   } catch (error: any) {
     throw new Error('Failed to fetch All Residents Data:\n\t\t' + error)
   }
