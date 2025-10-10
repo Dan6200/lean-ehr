@@ -25,7 +25,7 @@ import {
   ResidentSchema,
 } from '.'
 
-const residentConverter = async (): Promise<
+export const getResidentConverter = async (): Promise<
   FirestoreDataConverter<Resident | EncryptedResident>
 > => ({
   async toFirestore(resident: Resident): Promise<DocumentData> {
@@ -441,8 +441,4 @@ const facilityConverter: FirestoreDataConverter<Facility> = {
 
 export const getFacilityConverter = async function () {
   return facilityConverter
-}
-
-export const getResidentConverter = async function () {
-  return residentConverter()
 }
