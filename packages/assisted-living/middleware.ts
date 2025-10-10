@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import {
-  getSessionCookie,
-  getVerifySessions,
-} from './firebase/auth/server/definitions'
+import { getVerifiedSessionCookie } from './auth/server/definitions'
 
 // Define the public paths that require no authentication
 const PUBLIC_PATHS = ['/sign-in', '/activate-account', '/temp']
@@ -17,7 +14,7 @@ const PROTECTED_PATHS = ['/admin']
  */
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  const sessionVerified = !!(await getVerifySessions())
+  const sessionVerified = !!(await getVerifiedSessionCookie())
 
   const isPublicPath = PUBLIC_PATHS.includes(pathname)
   const isProtectedPath = PROTECTED_PATHS.some((path) =>
