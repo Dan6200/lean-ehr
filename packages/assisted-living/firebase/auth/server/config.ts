@@ -1,15 +1,14 @@
 import { getAuth } from 'firebase/auth'
 import { initializeServerApp } from 'firebase/app'
-import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore'
 import { headers } from 'next/headers'
 
 export const firebaseConfig = {
-  apiKey: process.env.FB_API_KEY,
-  authDomain: process.env.FB_AUTH_DOMAIN,
-  projectId: process.env.FB_PROJECT_ID,
-  storageBucket: process.env.FB_STORAGE_BUCKET,
-  appId: process.env.FB_APP_ID,
-  messagingSenderId: process.env.FB_MESSAGING_SENDER_ID,
+  apiKey: process.env.NEXT_PUBLIC_FB_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FB_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FB_STORAGE_BUCKET,
+  appId: process.env.NEXT_PUBLIC_FB_APP_ID,
+  messagingSenderId: process.env.NEXT_PUBLIC_FB_MESSAGING_SENDER_ID,
 }
 
 let databaseId: string | undefined = undefined
@@ -18,21 +17,21 @@ if (process.env.VERCEL_ENV === 'preview') {
 }
 
 const authIdToken = (await headers()).get('Authorization')?.split('Bearer ')[1]
-console.log(authIdToken)
 
-const app = initializeServerApp(firebaseConfig, { authIdToken })
+export const app = initializeServerApp(firebaseConfig, {
+  authIdToken,
+  releaseOnDeref: headers(),
+})
 
-// Can't use auth on both the backend and server...
 export const auth = getAuth(app)
-export const db = databaseId ? getFirestore(app, databaseId) : getFirestore(app)
 
 // Connect to Firestore Emulator in development
 if (process.env.NODE_ENV === 'development') {
-  const firestoreHost = process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_HOST
-  const firestorePort = process.env.NEXT_PUBLIC_FIRESTORE_EMULATOR_PORT
-  // const authHost = process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST!
-
-  connectFirestoreEmulator(db, firestoreHost!, Number(firestorePort!))
-  // connectAuthEmulator(auth, authHost)
-  console.log('Server: Connected to Firestore and Auth emulators!')
+  // Emulator connection for FirebaseServerApp is not directly supported here
+  // as it's a client-side concept running on server. Firestore emulator connection
+  // should be handled by the actual Firestore SDK instance that FirebaseServerApp uses.
+  // This block will be removed or adjusted when we create firestore-server.ts
+  console.log(
+    'Server: FirebaseServerApp initialized. Firestore emulator connection will be handled by firestore-server.ts',
+  )
 }
