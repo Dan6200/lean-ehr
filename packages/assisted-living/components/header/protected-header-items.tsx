@@ -24,7 +24,7 @@ export default function ProtectedHeaderItems() {
       setUser(currentUser)
       if (currentUser) {
         // User is logged in, fetch the rooms
-        const { residents } = await getAllResidentsData(1, 1000).catch((e) => {
+        const { residents } = await getAllResidentsData(0, 1000).catch((e) => {
           if (e.toString().match(/(session|cookie)/i)) router.push('/sign-in')
           console.error('Failed to Fetch Residents -- Tag:14.\n\t' + e)
           toast({
