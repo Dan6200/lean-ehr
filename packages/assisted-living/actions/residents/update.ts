@@ -1,8 +1,8 @@
 'use server'
 import { collectionWrapper } from '@/firebase/firestore-server'
-import { Resident, createResidentConverter } from '@/types'
-import { notFound } from 'next/navigation'
-import { getAuthenticatedAppAndClaims } from '@/auth/server/definitions'
+import { Resident, EncryptedResident } from '@/types'
+import { getAuthenticatedAppAndClaims } from '@/firebase/auth/server/definitions'
+import { encryptResident, getResidentConverter } from '@/types/converters'
 
 export async function updateResident(
   newResidentData: Resident,
@@ -11,23 +11,15 @@ export async function updateResident(
   try {
     const authenticatedApp = await getAuthenticatedAppAndClaims()
     if (!authenticatedApp) throw new Error('Failed to authenticate session')
-    const { app, idToken } = authenticatedApp
-    const userRoles: string[] = (idToken.claims?.roles as string[]) || []
+    const { app } = authenticatedApp
 
-    // We need to get the Firestore instance from the FirebaseServerApp
-    // and then use it to run the transaction.
-    // For now, we'll use the collectionWrapper directly with the app instance.
-    const residentsCollection = collectionWrapper(
-      app,
-      'residents',
-    ).withConverter(createResidentConverter(userRoles))
+    const encryptedResident = await encryptResident(newResidentData)
 
-    const residentRef = residentsCollection.doc(documentId)
+    const residentRef = collectionWrapper<EncryptedResident>(app, 'residents')
+      .withConverter(await getResidentConverter())
+      .doc(documentId)
 
-    // Transactions in Firebase Admin SDK (which FirebaseServerApp uses for Firestore) are slightly different.
-    // They don't directly take a `db` instance from `firebase/server/config`.
-    // Instead, you operate on references obtained from the `FirebaseServerApp`'s Firestore instance.
-    await residentRef.update({ ...newResidentData })
+    await residentRef.update(encryptedResident)
 
     return {
       success: true,

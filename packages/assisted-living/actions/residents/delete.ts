@@ -1,23 +1,24 @@
 'use server'
-import { collectionWrapper } from '@/firebase/firestore'
-import db from '@/firebase/server/config'
+import { collectionWrapper } from '@/firebase/firestore-server'
 import { notFound } from 'next/navigation'
+import { getAuthenticatedAppAndClaims } from '@/firebase/auth/server/definitions'
 
 export async function deleteResidentData(documentId: string) {
   try {
-    await db.runTransaction(async (transaction) => {
-      const residentDocRef = collectionWrapper('residents').doc(documentId)
-      const resSnap = await transaction.get(residentDocRef)
-      if (!resSnap.exists) throw notFound()
+    const authenticatedApp = await getAuthenticatedAppAndClaims()
+    if (!authenticatedApp) throw new Error('Failed to authenticate session')
+    const { app } = authenticatedApp
 
-      transaction.delete(resSnap.ref)
-    })
+    const residentDocRef = collectionWrapper(app, 'residents').doc(documentId)
+
+    await residentDocRef.delete()
+
     return { success: true, message: 'Successfully Deleted Resident' }
-  } catch (error) {
-    console.error('Failed to Delete the Resident.', error)
+  } catch (error: any) {
+    console.error('Failed to Delete the Resident:', error)
     return {
       success: false,
-      message: 'Failed to Delete the Resident.',
+      message: error.message || 'Failed to Delete the Resident.',
     }
   }
 }
