@@ -98,6 +98,8 @@ export async function getAuthenticatedAppAndClaims(): Promise<{
   const authorizationHeader = (await headers()).get('Authorization')
   const idTokenFromHeader = authorizationHeader?.split('Bearer ')[1]
 
+  console.log('authorization header', authorizationHeader)
+
   if (idTokenFromHeader) {
     authIdToken = idTokenFromHeader // Use the original ID token for FirebaseServerApp
   }
