@@ -6,6 +6,7 @@
   "module": "nodenext",
   "scripts": {
     "dev": "NODE_OPTIONS=--max-old-space-size=4096 next dev --turbopack",
+    "dev:https": "node server.js",
     "build": "next build",
     "build:prod": "env-cmd -f .env.production next build",
     "start": "next start",
