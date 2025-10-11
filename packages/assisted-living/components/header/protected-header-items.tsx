@@ -27,10 +27,6 @@ export default function ProtectedHeaderItems() {
         const { residents } = await getAllResidentsData(0, 1000).catch((e) => {
           if (e.toString().match(/(session|cookie)/i)) router.push('/sign-in')
           console.error('Failed to Fetch Residents -- Tag:14.\n\t' + e)
-          toast({
-            title: 'Failed To Fetch Residents',
-            variant: 'destructive',
-          })
           return null
         })
         setResidentsData(residents)
