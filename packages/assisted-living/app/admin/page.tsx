@@ -6,31 +6,41 @@ import { redirect } from 'next/navigation'
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { page?: string }
+  searchParams: { next?: string; prev?: string }
 }) {
-  const currentPage = Number((await searchParams)?.page) || 1
   const LIMIT = 25
+  const { next, prev } = await searchParams
 
-  const { residents, total } = await getAllResidentsData(
-    currentPage - 1,
-    LIMIT,
-  ).catch(async (e) => {
-    if (e.toString().match(/(session|cookie)/i))
-      await fetch(`${process.env.URL}:${process.env.PORT}/api/auth/logout`, {
-        method: 'post',
-      }).then(async (result) => {
-        if (result.status === 200) redirect('/sign-in') // Navigate to the login page
-      })
-    console.error('Failed to fetch residentData:', e)
-    return { residents: [], total: 0 } // Handle error gracefully
-  })
-
-  const totalPages = Math.ceil(total / LIMIT)
+  // The getAllResidentsData function will need to be updated to handle next/prev cursors
+  // and return the new pagination info.
+  const { residents, nextCursor, prevCursor, hasNextPage, hasPrevPage } =
+    await getAllResidentsData({
+      limit: LIMIT,
+      nextCursorId: next,
+      prevCursorId: prev,
+    }).catch(async (e) => {
+      if (e.toString().match(/(session|cookie)/i))
+        await fetch(`${process.env.URL}:${process.env.PORT}/api/auth/logout`, {
+          method: 'post',
+        }).then(async (result) => {
+          if (result.status === 200) redirect('/sign-in') // Navigate to the login page
+        })
+      console.error('Failed to fetch residentData:', e)
+      return {
+        residents: [],
+        nextCursor: undefined,
+        prevCursor: undefined,
+        hasNextPage: false,
+        hasPrevPage: false,
+      } // Handle error gracefully
+    })
 
   return (
     <main className="sm:container bg-background text-center mx-auto py-48 md:py-32">
       <ResidentList {...{ residentsData: residents }} />
-      <ServerPagination {...{ totalPages, currentPage }} />
+      <ServerPagination
+        {...{ nextCursor, prevCursor, hasNextPage, hasPrevPage }}
+      />
     </main>
   )
 }
