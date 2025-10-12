@@ -1,35 +1,14 @@
-// service-workers/auth.js
 // This service worker intercepts fetch requests to append Firebase Auth ID tokens
 // to headers for SSR authentication.
 
-import { initializeApp, getApp, getApps } from 'firebase/app'
+import { initializeApp, getApps } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
+import { firebaseConfig } from './firebase/config'
 
-// Firebase client configuration - these values are public and can be hardcoded here.
-// They should match the firebaseConfig in firebase/auth/client/config.ts
-const firebaseConfig = {
-  apiKey: 'AIzaSyDqWwBZVVjvnI-GgL8gzKW5N7q_oOSdBuQ',
-  authDomain: 'lean-ehr.firebaseapp.com',
-  projectId: 'lean-ehr',
-  storageBucket: 'lean-ehr.firebasestorage.app',
-  appId: '1:31765765651:web:a24a23e659b9377689e9e6',
-  messagingSenderId: '31765765651',
-}
-
-// Initialize Firebase app in the service worker if not already initialized
-// This ensures the Firebase client SDK is ready to provide auth tokens.
-let firebaseApp
-if (!getApps().length) {
-  firebaseApp = initializeApp(firebaseConfig)
-} else {
-  firebaseApp = getApp()
-}
-
-const getOriginFromUrl = (url) => {
-  const pathArray = url.split('/')
-  const protocol = pathArray[0]
-  const host = pathArray[2]
-  return protocol + '//' + host
+const appName = 'lean-ehr-assisted-living-client'
+let firebaseApp = getApps().find((app) => app?.name === appName)
+if (!firebaseApp) {
+  firebaseApp = initializeApp(firebaseConfig, appName)
 }
 
 // Helper to get request body for non-GET requests
@@ -47,15 +26,16 @@ const getBodyContent = (req) => {
   })
 }
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener('fetch', (event: FetchEvent) => {
   const evt = event
 
   // Only intercept requests to your own origin that are for HTML documents (SSR requests)
-  if (
-    evt.request.mode === 'navigate' &&
-    evt.request.destination === 'document' &&
-    evt.request.url.startsWith(self.location.origin)
-  ) {
+  const url = new URL(evt.request.url)
+  const isStatic = /\.(js|css|png|jpg|jpeg|svg|gif|ico|json)$/.test(
+    url.pathname,
+  )
+
+  if (evt.request.url.startsWith(self.location.origin) && !isStatic) {
     evt.respondWith(
       (async function () {
         const auth = getAuth(firebaseApp)
@@ -65,9 +45,9 @@ self.addEventListener('fetch', (event) => {
         if (user) {
           try {
             // Get the ID token, refreshing it if necessary
-            idToken = await user.getIdToken(true) // `true` forces a refresh
+            idToken = await user.getIdToken() // Do not force a refresh
           } catch (error) {
-            console.error('Service Worker: Failed to get ID token:', error)
+            console.error('Service Worker: Failed to get ID token:', error) // Error: failed to get ID token: FirebaseError: Firebase: Error (auth/invalid-refresh-token).
           }
         }
 
@@ -112,6 +92,6 @@ self.addEventListener('fetch', (event) => {
 })
 
 // Activate event listener for the service worker
-self.addEventListener('activate', (event) => {
+self.addEventListener('activate', (event: ExtendableEvent) => {
   event.waitUntil(clients.claim())
 })
