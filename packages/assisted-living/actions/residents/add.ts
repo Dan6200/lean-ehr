@@ -1,7 +1,7 @@
 'use server'
 import { collectionWrapper } from '@/firebase/firestore-server'
 import { Resident, EncryptedResident } from '@/types'
-import { getAuthenticatedAppAndClaims } from '@/firebase/auth/server/definitions'
+import { getAuthenticatedAppAndClaims } from '@/auth/server/definitions'
 import { encryptResident, getResidentConverter } from '@/types/converters'
 
 export async function addNewResident(

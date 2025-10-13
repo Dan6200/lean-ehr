@@ -1,7 +1,7 @@
 'use server'
 import { collectionWrapper } from '@/firebase/firestore-server'
 import { notFound } from 'next/navigation'
-import { getAuthenticatedAppAndClaims } from '@/firebase/auth/server/definitions'
+import { getAuthenticatedAppAndClaims } from '@/auth/server/definitions'
 
 export async function deleteResidentData(documentId: string) {
   try {
