@@ -5,7 +5,7 @@ import { getResidentData } from '@/actions/residents/get'
 export default async function EditResidentPage({
   params: { resId },
 }: {
-  params: { resId: string }
+  params: Promise<{ resId: string }>
 }) {
   const residentData = await getResidentData(resId)
 

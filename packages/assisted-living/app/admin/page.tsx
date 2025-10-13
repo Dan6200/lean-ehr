@@ -6,7 +6,7 @@ import { redirect } from 'next/navigation'
 export default async function Home({
   searchParams,
 }: {
-  searchParams: { next?: string; prev?: string }
+  searchParams: Promise<{ next?: string; prev?: string }>
 }) {
   const LIMIT = 25
   const { next, prev } = await searchParams

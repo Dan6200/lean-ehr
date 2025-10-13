@@ -4,10 +4,11 @@ import { ResidentSchema, Resident as ResidentType } from '@/types'
 import EmergencyContacts from '@/components/emergency-contacts'
 
 export default async function EmergencyContactsPage({
-  params: { id },
+  params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const rawResidentData = await getResidentData(id).catch((e) => {
     if (e.message.match(/not_found/i)) notFound()
     if (e.message.match(/insufficient permissions/)) redirect('/admin/sign-in')

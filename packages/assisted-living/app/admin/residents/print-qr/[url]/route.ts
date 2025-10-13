@@ -4,8 +4,9 @@ import QRcode from 'qrcode'
 
 export async function GET(
   req: NextRequest,
-  { params: { url } }: { params: { url: string } },
+  ctx: RouteContext<'/admin/residents/print-qr/[url]'>,
 ) {
+  const { url } = await ctx.params
   const { searchParams } = req.nextUrl
   const unit_number = searchParams.get('unit_number')
   const address = searchParams.get('address')

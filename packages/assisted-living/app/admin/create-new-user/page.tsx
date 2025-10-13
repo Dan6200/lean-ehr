@@ -1,6 +1,6 @@
-import { addAdmin } from '@/app/admin/new/action'
 import { GoBackLink } from '@/components/go-back-link'
 import { AddAdminForm } from '@/components/register-form'
+import { addAdmin } from './action'
 
 export default async function RegisterPage() {
   return (

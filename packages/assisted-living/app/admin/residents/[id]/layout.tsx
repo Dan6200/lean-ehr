@@ -8,11 +8,12 @@ import { ResidentNav } from '@/components/resident-nav'
 
 export default async function ResidentLayout({
   children,
-  params: { id },
+  params,
 }: {
   children: ReactNode
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
+  const { id } = await params
   const rawResidentData = await getResidentData(id).catch((e) => {
     if (e.message.match(/not_found/i)) throw notFound()
     if (e.message.match(/insufficient permissions/)) redirect('/admin/sign-in')
