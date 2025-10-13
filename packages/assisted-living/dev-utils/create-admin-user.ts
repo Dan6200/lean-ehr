@@ -1,4 +1,4 @@
-import * as admin from 'firebase-admin'
+import admin from 'firebase-admin'
 
 // This script requires Google Application Credentials to be set up.
 // See: https://firebase.google.com/docs/admin/setup#initialize-sdk
