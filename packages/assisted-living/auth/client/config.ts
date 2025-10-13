@@ -50,11 +50,33 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
-// Register the service worker
+// Register the service workers
 if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('/auth-service-worker.js', { scope: '/' })
     .then((registration) => {
+      // Force update flow...
+      if (registration.waiting) {
+        registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+      }
+      //
+      // registration.addEventListener('updatefound', () => {
+      //   const newWorker = registration.installing
+      //   newWorker?.addEventListener('statechange', () => {
+      //     if (
+      //       newWorker.state === 'installed' &&
+      //       navigator.serviceWorker.controller
+      //     ) {
+      //       newWorker.postMessage({ type: 'SKIP_WAITING' })
+      //     }
+      //   })
+      // })
+      //
+      // navigator.serviceWorker.addEventListener('controllerchange', () => {
+      //   console.log('New service worker took control, reloading...')
+      //   window.location.reload()
+      // })
+      //
       console.log('Service Worker registered with scope:', registration.scope)
     })
     .catch((error) => {
