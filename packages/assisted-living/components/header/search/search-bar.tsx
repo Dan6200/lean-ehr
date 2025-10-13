@@ -83,7 +83,7 @@ export const SearchBar = ({
   }
 
   async function onSubmit() {
-    router.push(`/residentsData/${matchingResidentsData?.[0].document_id}`)
+    router.push(`/residentsData/${matchingResidentsData?.[0].id}`)
     setOpen(!open)
   }
 

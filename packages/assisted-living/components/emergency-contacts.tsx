@@ -7,7 +7,7 @@ import Link from 'next/link'
 export default function EmergencyContacts({
   contacts,
 }: {
-  contacts: EmergencyContact[]
+  contacts?: EmergencyContact[] | null
 }) {
   const numContacts = contacts ? contacts.length : 0
   let gridColsClass = 'grid-cols-1'

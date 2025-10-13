@@ -5,7 +5,6 @@ import { onAuthStateChanged, User } from 'firebase/auth'
 import { getAllResidentsData } from '@/actions/residents/get'
 import { ResidentData } from '@/types'
 import Search from './search/index'
-import { toast } from '@/components/ui/use-toast'
 import { auth } from '@/auth/client/config'
 import { UserMenu } from './user-menu'
 
@@ -20,35 +19,37 @@ export default function ProtectedHeaderItems() {
   const pathname = usePathname()
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
-      setUser(currentUser)
-      if (currentUser) {
-        // User is logged in, fetch the rooms
-        const { residents } = await getAllResidentsData(0, 1000).catch((e) => {
-          if (e.toString().match(/(session|cookie)/i)) {
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+        setUser(currentUser)
+        if (currentUser) {
+          // User is logged in, fetch the rooms
+          const res = await getAllResidentsData({}).catch((e) => {
+            if (e.toString().match(/(session|cookie)/i)) {
+              return fetch('/api/auth/logout', {
+                method: 'post',
+              }).then(async (result) => {
+                if (result.status === 200) router.push('/sign-in') // Navigate to the login page
+              })
+            }
+            console.error('Failed to Fetch Residents -- Tag:14.\n\t' + e)
+            return null
+          })
+          setResidentsData(res?.residents ?? null)
+        } else {
+          // User is not logged in
+          setResidentsData(null)
+          if (pathname.startsWith('/admin') && pathname !== '/sign-in') {
             return fetch('/api/auth/logout', {
               method: 'post',
             }).then(async (result) => {
               if (result.status === 200) router.push('/sign-in') // Navigate to the login page
             })
           }
-          console.error('Failed to Fetch Residents -- Tag:14.\n\t' + e)
-          return null
-        })
-        setResidentsData(residents)
-      } else {
-        // User is not logged in
-        setResidentsData(null)
-        if (pathname.startsWith('/admin') && pathname !== '/sign-in') {
-          return fetch('/api/auth/logout', {
-            method: 'post',
-          }).then(async (result) => {
-            if (result.status === 200) router.push('/sign-in') // Navigate to the login page
-          })
         }
-      }
-    })
-    return () => unsubscribe()
+      })
+      return () => unsubscribe()
+    }
   }, [pathname, router])
 
   if (!user) {

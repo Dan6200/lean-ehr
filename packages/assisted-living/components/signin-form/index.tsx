@@ -56,8 +56,12 @@ export function SignInForm() {
   const router = useRouter()
 
   async function onSubmit(data: z.infer<typeof SignInFormSchema>) {
-    const { result, message, success } =
-      await signInWithEmailAndPasswordWrapper(data.email, data.password)
+    const res = await signInWithEmailAndPasswordWrapper(
+      data.email,
+      data.password,
+    )
+    if (!res) throw Error('Null Auth Instance')
+    const { result, message, success } = res
     if (success) {
       await fetch('/api/auth/login', {
         method: 'post',

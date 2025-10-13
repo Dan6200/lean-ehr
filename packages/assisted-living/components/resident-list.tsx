@@ -21,10 +21,12 @@ export default function ResidentList({
 }) {
   const [, setAdmin] = useState<User | null>(null)
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setAdmin(currentUser)
-    })
-    return () => unsubscribe()
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setAdmin(currentUser)
+      })
+      return () => unsubscribe()
+    }
   }, [setAdmin])
 
   return (

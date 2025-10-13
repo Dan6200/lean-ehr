@@ -52,10 +52,12 @@ export function AddAdminForm({ addAdmin }: AddAdminForm) {
 
   const [admin, setAdmin] = useState<User | null>(null)
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setAdmin(currentUser)
-    })
-    return () => unsubscribe()
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setAdmin(currentUser)
+      })
+      return () => unsubscribe()
+    }
   }, [setAdmin])
 
   async function onSubmit(

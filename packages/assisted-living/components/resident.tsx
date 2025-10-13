@@ -36,10 +36,12 @@ export default function Resident({
     residentData
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser)
-    })
-    return () => unsubscribe()
+    if (auth) {
+      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+        setUser(currentUser)
+      })
+      return () => unsubscribe()
+    }
   }, [setUser])
 
   return (

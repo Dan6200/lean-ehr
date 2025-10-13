@@ -91,6 +91,7 @@ export function ResidentFormEdit({
     }
 
     try {
+      if (!id) throw new Error("Can't find the resource to edit")
       const { message, success } = await updateResident(residentData, id)
       toast({
         title: message,
