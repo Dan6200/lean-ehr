@@ -167,8 +167,8 @@ export async function getAuthenticatedAppAndClaims(): Promise<{
       // If we used the session cookie path, we already have the claims.
       // If we used the header path, we need to get them now.
       if (!decodedIdToken) {
-        const idTokenResult = await serverAuth.currentUser.getIdTokenResult()
-        decodedIdToken = idTokenResult.claims
+        const idTokenResult = await serverAuth.currentUser?.getIdTokenResult()
+        decodedIdToken = idTokenResult?.claims
       }
 
       return { app: serverApp, idToken: decodedIdToken }
