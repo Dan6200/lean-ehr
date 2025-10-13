@@ -41,17 +41,17 @@ self.addEventListener('message', (event) => {
 })
 
 const auth = getAuth(firebaseApp)
-let idToken = null
-const getIdTokenWrapper = async () => {
+const getIdTokenWrapper = new Promise((res) => {
   const unsubscribe = onAuthStateChanged(auth, async (user) => {
     unsubscribe()
     console.log('user in observer: ', user)
     if (user) {
-      idToken = await getIdToken(user)
+      const idToken = await getIdToken(user)
       console.log('idToken in observer: ', idToken)
-    }
+      res(idToken)
+    } else res(null)
   })
-}
+})
 
 self.addEventListener('fetch', (event: FetchEvent) => {
   const evt = event
@@ -65,6 +65,8 @@ self.addEventListener('fetch', (event: FetchEvent) => {
   if (evt.request.url.startsWith(self.location.origin) && !isStatic) {
     evt.respondWith(
       (async function () {
+        let idToken = null
+
         try {
           // Get the ID token, refreshing it if necessary
           idToken = await getIdTokenWrapper() // Do not force a refresh
