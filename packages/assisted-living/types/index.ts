@@ -89,7 +89,7 @@ export type Facility = z.infer<typeof FacilitySchema>
 
 export const ResidentDataSchema = z.object({
   resident_name: z.string().nullable().optional(),
-  id: z.string(),
+  id: z.string().nullable().optional(),
   address: z.string(),
   facility_id: z.string(),
   room_no: z.string(),

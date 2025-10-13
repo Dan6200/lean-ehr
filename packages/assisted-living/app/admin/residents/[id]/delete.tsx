@@ -29,10 +29,11 @@ export default function DeleteResident({
   >
 }) {
   const router = useRouter()
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    'use server'
     if (!resident_id) {
       toast({ title: 'Unable to Delete Resident', variant: 'destructive' })
-      return null
+      return
     }
     deleteResidentData(resident_id)
       .catch((err) => {
@@ -41,6 +42,7 @@ export default function DeleteResident({
       })
       .then((_) => toast({ title: 'Successfully Deleted Resident' }))
     router.refresh()
+    return
   }
   return (
     <Dialog>

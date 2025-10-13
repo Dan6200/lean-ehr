@@ -1,15 +1,12 @@
-'use client'
-
 import { GoBackLink } from '@/components/go-back-link'
 import { ResidentForm } from '@/components/residents/form'
-import { useSearchParams } from 'next/navigation'
 
-export default function AddResidentPage({
-  params: { id },
+export default async function AddResidentPage({
+  params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const room = useSearchParams().get('room')
+  const { id } = await params
   return (
     <main className="flex flex-col gap-5 bg-background container w-full md:w-2/3 mx-auto py-32">
       <GoBackLink
@@ -21,8 +18,13 @@ export default function AddResidentPage({
       </GoBackLink>
       <ResidentForm
         {...{
+          id: null,
           resident_name: '',
-          facility_id: room as string,
+          facility_id: '',
+          dob: '',
+          avatar_url: '',
+          room_no: '',
+          pcp: '',
           emergency_contacts: [],
         }}
       />

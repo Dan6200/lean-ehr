@@ -11,50 +11,17 @@ import { toast } from '@/components/ui/use-toast'
 import { isError } from '@/app/utils'
 import { updateResident } from '@/actions/residents/update'
 import { ResidentFormBase } from './ResidentFormBase'
-import type { Resident, Nullable } from '@/types'
-
-const emergencyContactSchema = z.object({
-  encrypted_contact_name: z
-    .string()
-    .min(3, {
-      message: 'contact name must be at least 3 characters.',
-    })
-    .nullable()
-    .optional(),
-  encrypted_cell_phone: z.string(),
-  encrypted_home_phone: z.string().nullable().optional(),
-  encrypted_work_phone: z.string().nullable().optional(),
-  encrypted_relationship: z.string().nullable().optional(),
-})
-
-const ResidentFormSchema = z.object({
-  encrypted_resident_name: z.string().nullable(),
-  emergency_contacts: z.array(emergencyContactSchema).nullable().optional(),
-})
-
-interface ResidentFormEditProps {
-  encrypted_resident_name?: Nullable<string>
-  document_id: string // document_id is required for editing
-  resident_id: string // resident_id is required for editing
-  facility_id: string
-  emergency_contacts?: Nullable<
-    {
-      encrypted_contact_name?: Nullable<string>
-      encrypted_cell_phone: string
-      encrypted_home_phone?: Nullable<string>
-      encrypted_work_phone?: Nullable<string>
-      encrypted_relationship?: Nullable<string>
-    }[]
-  >
-}
+import {
+  type Resident,
+  type Nullable,
+  type ResidentData,
+  ResidentDataSchema,
+} from '@/types'
 
 export function ResidentFormEdit({
-  encrypted_resident_name,
-  document_id,
-  resident_id,
-  facility_id,
-  emergency_contacts,
-}: ResidentFormEditProps) {
+  ...residentData
+}: Omit<ResidentData, 'address'>) {
+  const { resident_name, id, facility_id, emergency_contacts } = residentData
   const router = useRouter()
   const [idToken, setIdToken] = useState<string | null>(null) // State to hold idToken
 
@@ -71,31 +38,31 @@ export function ResidentFormEdit({
     return () => unsubscribe()
   }, [])
 
-  const form = useForm<z.infer<typeof ResidentFormSchema>>({
-    resolver: zodResolver(ResidentFormSchema),
+  const form = useForm<ResidentData>({
+    resolver: zodResolver(ResidentDataSchema),
     defaultValues: {
-      encrypted_resident_name: encrypted_resident_name ?? undefined,
+      resident_name: resident_name ?? undefined,
       emergency_contacts:
         emergency_contacts?.map(
           ({
-            encrypted_contact_name,
-            encrypted_cell_phone,
-            encrypted_home_phone,
-            encrypted_work_phone,
-            encrypted_relationship,
+            contact_name,
+            cell_phone,
+            home_phone,
+            work_phone,
+            relationship,
           }) => ({
-            encrypted_contact_name: encrypted_contact_name ?? undefined,
-            encrypted_cell_phone,
-            encrypted_home_phone: encrypted_home_phone ?? undefined,
-            encrypted_work_phone: encrypted_work_phone ?? undefined,
-            encrypted_relationship: encrypted_relationship ?? undefined,
+            contact_name: contact_name ?? undefined,
+            cell_phone,
+            home_phone: home_phone ?? undefined,
+            work_phone: work_phone ?? undefined,
+            relationship: relationship ?? undefined,
           }),
         ) ?? [],
     },
   })
   const originalNoOfEmContacts = useRef(emergency_contacts?.length ?? 0)
 
-  async function onSubmit(data: z.infer<typeof ResidentFormSchema>) {
+  async function onSubmit(data: z.infer<typeof ResidentDataSchema>) {
     if (!idToken) {
       toast({
         title: 'Authentication Error',
@@ -105,19 +72,18 @@ export function ResidentFormEdit({
       return
     }
 
-    let residentData: Resident = {} as Resident
-    residentData.encrypted_resident_name = data.encrypted_resident_name ?? null
+    let residentData: ResidentData = {} as ResidentData
+    residentData.resident_name = data.resident_name ?? null
     residentData.facility_id = facility_id
-    residentData.resident_id = resident_id // Use existing resident_id
 
     if (data.emergency_contacts) {
       residentData.emergency_contacts = data.emergency_contacts.map(
         (contact) => ({
-          encrypted_work_phone: contact.encrypted_work_phone ?? null,
-          encrypted_home_phone: contact.encrypted_home_phone ?? null,
-          encrypted_contact_name: contact.encrypted_contact_name ?? null,
-          encrypted_relationship: contact.encrypted_relationship ?? null,
-          encrypted_cell_phone: contact.encrypted_cell_phone,
+          work_phone: contact.work_phone ?? null,
+          home_phone: contact.home_phone ?? null,
+          contact_name: contact.contact_name ?? null,
+          relationship: contact.relationship ?? null,
+          cell_phone: contact.cell_phone,
         }),
       )
     } else {
@@ -125,11 +91,7 @@ export function ResidentFormEdit({
     }
 
     try {
-      const { message, success } = await updateResident(
-        residentData,
-        document_id,
-        idToken, // Pass idToken to updateResident
-      )
+      const { message, success } = await updateResident(residentData, id)
       toast({
         title: message,
         variant: success ? 'default' : 'destructive',

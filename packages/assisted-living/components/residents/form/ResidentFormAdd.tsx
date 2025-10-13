@@ -9,32 +9,12 @@ import { toast } from '@/components/ui/use-toast'
 import { isError } from '@/app/utils'
 import { addNewResident } from '@/actions/residents/add'
 import { ResidentFormBase } from './ResidentFormBase'
-import type { Resident } from '@/types'
+import type { ResidentData } from '@/types'
+import { ResidentDataSchema } from '@/types'
 
-const emergencyContactSchema = z.object({
-  encrypted_contact_name: z
-    .string()
-    .min(3, {
-      message: 'contact name must be at least 3 characters.',
-    })
-    .nullable()
-    .optional(),
-  encrypted_cell_phone: z.string(),
-  encrypted_home_phone: z.string().nullable().optional(),
-  encrypted_work_phone: z.string().nullable().optional(),
-  encrypted_relationship: z.string().nullable().optional(),
-})
-
-const ResidentFormSchema = z.object({
-  encrypted_resident_name: z.string().nullable(),
-  emergency_contacts: z.array(emergencyContactSchema).nullable().optional(),
-})
-
-interface ResidentFormAddProps {
-  facility_id: string
-}
-
-export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
+export function ResidentFormAdd({
+  facility_id,
+}: Pick<ResidentData, 'facility_id'>) {
   const [idToken, setIdToken] = useState<string | null>(null) // State to hold idToken
 
   useEffect(() => {
@@ -50,15 +30,15 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
     return () => unsubscribe()
   }, [])
 
-  const form = useForm<z.infer<typeof ResidentFormSchema>>({
-    resolver: zodResolver(ResidentFormSchema),
+  const form = useForm<z.infer<typeof ResidentDataSchema>>({
+    resolver: zodResolver(ResidentDataSchema),
     defaultValues: {
-      encrypted_resident_name: '', // Changed from resident_name
+      resident_name: '', // Changed from resident_name
       emergency_contacts: [],
     },
   })
 
-  async function onSubmit(data: z.infer<typeof ResidentFormSchema>) {
+  async function onSubmit(data: z.infer<typeof ResidentDataSchema>) {
     if (!idToken) {
       toast({
         title: 'Authentication Error',
@@ -68,18 +48,18 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
       return
     }
 
-    let residentData: Resident = {} as Resident
-    residentData.encrypted_resident_name = data.encrypted_resident_name ?? null // Changed from resident_name
+    let residentData = {} as ResidentData
+    residentData.resident_name = data.resident_name ?? null // Changed from resident_name
     residentData.facility_id = facility_id
 
     if (data.emergency_contacts) {
       residentData.emergency_contacts = data.emergency_contacts.map(
         (contact) => ({
-          encrypted_work_phone: contact.encrypted_work_phone ?? null, // Changed
-          encrypted_home_phone: contact.encrypted_home_phone ?? null, // Changed
-          encrypted_contact_name: contact.encrypted_contact_name ?? null, // Changed
-          encrypted_relationship: contact.encrypted_relationship ?? null, // Changed
-          encrypted_cell_phone: contact.encrypted_cell_phone, // Changed
+          work_phone: contact.work_phone ?? null, // Changed
+          home_phone: contact.home_phone ?? null, // Changed
+          contact_name: contact.contact_name ?? null, // Changed
+          relationship: contact.relationship ?? null, // Changed
+          cell_phone: contact.cell_phone, // Changed
         }),
       )
     } else {
@@ -87,7 +67,7 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
     }
 
     try {
-      const { message, success } = await addNewResident(residentData, idToken) // Pass idToken
+      const { message, success } = await addNewResident(residentData)
       if (!success) {
         toast({
           title: success ? 'Unable to Add New Resident' : message,
@@ -96,7 +76,7 @@ export function ResidentFormAdd({ facility_id }: ResidentFormAddProps) {
         return
       }
       toast({ title: message })
-      form.reset({ encrypted_resident_name: '', emergency_contacts: [] }) // Changed
+      form.reset({ resident_name: '', emergency_contacts: [] }) // Changed
     } catch (err) {
       if (isError(err)) toast({ title: err.message, variant: 'destructive' })
     }

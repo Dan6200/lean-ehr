@@ -1,10 +1,8 @@
 'use client'
+import { EmergencyContact } from '@/types'
 import { Card, CardContent, CardFooter } from './ui/card'
 import { PhoneCall } from 'lucide-react'
 import Link from 'next/link'
-import { Resident } from '@/types'
-
-type EmergencyContact = Resident['emergency_contacts'][0]
 
 export default function EmergencyContacts({
   contacts,
@@ -26,7 +24,7 @@ export default function EmergencyContacts({
         {contacts && contacts.length > 0 ? (
           contacts.map((contact, index) => (
             <Link
-              key={index + contact.contact_name.split(' ')[0]}
+              key={index + (contact.contact_name?.split(' ')[0] ?? '')}
               href={`tel:${contact.cell_phone}`}
               className="w-full sm:w-fit"
             >
