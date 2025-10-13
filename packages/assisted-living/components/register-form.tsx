@@ -19,7 +19,7 @@ import { toast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { onAuthStateChanged, User } from 'firebase/auth'
-import { auth } from '@/firebase/client/config'
+import { auth } from '@/auth/client/config'
 
 const AddAdminFormSchema = z.object({
   email: z.string().min(2, {
