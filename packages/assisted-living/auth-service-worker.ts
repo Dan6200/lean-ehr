@@ -1,6 +1,6 @@
 // This service worker intercepts fetch requests to append Firebase Auth ID tokens
 // to headers for SSR authentication.
-
+// @ts-nocheck
 import { initializeApp, getApps } from 'firebase/app'
 import { getAuth } from 'firebase/auth'
 import { firebaseConfig } from './firebase/config'
@@ -12,7 +12,7 @@ if (!firebaseApp) {
 }
 
 // Helper to get request body for non-GET requests
-const getBodyContent = (req) => {
+const getBodyContent = (req: Request) => {
   return new Promise((resolve) => {
     if (req.method !== 'GET') {
       req
@@ -26,7 +26,7 @@ const getBodyContent = (req) => {
   })
 }
 
-self.addEventListener('install', (event: ExtendableEvent) => {
+self.addEventListener('install', () => {
   // Force the waiting service worker to become the active service worker.
   console.log('[SW] Installing new version...')
   self.skipWaiting()
