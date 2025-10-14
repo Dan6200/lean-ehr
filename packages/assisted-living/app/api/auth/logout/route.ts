@@ -4,7 +4,6 @@ import {
   deleteSessionCookie,
   getSessionCookie,
   getVerifiedSessionCookie,
-  clearAuthHeader,
 } from '@/auth/server/definitions'
 
 // The endpoint the client calls to sign out and clear the session.
@@ -12,7 +11,6 @@ export async function POST(_request: NextRequest) {
   try {
     // FOR SERVICE-WORKER AUTH FLOW, THERE SHOULD BE NO SESSION COOKIE SET!
     if (!(await getSessionCookie())) {
-      await clearAuthHeader()
       return NextResponse.json(
         { message: 'Signed out successfully' },
         { status: 200 },
