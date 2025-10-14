@@ -32,7 +32,7 @@ export const UserMenu = () => {
 
   return (
     <DropdownMenu>
-      <div className="flex justify-end order-2 md:order-3">
+      <div className="flex self-end order-2 md:order-3">
         <DropdownMenuTrigger className="rounded-full border-primary border-4 bg-primary-foreground w-12 h-12">
           <UserRound className="mx-auto" />
         </DropdownMenuTrigger>
