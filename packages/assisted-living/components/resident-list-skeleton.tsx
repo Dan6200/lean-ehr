@@ -12,8 +12,8 @@ import { PulsingDiv } from './ui/pulsing-div'
 export default function ResidentListSkeleton() {
   return (
     <main className="sm:container bg-background text-left mx-auto py-48 md:py-32">
-      <div className="w-fit rounded-md border-2 mx-auto">
-        <Table className="text-base w-[90vw] md:w-[70vw] lg:w-[50vw]">
+      <div className="w-full rounded-lg overflow-hidden md:w-3/5 shadow-md mx-auto">
+        <Table className="text-base w-fit sm:w-full overflow-x-scroll">
           <TableCaption>All Residents.</TableCaption>
           <TableHeader className="bg-foreground/20 font-bold rounded-md">
             <TableRow>
@@ -28,13 +28,13 @@ export default function ResidentListSkeleton() {
               .map((_data: null, index) => (
                 <TableRow key={index}>
                   <TableCell className="text-left">
-                    <PulsingDiv className="h-5 w-12 mx-auto" />
+                    <PulsingDiv className="h-5 w-12" />
                   </TableCell>
                   <TableCell className="text-left">
-                    <PulsingDiv className="h-5 w-32 mx-auto" />
+                    <PulsingDiv className="h-5 w-32" />
                   </TableCell>
                   <TableCell className="text-left">
-                    <PulsingDiv className="h-5 w-48 mx-auto" />
+                    <PulsingDiv className="h-5 w-48" />
                   </TableCell>
                 </TableRow>
               ))}
