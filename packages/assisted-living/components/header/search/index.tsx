@@ -1,9 +1,9 @@
 'use client'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { Suggestions } from '@/components/header/search/suggestions'
 import { ResidentData } from '@/types'
 import { SearchBar } from './search-bar'
-import { cn } from '@/lib/utils'
+import { cn } from '@/components/lib/utils'
 
 interface SearchProps {
   residentsData: ResidentData[] | null
