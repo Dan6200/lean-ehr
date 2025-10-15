@@ -8,6 +8,8 @@ import {
   IconUserCircle,
 } from '@tabler/icons-react'
 
+import { useRouter } from 'next/navigation'
+import { signOutWrapper } from '@/auth/client/definitions'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
@@ -35,6 +37,16 @@ export function NavUser({
   }
 }) {
   const { isMobile } = useSidebar()
+  const router = useRouter()
+
+  const handleSignOut = async () => {
+    signOutWrapper()
+    await fetch('/api/auth/logout', {
+      method: 'post',
+    }).then(async (result) => {
+      if (result.status === 200) router.push('/sign-in') // Navigate to the login page
+    })
+  }
 
   return (
     <SidebarMenu>
@@ -94,7 +106,10 @@ export function NavUser({
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onSelect={handleSignOut}
+              className="cursor-pointer"
+            >
               <IconLogout />
               Log out
             </DropdownMenuItem>
