@@ -7,7 +7,7 @@ import { Button } from './ui/button'
 import { onAuthStateChanged, User } from 'firebase/auth'
 import { auth } from '@/auth/client/config'
 
-function ResidentInfoRow({
+export function ResidentInfoRow({
   label,
   value,
 }: {
@@ -69,26 +69,6 @@ export default function Resident({
             {resident_name ?? 'Resident Name Not Available'}
           </h1>
         </div>
-        <article className="md:col-span-3 text-left flex flex-col gap-2 pt-4">
-          <h2 className="text-2xl font-bold mb-4 border-b pb-2">
-            Resident Information
-          </h2>
-          <ResidentInfoRow label="Room" value={room_no} />
-          <ResidentInfoRow label="Facility ID" value={facility_id} />
-          <ResidentInfoRow label="Facility Address" value={address} />
-          <ResidentInfoRow label="Date of Birth" value={dob} />
-          <ResidentInfoRow label="PCP" value={pcp} />
-          {user && (
-            <div className="mt-6">
-              <Button
-                className="w-full sm:w-auto"
-                onMouseDown={() => router.push(`/user/residents/${id}/edit`)}
-              >
-                Edit Resident Information
-              </Button>
-            </div>
-          )}
-        </article>
       </section>
     </div>
   )
