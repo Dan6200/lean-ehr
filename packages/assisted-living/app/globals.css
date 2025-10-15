@@ -152,3 +152,9 @@ body {
   /* IE 10+ */
   -ms-overflow-style: none;
 }
+
+/* Prevent Scroll-locking issue with Shadcn/RadixUI when a modal is open */
+body,
+html body {
+  @apply data-[scroll-locked]:!overflow-visible data-[scroll-locked]:!m-0;
+}
