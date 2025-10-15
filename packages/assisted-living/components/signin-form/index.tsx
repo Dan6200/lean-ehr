@@ -69,7 +69,7 @@ export function SignInForm() {
       })
         .then(async (result) => {
           if (result.ok) {
-            router.push('/admin') // Navigate to the homepage
+            router.push('/admin/dashboard') // Navigate to the homepage
             toast({ title: message, variant: 'default' })
             return result
           } else {
