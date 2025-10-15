@@ -47,7 +47,7 @@ export async function middleware(request: NextRequest) {
     if (sessionVerified) {
       // Cookie exists -> Redirect authenticated users from login/register pages to dashboard
       const url = request.nextUrl.clone()
-      url.pathname = '/admin'
+      url.pathname = '/admin/dashboard'
       return NextResponse.redirect(url)
     }
   }
