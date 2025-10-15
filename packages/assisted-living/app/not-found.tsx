@@ -1,24 +1,39 @@
 'use client'
-import { useRouter } from 'next/navigation'
-import { useLayoutEffect } from 'react'
+
+import { Button } from '@/components/ui/button'
+import { GoBackLink } from '@/components/go-back-link'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export default function NotFound() {
-  const router = useRouter()
-  useLayoutEffect(() => {
-    let t: any
-    t = setTimeout(() => {
-      router.push('/admin/dashboard')
-    }, 2000)
-    return () => t
-  }, [])
   return (
-    <main className="flex gap-5 md:gap-10 flex-col container sm:w-4/5 py-48 px-8 md:px-32">
-      <h1 className="text-5xl font-semibold mb-8 mx-auto text-center">
-        Lean EHR
-      </h1>
-      <h3 className="text-2xl text-center capitalize">
-        The requested resource could not be found
-      </h3>
-    </main>
+    <div className="grid min-h-svh w-full grid-cols-1 md:grid-cols-2">
+      <div className="relative flex flex-col items-center justify-center gap-4 p-8 text-center">
+        <GoBackLink className="absolute left-8 top-8">Go Back</GoBackLink>
+        <Image
+          src="/404-compass.png"
+          alt="Compass indicating a lost page"
+          width={200}
+          height={200}
+          className="mb-4 md:hidden" // Show compass on mobile in the text column
+        />
+        <div className="text-9xl font-bold">404</div>
+        <h1 className="text-3xl font-semibold">Page Not Found</h1>
+        <p className="text-muted-foreground">
+          The page you are looking for does not exist.
+        </p>
+        <Button asChild className="mt-4">
+          <Link href="/admin/dashboard">Go to Dashboard</Link>
+        </Button>
+      </div>
+      <div className="relative hidden md:block">
+        <Image
+          src="/404-compass.png"
+          alt="Compass indicating a lost page"
+          fill
+          className="object-cover dark:brightness-[0.7] dark:grayscale"
+        />
+      </div>
+    </div>
   )
 }
