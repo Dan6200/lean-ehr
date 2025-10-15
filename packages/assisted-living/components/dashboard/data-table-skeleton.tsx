@@ -11,14 +11,14 @@ import {
 export function DataTableSkeleton() {
   return (
     <div className="w-full flex-col justify-start gap-6">
-      <div className="flex items-center justify-between px-4 lg:px-6">
+      <div className="flex items-center justify-between lg:px-6">
         <PulsingDiv className="h-9 w-24" />
         <div className="flex items-center gap-2">
           <PulsingDiv className="h-9 w-28" />
           <PulsingDiv className="h-9 w-28" />
         </div>
       </div>
-      <div className="relative flex flex-col gap-4 overflow-auto px-4 lg:px-6 mt-4">
+      <div className="relative flex flex-col gap-4 overflow-auto lg:px-6 mt-4">
         <div className="overflow-hidden rounded-lg border">
           <Table>
             <TableHeader className="bg-muted sticky top-0 z-10">
