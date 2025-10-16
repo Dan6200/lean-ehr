@@ -28,9 +28,6 @@ export function ResidentNav({ residentId }: { residentId: string }) {
         {navLinks.map((link) => {
           const fullHref = `/admin/dashboard/residents/${residentId}${link.href}`
           const isActive = pathname === fullHref
-          console.log('is active', isActive)
-          console.log('full href', fullHref)
-          console.log('pathname', pathname)
           return (
             <NavigationMenuItem key={link.name}>
               <NavigationMenuLink
