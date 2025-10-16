@@ -74,6 +74,7 @@
     "mobx-react-lite": "^4.0.7",
     "mobx-state-tree": "^6.0.0",
     "next": "15.5.4",
+    "next-cloudinary": "^6.16.0",
     "pusher-js": "8.4.0-rc2",
     "qrcode": "^1.5.3",
     "qrcode.react": "^3.1.0",
