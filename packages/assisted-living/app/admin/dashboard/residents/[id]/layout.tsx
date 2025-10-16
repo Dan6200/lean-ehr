@@ -39,7 +39,7 @@ export default async function ResidentLayout({
 }) {
   const { id } = await params
   return (
-    <main className="bg-background flex flex-col items-start gap-2 container md:px-4 text-center h-fit">
+    <main className="bg-background flex flex-col items-start gap-2 container px-4 text-center h-fit">
       <GoBackLink className="cursor-pointer flex w-full gap-2 sm:gap-5">
         Go Back
       </GoBackLink>
