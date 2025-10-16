@@ -1,11 +1,13 @@
 'use client'
+import { CldImage } from 'next-cloudinary'
 import Image from 'next/image'
 import type { ResidentData } from '@/types'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Button } from './ui/button'
 import { onAuthStateChanged, User } from 'firebase/auth'
 import { auth } from '@/auth/client/config'
+
+const CLOUDINARY_FOLDER = 'lean-ehr/assisted-living/'
 
 export default function Resident({
   id,
@@ -17,7 +19,7 @@ export default function Resident({
   const [, setUser] = useState<User | null>(null)
   const router = useRouter()
 
-  const { resident_name } = residentData
+  const { resident_name, avatar_url } = residentData
 
   useEffect(() => {
     if (auth) {
@@ -31,13 +33,13 @@ export default function Resident({
   return (
     <div className="p-2 md:p-4 w-full lg:w-2/3">
       <div className="flex flex-col md:flex-row items-center self-center gap-4 md:gap-8">
-        {residentData.avatar_url ? (
-          <Image
-            src={residentData.avatar_url}
+        {avatar_url ? (
+          <CldImage
+            width="128"
+            height="128"
+            src={`${CLOUDINARY_FOLDER}${avatar_url}`.replace('.png', '')}
             alt="resident avatar"
             className="rounded-full"
-            width={128}
-            height={128}
           />
         ) : (
           <Image

@@ -11,7 +11,8 @@ import { toast } from '@/components/ui/use-toast'
 import { isError } from '@/app/utils'
 import { updateResident } from '@/actions/residents/update'
 import { ResidentFormBase } from './ResidentFormBase'
-import { type ResidentData, ResidentDataSchema } from '@/types'
+import { type ResidentData, ResidentDataSchema, Resident } from '@/types'
+import { UploadButton } from '@/components/cloudinary/upload-button'
 
 export function ResidentFormEdit({
   onFinished,
@@ -19,7 +20,8 @@ export function ResidentFormEdit({
 }: Omit<ResidentData, 'address'> & { onFinished: () => void }) {
   const { resident_name, id, facility_id } = residentData
   const router = useRouter()
-  const [idToken, setIdToken] = useState<string | null>(null) // State to hold idToken
+  const [idToken, setIdToken] = useState<string | null>(null)
+  const [newAvatarUrl, setNewAvatarUrl] = useState<string | null>(null)
 
   useEffect(() => {
     if (auth) {
@@ -56,17 +58,15 @@ export function ResidentFormEdit({
       return
     }
 
-    let residentData: Partial<ResidentData> = {}
-    residentData.resident_name = data.resident_name ?? null
-    residentData.facility_id = facility_id
+    let residentUpdateData: Partial<ResidentData> = {}
+    residentUpdateData.resident_name = data.resident_name ?? null
+    if (newAvatarUrl) {
+      residentUpdateData.avatar_url = newAvatarUrl
+    }
 
     try {
       if (!id) throw new Error("Can't find the resource to edit")
-      // The updateResident action needs to be updated to handle partial data
-      const { message, success } = await updateResident(
-        residentData as Resident,
-        id,
-      )
+      const { message, success } = await updateResident(residentUpdateData, id)
       toast({
         title: message,
         variant: success ? 'default' : 'destructive',
@@ -80,13 +80,23 @@ export function ResidentFormEdit({
     }
   }
 
+  const handleUpload = (result: any) => {
+    setNewAvatarUrl(result.info.secure_url)
+    toast({ title: 'Image uploaded successfully!' })
+  }
+
   return (
-    <ResidentFormBase
-      form={form}
-      onSubmit={onSubmit}
-      formTitle="Edit Resident Information"
-      isResidentNameEditableByDefault={false}
-      originalNoOfEmContacts={0} // No contacts in this form
-    />
+    <>
+      <ResidentFormBase
+        form={form}
+        onSubmit={onSubmit}
+        formTitle="Edit Resident Information"
+        isResidentNameEditableByDefault={false}
+        originalNoOfEmContacts={0} // No contacts in this form
+      />
+      <div className="mt-4">
+        <UploadButton onUpload={handleUpload} />
+      </div>
+    </>
   )
 }
