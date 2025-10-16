@@ -19,7 +19,7 @@ export default function DashboardLayout({
       <AppSidebar variant="inset" />
       <SidebarInset>
         <SiteHeader />
-        <main className="@container/main flex-1 overflow-y-auto p-4 pt-6 md:p-6">
+        <main className="@container/main flex-1 overflow-y-auto px-0 sm:p-4 py-6 md:p-6">
           {children}
         </main>
       </SidebarInset>

@@ -287,7 +287,7 @@ export function DataTable<TData, TValue>({
         value="overview"
         className="relative flex flex-col gap-4 overflow-auto lg:px-6"
       >
-        <div className="overflow-hidden rounded-lg border">
+        <div className="overflow-hidden sm:rounded-lg border">
           <DndContext
             collisionDetection={closestCenter}
             modifiers={[restrictToVerticalAxis]}

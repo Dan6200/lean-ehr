@@ -16,8 +16,8 @@ export default async function ResidentInformationPage({
   })
 
   return (
-    <article className="text-left flex flex-col gap-2 pt-4">
-      <h2 className="text-center text-2xl font-bold mb-4 pb-2">
+    <article className="text-left grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
+      <h2 className="text-center md:col-span-2 text-xl font-semibold mb-8 pb-2">
         Resident Information
       </h2>
       <ResidentInfoRow label="Room" value={residentData.room_no} />

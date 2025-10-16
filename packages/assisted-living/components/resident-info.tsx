@@ -8,7 +8,9 @@ export function ResidentInfoRow({
   return (
     <p className="text-base">
       {label}:
-      <span className="text-base font-semibold ml-4">{value ?? 'N/A'}</span>
+      <span className="text-base font-semibold ml-4">
+        {value === 'null' || !value ? 'N/A' : value}
+      </span>
     </p>
   )
 }
