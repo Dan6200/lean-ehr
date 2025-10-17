@@ -1,7 +1,8 @@
-import { notFound, redirect } from 'next/navigation'
 import { getResidentData } from '@/actions/residents/get'
 import EmergencyContacts from '@/components/emergency-contacts'
-import { EditEmergencyContactsDialog } from '@/components/dashboard/residents/edit-emergency-contacts-dialog'
+import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { notFound, redirect } from 'next/navigation'
 
 export default async function EmergencyContactsPage({
   params,
@@ -21,10 +22,13 @@ export default async function EmergencyContactsPage({
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-2 mb-8">
         <h2 className="text-xl font-semibold">Emergency Contacts</h2>
-        <EditEmergencyContactsDialog
-          documentId={id}
-          contacts={residentData.emergency_contacts}
-        />
+        <Button asChild>
+          <Link
+            href={`/admin/dashboard/residents/${id}/emergency-contacts/edit`}
+          >
+            Edit Contacts
+          </Link>
+        </Button>
       </div>
       <EmergencyContacts contacts={residentData.emergency_contacts} />
     </div>
