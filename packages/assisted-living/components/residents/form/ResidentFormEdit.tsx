@@ -14,9 +14,8 @@ import { ResidentFormBase } from './ResidentFormBase'
 import { type ResidentData, ResidentDataSchema } from '@/types'
 
 export function ResidentFormEdit({
-  onFinished,
   ...residentData
-}: Omit<ResidentData, 'address'> & { onFinished: () => void }) {
+}: Omit<ResidentData, 'address'>) {
   const { resident_name, id, facility_id } = residentData
   const router = useRouter()
   const [idToken, setIdToken] = useState<string | null>(null)

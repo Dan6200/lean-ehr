@@ -31,7 +31,7 @@ export function EmergencyContactsFormBase({
 
   return (
     <Form {...form}>
-      <h1 className="font-semibold mb-8 text-2xl ">{formTitle}</h1>
+      <h1 className="font-semibold text-left mb-8 text-2xl ">{formTitle}</h1>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="w-full sm:w-4/5 lg:w-3/4 space-y-6"

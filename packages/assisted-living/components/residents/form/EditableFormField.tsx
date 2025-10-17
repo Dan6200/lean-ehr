@@ -71,7 +71,7 @@ export const EditableFormField = memo(function EditableFormField({
               />
             )}
           </FormControl>
-          <FormDescription>{description}</FormDescription>
+          <FormDescription className="text-left">{description}</FormDescription>
           <FormMessage />
         </FormItem>
       )}

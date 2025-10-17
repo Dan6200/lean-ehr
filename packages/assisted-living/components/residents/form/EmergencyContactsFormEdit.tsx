@@ -20,11 +20,9 @@ const EmergencyContactsFormSchema = z.object({
 export function EmergencyContactsFormEdit({
   documentId,
   initialContacts,
-  onFinished,
 }: {
   documentId: string
-  initialContacts: EmergencyContact[]
-  onFinished: () => void
+  initialContacts?: EmergencyContact[] | null
 }) {
   const router = useRouter()
   const form = useForm<z.infer<typeof EmergencyContactsFormSchema>>({
@@ -48,7 +46,6 @@ export function EmergencyContactsFormEdit({
       })
       if (success) {
         router.refresh()
-        onFinished()
       }
     } catch (err) {
       if (isError(err)) toast({ title: err.message, variant: 'destructive' })

@@ -52,14 +52,14 @@ export function EmergencyContactBlock({
         <div className="flex gap-2">
           <span
             onClick={() => setIsEmContactBlockEditing(!isEmContactBlockEditing)}
-            className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
+            className="p-1 border hover:bg-accent rounded-md cursor-pointer"
           >
             {!isEmContactBlockEditing ? <Edit /> : <Lock />}
           </span>
           {isEmContactBlockEditing && (
             <span
               onClick={() => onDelete(index)}
-              className="p-1 border hover:bg-primary/10 rounded-md cursor-pointer"
+              className="p-1 border hover:bg-accent rounded-md cursor-pointer"
             >
               <Trash2 />
             </span>
@@ -81,7 +81,7 @@ export function EmergencyContactBlock({
           defaultValue={[]}
           render={({ field }) => (
             <div className="space-y-2">
-              <label className="text-sm font-medium">
+              <label className="w-full block text-left text-sm font-medium">
                 Personal Relationships
               </label>
               <MultiSelect
@@ -91,7 +91,7 @@ export function EmergencyContactBlock({
                 placeholder="Select..."
                 disabled={!isEmContactBlockEditing}
               />
-              <p className="text-sm text-muted-foreground">
+              <p className="text-left text-sm text-muted-foreground">
                 Select the personal relationship(s).
               </p>
             </div>
@@ -104,7 +104,9 @@ export function EmergencyContactBlock({
           defaultValue={[]}
           render={({ field }) => (
             <div className="space-y-2">
-              <label className="text-sm font-medium">Legal Relationships</label>
+              <label className="w-full block text-left text-sm font-medium">
+                Legal Relationships
+              </label>
               <MultiSelect
                 options={legalOptions}
                 onValueChange={field.onChange}
@@ -112,7 +114,7 @@ export function EmergencyContactBlock({
                 placeholder="Select..."
                 disabled={!isEmContactBlockEditing}
               />
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-left text-muted-foreground">
                 Select the legal relationship(s).
               </p>
             </div>
