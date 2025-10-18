@@ -184,6 +184,25 @@ export async function encryptResident(
       },
     )
   }
+  if (dataToEncrypt.medical_records) {
+    encryptedData.encrypted_medical_records = dataToEncrypt.medical_records.map(
+      (record: MedicalRecord) => {
+        const enc: any = {}
+        if (record.date)
+          enc.encrypted_date = encryptData(record.date, clinicalDek)
+        if (record.title)
+          enc.encrypted_title = encryptData(record.title, clinicalDek)
+        if (record.notes)
+          enc.encrypted_notes = encryptData(record.notes, clinicalDek)
+        if (record.snomed_code)
+          enc.encrypted_snomed_code = encryptData(
+            record.snomed_code,
+            clinicalDek,
+          )
+        return EncryptedMedicalRecordSchema.parse(enc)
+      },
+    )
+  }
 
   // Encrypt Financial Data
   if (dataToEncrypt.financials) {
@@ -394,6 +413,25 @@ export async function decryptResidentData(
           dec.frequency = decryptData(med.encrypted_frequency, clinicalDek)
         return dec
       })
+    }
+    if (data.encrypted_medical_records) {
+      decryptedData.medical_records = data.encrypted_medical_records.map(
+        (record: any) => {
+          const dec: any = {}
+          if (record.encrypted_date)
+            dec.date = decryptData(record.encrypted_date, clinicalDek)
+          if (record.encrypted_title)
+            dec.title = decryptData(record.encrypted_title, clinicalDek)
+          if (record.encrypted_notes)
+            dec.notes = decryptData(record.encrypted_notes, clinicalDek)
+          if (record.encrypted_snomed_code)
+            dec.snomed_code = decryptData(
+              record.encrypted_snomed_code,
+              clinicalDek,
+            )
+          return dec
+        },
+      )
     }
   }
 
