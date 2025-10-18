@@ -28,7 +28,29 @@ export const RelationshipEnum = z.union([
   PersonalRelationshipEnum,
 ])
 
+export const FinancialTransactionTypeEnum = z.enum(['PAYMENT', 'CHARGE'])
+
 // --- Plaintext Schemas (for Application Use) ---
+export const AllergySchema = z.object({
+  name: z.string(),
+  snomed_code: z.string().optional(),
+  reaction: z.string().optional(),
+})
+
+export const MedicationSchema = z.object({
+  name: z.string(),
+  rxnorm_code: z.string().optional(),
+  dosage: z.string().optional(),
+  frequency: z.string().optional(),
+})
+
+export const FinancialTransactionSchema = z.object({
+  amount: z.number(),
+  date: z.string(), // ISO 8601 date string
+  type: FinancialTransactionTypeEnum,
+  description: z.string(),
+})
+
 export const EmergencyContactSchema = z
   .object({
     contact_name: z.string().nullable().optional(),
@@ -62,16 +84,39 @@ export const ResidentSchema = z.object({
   work_phone: z.string().nullable().optional(),
   home_phone: z.string().nullable().optional(),
   emergency_contacts: z.array(EmergencyContactSchema).nullable().optional(),
+  allergies: z.array(AllergySchema).nullable().optional(),
+  medications: z.array(MedicationSchema).nullable().optional(),
+  financials: z.array(FinancialTransactionSchema).nullable().optional(),
 })
 
 // --- Encrypted Field Schema ---
 export const EncryptedFieldSchema = z.object({
-  ciphertext: z.string(), // Base64 encoded Buffer
-  iv: z.string(), // Base64 encoded Buffer
-  authTag: z.string(), // Base64 encoded Buffer
+  ciphertext: z.string(),
+  iv: z.string(),
+  authTag: z.string(),
 })
 
 // --- Encrypted Schemas (for Firestore Storage) ---
+export const EncryptedAllergySchema = z.object({
+  encrypted_name: EncryptedFieldSchema,
+  encrypted_snomed_code: EncryptedFieldSchema.optional(),
+  encrypted_reaction: EncryptedFieldSchema.optional(),
+})
+
+export const EncryptedMedicationSchema = z.object({
+  encrypted_name: EncryptedFieldSchema,
+  encrypted_rxnorm_code: EncryptedFieldSchema.optional(),
+  encrypted_dosage: EncryptedFieldSchema.optional(),
+  encrypted_frequency: EncryptedFieldSchema.optional(),
+})
+
+export const EncryptedFinancialTransactionSchema = z.object({
+  encrypted_amount: EncryptedFieldSchema,
+  encrypted_date: EncryptedFieldSchema,
+  encrypted_type: EncryptedFieldSchema,
+  encrypted_description: EncryptedFieldSchema,
+})
+
 export const EncryptedEmergencyContactSchema = z.object({
   encrypted_contact_name: EncryptedFieldSchema.nullable().optional(),
   encrypted_cell_phone: EncryptedFieldSchema,
@@ -86,12 +131,13 @@ export const EncryptedResidentSchema = z.object({
   room_no: z.string(),
 
   // Encrypted DEKs
-  encrypted_dek_general: z.string(), // Base64 encoded Buffer
-  encrypted_dek_contact: z.string(), // Base64 encoded Buffer
-  encrypted_dek_clinical: z.string(), // Base64 encoded Buffer
+  encrypted_dek_general: z.string(),
+  encrypted_dek_contact: z.string(),
+  encrypted_dek_clinical: z.string(),
+  encrypted_dek_financial: z.string(), // New DEK for financial data
 
   // Encrypted data fields
-  encrypted_avatar_url: EncryptedFieldSchema.nullable().optional(), // <--- Encrypted
+  encrypted_avatar_url: EncryptedFieldSchema.nullable().optional(),
   encrypted_resident_name: EncryptedFieldSchema.nullable().optional(),
   encrypted_dob: EncryptedFieldSchema.nullable().optional(),
   encrypted_pcp: EncryptedFieldSchema.nullable().optional(),
@@ -103,33 +149,34 @@ export const EncryptedResidentSchema = z.object({
     .array(EncryptedEmergencyContactSchema)
     .nullable()
     .optional(),
+  encrypted_allergies: z.array(EncryptedAllergySchema).nullable().optional(),
+  encrypted_medications: z
+    .array(EncryptedMedicationSchema)
+    .nullable()
+    .optional(),
+  encrypted_financials: z
+    .array(EncryptedFinancialTransactionSchema)
+    .nullable()
+    .optional(),
 })
 
 // --- Types ---
+export type Allergy = z.infer<typeof AllergySchema>
+export type Medication = z.infer<typeof MedicationSchema>
+export type FinancialTransaction = z.infer<typeof FinancialTransactionSchema>
 export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
 export type Resident = z.infer<typeof ResidentSchema>
 export type EncryptedResident = z.infer<typeof EncryptedResidentSchema>
 
 // --- Other Schemas & Types (unchanged) ---
 export const FacilitySchema = z.object({
-  id: z.string().nullable().optional(),
+  id: z.string().optional(),
   address: z.string(),
 })
 export type Facility = z.infer<typeof FacilitySchema>
 
-export const ResidentDataSchema = z.object({
-  resident_name: z.string().nullable().optional(),
-  id: z.string().nullable().optional(),
+export const ResidentDataSchema = ResidentSchema.extend({
+  id: z.string().optional(),
   address: z.string(),
-  facility_id: z.string(),
-  room_no: z.string(),
-  avatar_url: z.string(),
-  dob: z.string(),
-  pcp: z.string(),
-  resident_email: z.string().nullable().optional(),
-  cell_phone: z.string().nullable().optional(),
-  work_phone: z.string().nullable().optional(),
-  home_phone: z.string().nullable().optional(),
-  emergency_contacts: z.array(EmergencyContactSchema).nullable().optional(),
 })
 export type ResidentData = z.infer<typeof ResidentDataSchema>
