@@ -25,18 +25,27 @@ gcloud kms keyrings create assisted-living --location=europe-west1 --project=lea
 These commands create the three Key Encryption Keys for the different data sensitivity levels.
 
 **General Data Key:**
+
 ```bash
 gcloud kms keys create kek-general --keyring=assisted-living --location=europe-west1 --purpose=encryption --project=lean-ehr
 ```
 
 **Contact Data Key:**
+
 ```bash
 gcloud kms keys create kek-contact --keyring=assisted-living --location=europe-west1 --purpose=encryption --project=lean-ehr
 ```
 
 **Clinical Data Key:**
+
 ```bash
 gcloud kms keys create kek-clinical --keyring=assisted-living --location=europe-west1 --purpose=encryption --project=lean-ehr
+```
+
+**Financial Data Key:**
+
+```bash
+gcloud kms keys create kek-financial --keyring=assisted-living --location=europe-west1 --purpose=encryption --project=lean-ehr
 ```
 
 ### 4. Create a Service Account
@@ -52,22 +61,27 @@ gcloud iam service-accounts create assisted-living-app --display-name="Assisted 
 These commands grant the new service account the necessary roles to access Firestore, Firebase Authentication, and the KMS keys.
 
 **Firestore Access:**
+
 ```bash
 gcloud projects add-iam-policy-binding lean-ehr --member=serviceAccount:assisted-living-app@lean-ehr.iam.gserviceaccount.com --role=roles/datastore.user
 ```
 
 **Firebase Auth Access:**
+
 ```bash
 gcloud projects add-iam-policy-binding lean-ehr --member=serviceAccount:assisted-living-app@lean-ehr.iam.gserviceaccount.com --role=roles/firebaseauth.admin
 ```
 
 **KMS Access (per key):**
+
 ```bash
 gcloud kms keys add-iam-policy-binding kek-general --keyring=assisted-living --location=europe-west1 --member=serviceAccount:assisted-living-app@lean-ehr.iam.gserviceaccount.com --role=roles/cloudkms.cryptoKeyEncrypterDecrypter --project=lean-ehr
 
 gcloud kms keys add-iam-policy-binding kek-contact --keyring=assisted-living --location=europe-west1 --member=serviceAccount:assisted-living-app@lean-ehr.iam.gserviceaccount.com --role=roles/cloudkms.cryptoKeyEncrypterDecrypter --project=lean-ehr
 
 gcloud kms keys add-iam-policy-binding kek-clinical --keyring=assisted-living --location=europe-west1 --member=serviceAccount:assisted-living-app@lean-ehr.iam.gserviceaccount.com --role=roles/cloudkms.cryptoKeyEncrypterDecrypter --project=lean-ehr
+
+gcloud kms keys add-iam-policy-binding kek-financial --keyring=assisted-living --location=europe-west1 --member=serviceAccount:assisted-living-app@lean-ehr.iam.gserviceaccount.com --role=roles/cloudkms.cryptoKeyEncrypterDecrypter --project=lean-ehr
 ```
 
 ### 6. Generate Service Account Key
@@ -81,4 +95,3 @@ gcloud iam service-accounts keys create secret-key/assisted-living-app-key.json 
   --iam-account=assisted-living-app@lean-ehr.iam.gserviceaccount.com \
   --project=lean-ehr
 ```
-
