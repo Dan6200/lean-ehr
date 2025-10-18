@@ -114,7 +114,7 @@
       "resident_email": "KaylaLittel100@hotmail.com",
       "cell_phone": "(972) 642-1521",
       "work_phone": "(819) 659-5811",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -158,7 +158,7 @@
       "pcp": "Dr. James Smith",
       "resident_email": "NadineDietrich100@hotmail.com",
       "cell_phone": "(819) 659-5811",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(296) 635-0801"
     }
   },
@@ -202,7 +202,7 @@
       "dob": "01/11/1943",
       "pcp": "Dr. Robert Jones",
       "resident_email": "PearlO'Keefe100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(296) 635-0801",
       "home_phone": "(438) 939-2900"
     }
@@ -921,7 +921,7 @@
       "resident_email": "ShariHermann100@hotmail.com",
       "cell_phone": "(861) 643-9728",
       "work_phone": "(608) 632-0504",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -965,7 +965,7 @@
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "PennyMurray100@hotmail.com",
       "cell_phone": "(608) 632-0504",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(964) 204-1958"
     }
   },
@@ -1023,7 +1023,7 @@
       "dob": "11/30/1953",
       "pcp": "Dr. Patricia Brown",
       "resident_email": "Dr.Grady100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(964) 204-1958",
       "home_phone": "(697) 283-2016"
     }
@@ -1056,7 +1056,7 @@
       "resident_email": "SimonRosenbaum-Jakubowski100@hotmail.com",
       "cell_phone": "(964) 204-1958",
       "work_phone": "(697) 283-2016",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -1114,7 +1114,7 @@
       "pcp": "Dr. Joseph Thomas",
       "resident_email": "HarveyThiel100@hotmail.com",
       "cell_phone": "(697) 283-2016",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(344) 996-0334"
     }
   },
@@ -1158,7 +1158,7 @@
       "dob": "11/18/1948",
       "pcp": "Dr. Mary Johnson",
       "resident_email": "CarolynLarson100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(344) 996-0334",
       "home_phone": "(928) 762-6995"
     }
@@ -1267,7 +1267,7 @@
       "resident_email": "CarlDonnelly100@hotmail.com",
       "cell_phone": "(723) 885-6340",
       "work_phone": "(536) 598-5196",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -1311,7 +1311,7 @@
       "pcp": "Dr. Charles Martin",
       "resident_email": "MartySpinka100@hotmail.com",
       "cell_phone": "(536) 598-5196",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(335) 253-2198"
     }
   },
@@ -1355,7 +1355,7 @@
       "dob": "08/06/1939",
       "pcp": "Dr. William Rodriguez",
       "resident_email": "AprilHeller100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(335) 253-2198",
       "home_phone": "(657) 372-1991"
     }
@@ -1506,7 +1506,7 @@
       "resident_email": "LutherGreenfelder100@hotmail.com",
       "cell_phone": "(268) 991-1985",
       "work_phone": "(588) 753-9984",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -1564,7 +1564,7 @@
       "pcp": "Dr. Karen Thompson",
       "resident_email": "KatieNader100@hotmail.com",
       "cell_phone": "(588) 753-9984",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(375) 875-5672"
     }
   },
@@ -1594,7 +1594,7 @@
       "dob": "02/29/1944",
       "pcp": "Dr. James Smith",
       "resident_email": "SaraHills100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(375) 875-5672",
       "home_phone": "(778) 661-2052"
     }
@@ -1897,7 +1897,7 @@
       "resident_email": "AubreyConroy100@hotmail.com",
       "cell_phone": "(893) 705-3929",
       "work_phone": "(624) 285-2175",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -1955,7 +1955,7 @@
       "pcp": "Dr. Karen Thompson",
       "resident_email": "KyleLockman100@hotmail.com",
       "cell_phone": "(624) 285-2175",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(711) 266-4045"
     }
   },
@@ -1999,7 +1999,7 @@
       "dob": "07/02/1946",
       "pcp": "Dr. Mary Johnson",
       "resident_email": "AdrianStroman100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(711) 266-4045",
       "home_phone": "(502) 957-3888"
     }
@@ -2105,7 +2105,7 @@
       "resident_email": "Dr.Myrtle100@hotmail.com",
       "cell_phone": "(502) 957-3888",
       "work_phone": "(432) 455-8505",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -2135,7 +2135,7 @@
       "pcp": "Dr. Sarah Harris",
       "resident_email": "GeraldBartell100@hotmail.com",
       "cell_phone": "(432) 455-8505",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(679) 311-9266"
     }
   },
@@ -2165,7 +2165,7 @@
       "dob": "03/30/1952",
       "pcp": "Dr. Barbara Moore",
       "resident_email": "FrederickKunze100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(679) 311-9266",
       "home_phone": "(526) 397-5853"
     }
@@ -2271,7 +2271,7 @@
       "resident_email": "OliviaMann100@hotmail.com",
       "cell_phone": "(526) 397-5853",
       "work_phone": "(547) 217-5690",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -2343,7 +2343,7 @@
       "pcp": "Dr. Mary Johnson",
       "resident_email": "BarryBlanda100@hotmail.com",
       "cell_phone": "(547) 217-5690",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(594) 556-5903"
     }
   },
@@ -2373,7 +2373,7 @@
       "dob": "01/29/1934",
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "VanFeil100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(594) 556-5903",
       "home_phone": "(892) 498-1460"
     }
@@ -2884,7 +2884,7 @@
       "resident_email": "LaurieJacobson100@hotmail.com",
       "cell_phone": "(445) 930-6872",
       "work_phone": "(581) 790-6589",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -2942,8 +2942,8 @@
       "pcp": "Dr. William Rodriguez",
       "resident_email": "Dr.Winston100@hotmail.com",
       "cell_phone": "(581) 790-6589",
-      "work_phone": "null",
-      "home_phone": "null"
+      "work_phone": null,
+      "home_phone": null
     }
   },
   {
@@ -2957,8 +2957,8 @@
       "dob": "01/21/1954",
       "pcp": "Dr. James Smith",
       "resident_email": "KyleTreutel-Willms100@hotmail.com",
-      "cell_phone": "null",
-      "work_phone": "null",
+      "cell_phone": null,
+      "work_phone": null,
       "home_phone": "(858) 781-4747"
     }
   },
@@ -3016,7 +3016,7 @@
       "dob": "09/14/1954",
       "pcp": "Dr. Charles Martin",
       "resident_email": "Mr.Conrad100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(858) 781-4747",
       "home_phone": "(920) 743-4714"
     }
@@ -3108,7 +3108,7 @@
       "resident_email": "HaroldRogahn100@hotmail.com",
       "cell_phone": "(920) 743-4714",
       "work_phone": "(464) 386-8458",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -3138,7 +3138,7 @@
       "pcp": "Dr. Susan Anderson",
       "resident_email": "KendraRice100@hotmail.com",
       "cell_phone": "(464) 386-8458",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(720) 957-4633"
     }
   },
@@ -3196,7 +3196,7 @@
       "dob": "06/20/1943",
       "pcp": "Dr. Joseph Thomas",
       "resident_email": "HenriettaRowe100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(720) 957-4633",
       "home_phone": "(933) 621-6565"
     }
@@ -3527,7 +3527,7 @@
       "resident_email": "RogelioTorphy100@hotmail.com",
       "cell_phone": "(638) 441-0748",
       "work_phone": "(675) 836-7241",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -3571,7 +3571,7 @@
       "pcp": "Dr. Joseph Thomas",
       "resident_email": "MargieRatke100@hotmail.com",
       "cell_phone": "(675) 836-7241",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(294) 618-1178"
     }
   },
@@ -3615,7 +3615,7 @@
       "dob": "04/29/1947",
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "MosesReynolds100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(294) 618-1178",
       "home_phone": "(923) 596-4689"
     }
@@ -4412,7 +4412,7 @@
       "resident_email": "Dr.Simon100@hotmail.com",
       "cell_phone": "(772) 504-8122",
       "work_phone": "(239) 733-9104",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -4442,8 +4442,8 @@
       "pcp": "Dr. Mary Johnson",
       "resident_email": "EdwardWintheiser100@hotmail.com",
       "cell_phone": "(239) 733-9104",
-      "work_phone": "null",
-      "home_phone": "null"
+      "work_phone": null,
+      "home_phone": null
     }
   },
   {
@@ -4472,8 +4472,8 @@
       "dob": "03/13/1949",
       "pcp": "Dr. Susan Anderson",
       "resident_email": "LynnFeeney100@hotmail.com",
-      "cell_phone": "null",
-      "work_phone": "null",
+      "cell_phone": null,
+      "work_phone": null,
       "home_phone": "(625) 852-9258"
     }
   },
@@ -4517,7 +4517,7 @@
       "dob": "01/27/1934",
       "pcp": "Dr. William Rodriguez",
       "resident_email": "YolandaBartoletti-Fahey100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(625) 852-9258",
       "home_phone": "(980) 442-2923"
     }
@@ -5607,7 +5607,7 @@
       "resident_email": "JuanaPfeffer100@hotmail.com",
       "cell_phone": "(647) 503-8519",
       "work_phone": "(355) 866-0824",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -5665,7 +5665,7 @@
       "pcp": "Dr. Charles Martin",
       "resident_email": "DexterOrn100@hotmail.com",
       "cell_phone": "(355) 866-0824",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(733) 471-0953"
     }
   },
@@ -5709,7 +5709,7 @@
       "dob": "05/23/1947",
       "pcp": "Dr. Barbara Moore",
       "resident_email": "Dr.Clark100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(733) 471-0953",
       "home_phone": "(546) 715-5431"
     }
@@ -5832,7 +5832,7 @@
       "resident_email": "ErnestHand100@hotmail.com",
       "cell_phone": "(260) 229-9034",
       "work_phone": "(232) 353-7863",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -5890,7 +5890,7 @@
       "pcp": "Dr. James Smith",
       "resident_email": "RomanStark100@hotmail.com",
       "cell_phone": "(232) 353-7863",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(243) 602-4708"
     }
   },
@@ -5948,7 +5948,7 @@
       "dob": "03/22/1949",
       "pcp": "Dr. Mary Johnson",
       "resident_email": "ClarenceWalsh100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(243) 602-4708",
       "home_phone": "(337) 907-8057"
     }
@@ -5995,7 +5995,7 @@
       "resident_email": "NealSchmitt100@hotmail.com",
       "cell_phone": "(243) 602-4708",
       "work_phone": "(337) 907-8057",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -6039,8 +6039,8 @@
       "pcp": "Dr. James Smith",
       "resident_email": "KelvinCormier100@hotmail.com",
       "cell_phone": "(337) 907-8057",
-      "work_phone": "null",
-      "home_phone": "null"
+      "work_phone": null,
+      "home_phone": null
     }
   },
   {
@@ -6083,8 +6083,8 @@
       "dob": "12/08/1947",
       "pcp": "Dr. James Smith",
       "resident_email": "FlorenceDach100@hotmail.com",
-      "cell_phone": "null",
-      "work_phone": "null",
+      "cell_phone": null,
+      "work_phone": null,
       "home_phone": "(751) 974-2785"
     }
   },
@@ -6114,7 +6114,7 @@
       "dob": "03/15/1938",
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "Mr.Irving100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(751) 974-2785",
       "home_phone": "(589) 783-0085"
     }
@@ -6760,7 +6760,7 @@
       "resident_email": "Dr.Gerard100@hotmail.com",
       "cell_phone": "(980) 706-5385",
       "work_phone": "(934) 379-1884",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -6804,7 +6804,7 @@
       "pcp": "Dr. Charles Martin",
       "resident_email": "JessieWiza100@hotmail.com",
       "cell_phone": "(934) 379-1884",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(549) 719-8564"
     }
   },
@@ -6862,7 +6862,7 @@
       "dob": "01/05/1930",
       "pcp": "Dr. James Smith",
       "resident_email": "Mr.Jay100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(549) 719-8564",
       "home_phone": "(891) 526-6232"
     }
@@ -7131,7 +7131,7 @@
       "resident_email": "JeremyKulas100@hotmail.com",
       "cell_phone": "(994) 754-3588",
       "work_phone": "(490) 505-5097",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -7189,8 +7189,8 @@
       "pcp": "Dr. Mary Johnson",
       "resident_email": "MercedesRunte100@hotmail.com",
       "cell_phone": "(490) 505-5097",
-      "work_phone": "null",
-      "home_phone": "null"
+      "work_phone": null,
+      "home_phone": null
     }
   },
   {
@@ -7247,8 +7247,8 @@
       "dob": "03/12/1953",
       "pcp": "Dr. Linda Davis",
       "resident_email": "MarieChristiansen100@hotmail.com",
-      "cell_phone": "null",
-      "work_phone": "null",
+      "cell_phone": null,
+      "work_phone": null,
       "home_phone": "(757) 647-7438"
     }
   },
@@ -7278,7 +7278,7 @@
       "dob": "04/13/1939",
       "pcp": "Dr. Michael Miller",
       "resident_email": "LyndaSporer100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(757) 647-7438",
       "home_phone": "(427) 993-1317"
     }
@@ -7522,7 +7522,7 @@
       "resident_email": "Mr.Antonio100@hotmail.com",
       "cell_phone": "(341) 643-8183",
       "work_phone": "(280) 731-5432",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -7566,7 +7566,7 @@
       "pcp": "Dr. Jennifer Garcia",
       "resident_email": "FrancisSauer100@hotmail.com",
       "cell_phone": "(280) 731-5432",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(988) 945-4557"
     }
   },
@@ -7596,7 +7596,7 @@
       "dob": "09/17/1947",
       "pcp": "Dr. David Hernandez",
       "resident_email": "GerardoStamm100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(988) 945-4557",
       "home_phone": "(744) 984-0802"
     }
@@ -7702,7 +7702,7 @@
       "resident_email": "BeulahRippin-Dibbert100@hotmail.com",
       "cell_phone": "(744) 984-0802",
       "work_phone": "(720) 360-6870",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -7760,8 +7760,8 @@
       "pcp": "Dr. Barbara Moore",
       "resident_email": "TracyWisoky100@hotmail.com",
       "cell_phone": "(720) 360-6870",
-      "work_phone": "null",
-      "home_phone": "null"
+      "work_phone": null,
+      "home_phone": null
     }
   },
   {
@@ -7790,8 +7790,8 @@
       "dob": "06/17/1933",
       "pcp": "Dr. Thomas White",
       "resident_email": "LoreneChamplin100@hotmail.com",
-      "cell_phone": "null",
-      "work_phone": "null",
+      "cell_phone": null,
+      "work_phone": null,
       "home_phone": "(852) 658-7920"
     }
   },
@@ -7863,7 +7863,7 @@
       "dob": "01/17/1947",
       "pcp": "Dr. Elizabeth Martinez",
       "resident_email": "ViolaBernhard100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(852) 658-7920",
       "home_phone": "(737) 324-4047"
     }
@@ -8059,7 +8059,7 @@
       "resident_email": "LuzSchamberger100@hotmail.com",
       "cell_phone": "(652) 475-3139",
       "work_phone": "(543) 953-9427",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -8145,7 +8145,7 @@
       "pcp": "Dr. Susan Anderson",
       "resident_email": "CameronWaters100@hotmail.com",
       "cell_phone": "(543) 953-9427",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(736) 888-5864"
     }
   },
@@ -8175,7 +8175,7 @@
       "dob": "01/03/1938",
       "pcp": "Dr. Susan Anderson",
       "resident_email": "ShellyHahn100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(736) 888-5864",
       "home_phone": "(452) 751-7087"
     }
@@ -8222,7 +8222,7 @@
       "resident_email": "DeborahSipes100@hotmail.com",
       "cell_phone": "(736) 888-5864",
       "work_phone": "(452) 751-7087",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -8280,7 +8280,7 @@
       "pcp": "Dr. Richard Taylor",
       "resident_email": "FrancesBauch100@hotmail.com",
       "cell_phone": "(452) 751-7087",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(472) 501-6096"
     }
   },
@@ -8338,7 +8338,7 @@
       "dob": "04/23/1946",
       "pcp": "Dr. Robert Jones",
       "resident_email": "MargaritaBoyer100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(472) 501-6096",
       "home_phone": "(334) 888-8602"
     }
@@ -8509,7 +8509,7 @@
       "resident_email": "Ms.Angel100@hotmail.com",
       "cell_phone": "(661) 951-7614",
       "work_phone": "(441) 964-7667",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -8553,7 +8553,7 @@
       "pcp": "Dr. Mary Johnson",
       "resident_email": "JamieBlock100@hotmail.com",
       "cell_phone": "(441) 964-7667",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(607) 631-4277"
     }
   },
@@ -8625,7 +8625,7 @@
       "dob": "09/01/1952",
       "pcp": "Dr. Elizabeth Martinez",
       "resident_email": "JulieKuhic100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(607) 631-4277",
       "home_phone": "(364) 769-7811"
     }
@@ -9287,7 +9287,7 @@
       "resident_email": "CaryGerlach100@hotmail.com",
       "cell_phone": "(704) 693-2358",
       "work_phone": "(899) 949-0956",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -9317,7 +9317,7 @@
       "pcp": "Dr. John Williams",
       "resident_email": "EvanHalvorson100@hotmail.com",
       "cell_phone": "(899) 949-0956",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(970) 463-9005"
     }
   },
@@ -9361,7 +9361,7 @@
       "dob": "01/27/1952",
       "pcp": "Dr. David Hernandez",
       "resident_email": "RosaKris100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(970) 463-9005",
       "home_phone": "(481) 389-2546"
     }
@@ -9914,7 +9914,7 @@
       "resident_email": "ErinMoore-Bogan100@hotmail.com",
       "cell_phone": "(265) 917-9906",
       "work_phone": "(693) 327-4117",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -9958,7 +9958,7 @@
       "pcp": "Dr. Michael Miller",
       "resident_email": "Mr.Miguel100@hotmail.com",
       "cell_phone": "(693) 327-4117",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(678) 365-3511"
     }
   },
@@ -9988,7 +9988,7 @@
       "dob": "11/07/1931",
       "pcp": "Dr. Sarah Harris",
       "resident_email": "JosephineCollins100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(678) 365-3511",
       "home_phone": "(443) 767-6481"
     }
@@ -10502,7 +10502,7 @@
       "resident_email": "BryantFerry100@hotmail.com",
       "cell_phone": "(540) 747-9668",
       "work_phone": "(340) 485-9305",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -10532,7 +10532,7 @@
       "pcp": "Dr. Joseph Thomas",
       "resident_email": "TheodoreRogahn100@hotmail.com",
       "cell_phone": "(340) 485-9305",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(219) 311-6095"
     }
   },
@@ -10562,7 +10562,7 @@
       "dob": "10/28/1935",
       "pcp": "Dr. Elizabeth Martinez",
       "resident_email": "OraSchuppe100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(219) 311-6095",
       "home_phone": "(972) 612-2302"
     }
@@ -10623,7 +10623,7 @@
       "resident_email": "IsabelO'Connell100@hotmail.com",
       "cell_phone": "(219) 311-6095",
       "work_phone": "(972) 612-2302",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -10653,7 +10653,7 @@
       "pcp": "Dr. Barbara Moore",
       "resident_email": "JudyCronin-Carroll100@hotmail.com",
       "cell_phone": "(972) 612-2302",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(399) 902-5002"
     }
   },
@@ -10683,7 +10683,7 @@
       "dob": "06/29/1955",
       "pcp": "Dr. Karen Thompson",
       "resident_email": "YolandaWiza100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(399) 902-5002",
       "home_phone": "(554) 276-6470"
     }
@@ -10744,7 +10744,7 @@
       "resident_email": "AllisonHerzog100@hotmail.com",
       "cell_phone": "(399) 902-5002",
       "work_phone": "(554) 276-6470",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -10774,7 +10774,7 @@
       "pcp": "Dr. Joseph Thomas",
       "resident_email": "AlvinBalistreri100@hotmail.com",
       "cell_phone": "(554) 276-6470",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(354) 397-5933"
     }
   },
@@ -10804,7 +10804,7 @@
       "dob": "09/17/1937",
       "pcp": "Dr. Joseph Thomas",
       "resident_email": "ZacharyHeidenreich-Purdy100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(354) 397-5933",
       "home_phone": "(729) 203-1554"
     }
@@ -11194,7 +11194,7 @@
       "resident_email": "LeticiaO'Kon100@hotmail.com",
       "cell_phone": "(910) 868-3290",
       "work_phone": "(976) 597-9656",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -11238,7 +11238,7 @@
       "pcp": "Dr. Elizabeth Martinez",
       "resident_email": "Dr.Tony100@hotmail.com",
       "cell_phone": "(976) 597-9656",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(425) 804-5469"
     }
   },
@@ -11296,7 +11296,7 @@
       "dob": "09/09/1954",
       "pcp": "Dr. Susan Anderson",
       "resident_email": "LindseyRaynor100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(425) 804-5469",
       "home_phone": "(928) 842-8802"
     }
@@ -11540,7 +11540,7 @@
       "resident_email": "EllenDaniel100@hotmail.com",
       "cell_phone": "(910) 397-7597",
       "work_phone": "(822) 531-4467",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -11555,7 +11555,7 @@
       "pcp": "Dr. Richard Taylor",
       "resident_email": "LeroyMaggio100@hotmail.com",
       "cell_phone": "(822) 531-4467",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(419) 641-6844"
     }
   },
@@ -11585,7 +11585,7 @@
       "dob": "11/30/1942",
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "HarveyNicolas100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(419) 641-6844",
       "home_phone": "(440) 991-7201"
     }
@@ -11677,7 +11677,7 @@
       "resident_email": "ShawnaStanton100@hotmail.com",
       "cell_phone": "(440) 991-7201",
       "work_phone": "(396) 702-6403",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -11735,7 +11735,7 @@
       "pcp": "Dr. James Smith",
       "resident_email": "CharlotteWillms100@hotmail.com",
       "cell_phone": "(396) 702-6403",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(917) 446-2584"
     }
   },
@@ -11765,7 +11765,7 @@
       "dob": "06/09/1943",
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "MiltonHeidenreich100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(917) 446-2584",
       "home_phone": "(805) 438-7578"
     }
@@ -11944,7 +11944,7 @@
       "resident_email": "MissBarbara100@hotmail.com",
       "cell_phone": "(816) 481-2431",
       "work_phone": "(581) 329-5224",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -11959,7 +11959,7 @@
       "pcp": "Dr. Karen Thompson",
       "resident_email": "PatGleichner100@hotmail.com",
       "cell_phone": "(581) 329-5224",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(326) 891-7530"
     }
   },
@@ -11989,7 +11989,7 @@
       "dob": "12/14/1934",
       "pcp": "Dr. Elizabeth Martinez",
       "resident_email": "SylviaOndricka100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(326) 891-7530",
       "home_phone": "(395) 400-6853"
     }
@@ -12022,7 +12022,7 @@
       "resident_email": "AllenGislason100@hotmail.com",
       "cell_phone": "(326) 891-7530",
       "work_phone": "(395) 400-6853",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -12080,7 +12080,7 @@
       "pcp": "Dr. Jessica Jackson",
       "resident_email": "MelvinPadberg100@hotmail.com",
       "cell_phone": "(395) 400-6853",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(998) 688-2711"
     }
   },
@@ -12124,7 +12124,7 @@
       "dob": "06/08/1951",
       "pcp": "Dr. Michael Miller",
       "resident_email": "LoisMcCullough100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(998) 688-2711",
       "home_phone": "(559) 778-2191"
     }
@@ -12587,7 +12587,7 @@
       "resident_email": "RickyBayer100@hotmail.com",
       "cell_phone": "(919) 458-3528",
       "work_phone": "(806) 942-6712",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -12617,8 +12617,8 @@
       "pcp": "Dr. Elizabeth Martinez",
       "resident_email": "NancyBarton100@hotmail.com",
       "cell_phone": "(806) 942-6712",
-      "work_phone": "null",
-      "home_phone": "null"
+      "work_phone": null,
+      "home_phone": null
     }
   },
   {
@@ -12661,8 +12661,8 @@
       "dob": "08/09/1930",
       "pcp": "Dr. Charles Martin",
       "resident_email": "ErikaHoppe100@hotmail.com",
-      "cell_phone": "null",
-      "work_phone": "null",
+      "cell_phone": null,
+      "work_phone": null,
       "home_phone": "(628) 426-6908"
     }
   },
@@ -12720,7 +12720,7 @@
       "dob": "09/03/1938",
       "pcp": "Dr. Barbara Moore",
       "resident_email": "ArleneMcCullough100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(628) 426-6908",
       "home_phone": "(397) 946-9183"
     }
@@ -12902,7 +12902,7 @@
       "resident_email": "ClaudiaDickens100@hotmail.com",
       "cell_phone": "(363) 529-9618",
       "work_phone": "(574) 408-5612",
-      "home_phone": "null"
+      "home_phone": null
     }
   },
   {
@@ -12932,7 +12932,7 @@
       "pcp": "Dr. Robert Jones",
       "resident_email": "TaraRice-Hackett100@hotmail.com",
       "cell_phone": "(574) 408-5612",
-      "work_phone": "null",
+      "work_phone": null,
       "home_phone": "(699) 817-6536"
     }
   },
@@ -12962,7 +12962,7 @@
       "dob": "12/04/1949",
       "pcp": "Dr. Michael Miller",
       "resident_email": "ClydeGreenholt100@hotmail.com",
-      "cell_phone": "null",
+      "cell_phone": null,
       "work_phone": "(699) 817-6536",
       "home_phone": "(774) 443-4462"
     }
