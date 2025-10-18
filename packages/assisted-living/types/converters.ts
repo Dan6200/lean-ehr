@@ -7,6 +7,7 @@ import {
   KEK_GENERAL_PATH,
   KEK_CONTACT_PATH,
   KEK_CLINICAL_PATH,
+  KEK_FINANCIAL_PATH, // Import new KEK path
 } from '@/lib/encryption'
 
 import {
@@ -15,20 +16,25 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore'
 import {
+  Allergy,
   EmergencyContactSchema,
+  EncryptedAllergySchema,
   EncryptedEmergencyContactSchema,
+  EncryptedFinancialTransactionSchema,
+  EncryptedMedicationSchema,
   EncryptedResident,
   EncryptedResidentSchema,
   Facility,
   FacilitySchema,
+  FinancialTransaction,
   LegalRelationshipEnum,
+  Medication,
   PersonalRelationshipEnum,
   Resident,
   ResidentSchema,
 } from '.'
 
 // --- Converters ---
-// Synchronous converter for Facility data
 const facilityConverter: FirestoreDataConverter<Facility> = {
   toFirestore(facility: Facility): DocumentData {
     return FacilitySchema.parse(facility)
@@ -38,167 +44,103 @@ const facilityConverter: FirestoreDataConverter<Facility> = {
   },
 }
 
-// Asynchronous function to encrypt a Resident object
 export async function encryptResident(
   resident: Resident,
 ): Promise<EncryptedResident> {
   const dataToEncrypt: any = { ...resident }
   const encryptedData: any = {}
 
-  // Unencrypted fields
   encryptedData.facility_id = dataToEncrypt.facility_id
   encryptedData.room_no = dataToEncrypt.room_no
 
-  // Generate DEKs and encrypt them
   const { plaintextDek: generalDek, encryptedDek: encryptedDekGeneral } =
     await generateDataKey(KEK_GENERAL_PATH)
   const { plaintextDek: contactDek, encryptedDek: encryptedDekContact } =
     await generateDataKey(KEK_CONTACT_PATH)
   const { plaintextDek: clinicalDek, encryptedDek: encryptedDekClinical } =
     await generateDataKey(KEK_CLINICAL_PATH)
+  const { plaintextDek: financialDek, encryptedDek: encryptedDekFinancial } =
+    await generateDataKey(KEK_FINANCIAL_PATH)
 
   encryptedData.encrypted_dek_general = encryptedDekGeneral.toString('base64')
   encryptedData.encrypted_dek_contact = encryptedDekContact.toString('base64')
   encryptedData.encrypted_dek_clinical = encryptedDekClinical.toString('base64')
+  encryptedData.encrypted_dek_financial =
+    encryptedDekFinancial.toString('base64')
 
   // Encrypt General Data
   if (dataToEncrypt.resident_name) {
-    const { ciphertext, iv, authTag } = encryptData(
+    encryptedData.encrypted_resident_name = encryptData(
       dataToEncrypt.resident_name,
       generalDek,
     )
-    encryptedData.encrypted_resident_name = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
   }
   if (dataToEncrypt.avatar_url) {
-    const { ciphertext, iv, authTag } = encryptData(
+    encryptedData.encrypted_avatar_url = encryptData(
       dataToEncrypt.avatar_url,
       generalDek,
     )
-    encryptedData.encrypted_avatar_url = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
   }
 
   // Encrypt Contact Data
   if (dataToEncrypt.resident_email) {
-    const { ciphertext, iv, authTag } = encryptData(
+    encryptedData.encrypted_resident_email = encryptData(
       dataToEncrypt.resident_email,
       contactDek,
     )
-    encryptedData.encrypted_resident_email = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
   }
   if (dataToEncrypt.cell_phone) {
-    const { ciphertext, iv, authTag } = encryptData(
+    encryptedData.encrypted_cell_phone = encryptData(
       dataToEncrypt.cell_phone,
       contactDek,
     )
-    encryptedData.encrypted_cell_phone = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
   }
   if (dataToEncrypt.work_phone) {
-    const { ciphertext, iv, authTag } = encryptData(
+    encryptedData.encrypted_work_phone = encryptData(
       dataToEncrypt.work_phone,
       contactDek,
     )
-    encryptedData.encrypted_work_phone = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
   }
   if (dataToEncrypt.home_phone) {
-    const { ciphertext, iv, authTag } = encryptData(
+    encryptedData.encrypted_home_phone = encryptData(
       dataToEncrypt.home_phone,
       contactDek,
     )
-    encryptedData.encrypted_home_phone = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
   }
   if (dataToEncrypt.dob) {
-    const { ciphertext, iv, authTag } = encryptData(
-      dataToEncrypt.dob,
-      contactDek,
-    )
-    encryptedData.encrypted_dob = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
+    encryptedData.encrypted_dob = encryptData(dataToEncrypt.dob, contactDek)
   }
   if (dataToEncrypt.emergency_contacts) {
     encryptedData.emergency_contacts = await Promise.all(
       dataToEncrypt.emergency_contacts.map(async (contact: any) => {
         const encryptedContact: any = {}
         if (contact.contact_name) {
-          const { ciphertext, iv, authTag } = encryptData(
+          encryptedContact.encrypted_contact_name = encryptData(
             contact.contact_name,
             contactDek,
           )
-          encryptedContact.encrypted_contact_name = {
-            ciphertext: ciphertext.toString('base64'),
-            iv: iv.toString('base64'),
-            authTag: authTag.toString('base64'),
-          }
         }
         if (contact.cell_phone) {
-          const { ciphertext, iv, authTag } = encryptData(
+          encryptedContact.encrypted_cell_phone = encryptData(
             contact.cell_phone,
             contactDek,
           )
-          encryptedContact.encrypted_cell_phone = {
-            ciphertext: ciphertext.toString('base64'),
-            iv: iv.toString('base64'),
-            authTag: authTag.toString('base64'),
-          }
         }
         if (contact.work_phone) {
-          const { ciphertext, iv, authTag } = encryptData(
+          encryptedContact.encrypted_work_phone = encryptData(
             contact.work_phone,
             contactDek,
           )
-          encryptedContact.encrypted_work_phone = {
-            ciphertext: ciphertext.toString('base64'),
-            iv: iv.toString('base64'),
-            authTag: authTag.toString('base64'),
-          }
         }
         if (contact.home_phone) {
-          const { ciphertext, iv, authTag } = encryptData(
+          encryptedContact.encrypted_home_phone = encryptData(
             contact.home_phone,
             contactDek,
           )
-          encryptedContact.encrypted_home_phone = {
-            ciphertext: ciphertext.toString('base64'),
-            iv: iv.toString('base64'),
-            authTag: authTag.toString('base64'),
-          }
         }
         if (contact.relationship) {
           encryptedContact.encrypted_relationship = contact.relationship.map(
-            (r: string) => {
-              const { ciphertext, iv, authTag } = encryptData(r, contactDek)
-              return {
-                ciphertext: ciphertext.toString('base64'),
-                iv: iv.toString('base64'),
-                authTag: authTag.toString('base64'),
-              }
-            },
+            (r: string) => encryptData(r, contactDek),
           )
         }
         return EncryptedEmergencyContactSchema.parse(encryptedContact)
@@ -208,39 +150,81 @@ export async function encryptResident(
 
   // Encrypt Clinical Data
   if (dataToEncrypt.pcp) {
-    const { ciphertext, iv, authTag } = encryptData(
-      dataToEncrypt.pcp,
-      clinicalDek,
+    encryptedData.encrypted_pcp = encryptData(dataToEncrypt.pcp, clinicalDek)
+  }
+  if (dataToEncrypt.allergies) {
+    encryptedData.encrypted_allergies = dataToEncrypt.allergies.map(
+      (allergy: Allergy) => {
+        const enc: any = {}
+        if (allergy.name)
+          enc.encrypted_name = encryptData(allergy.name, clinicalDek)
+        if (allergy.snomed_code)
+          enc.encrypted_snomed_code = encryptData(
+            allergy.snomed_code,
+            clinicalDek,
+          )
+        if (allergy.reaction)
+          enc.encrypted_reaction = encryptData(allergy.reaction, clinicalDek)
+        return EncryptedAllergySchema.parse(enc)
+      },
     )
-    encryptedData.encrypted_pcp = {
-      ciphertext: ciphertext.toString('base64'),
-      iv: iv.toString('base64'),
-      authTag: authTag.toString('base64'),
-    }
+  }
+  if (dataToEncrypt.medications) {
+    encryptedData.encrypted_medications = dataToEncrypt.medications.map(
+      (med: Medication) => {
+        const enc: any = {}
+        if (med.name) enc.encrypted_name = encryptData(med.name, clinicalDek)
+        if (med.rxnorm_code)
+          enc.encrypted_rxnorm_code = encryptData(med.rxnorm_code, clinicalDek)
+        if (med.dosage)
+          enc.encrypted_dosage = encryptData(med.dosage, clinicalDek)
+        if (med.frequency)
+          enc.encrypted_frequency = encryptData(med.frequency, clinicalDek)
+        return EncryptedMedicationSchema.parse(enc)
+      },
+    )
+  }
+
+  // Encrypt Financial Data
+  if (dataToEncrypt.financials) {
+    encryptedData.encrypted_financials = dataToEncrypt.financials.map(
+      (item: FinancialTransaction) => {
+        const enc: any = {}
+        if (item.amount)
+          enc.encrypted_amount = encryptData(
+            item.amount.toString(),
+            financialDek,
+          )
+        if (item.date) enc.encrypted_date = encryptData(item.date, financialDek)
+        if (item.type) enc.encrypted_type = encryptData(item.type, financialDek)
+        if (item.description)
+          enc.encrypted_description = encryptData(
+            item.description,
+            financialDek,
+          )
+        return EncryptedFinancialTransactionSchema.parse(enc)
+      },
+    )
   }
 
   return EncryptedResidentSchema.parse(encryptedData)
 }
 
-// Asynchronous function to decrypt a Resident object based on user roles
 export async function decryptResidentData(
   data: EncryptedResident,
   roles: string[],
 ): Promise<Resident> {
-  // Unencrypted fields
-  const decryptedData: Resident = {} as Resident
+  const decryptedData: Partial<Resident> = {}
   decryptedData.facility_id = data.facility_id
   decryptedData.room_no = data.room_no
 
-  // Decrypt DEKs based on user roles
-  let generalDek: Buffer | string | Uint8Array | undefined
-  let contactDek: Buffer | string | Uint8Array | undefined
-  let clinicalDek: Buffer | string | Uint8Array | undefined
+  let generalDek: Buffer | undefined
+  let contactDek: Buffer | undefined
+  let clinicalDek: Buffer | undefined
+  let financialDek: Buffer | undefined
 
-  // convert to uppercase if not...
   const userRoles = roles.map((role) => role.toUpperCase())
 
-  // Role-based DEK decryption
   if (
     userRoles.includes('ADMIN') ||
     userRoles.includes('CLINICIAN') ||
@@ -289,260 +273,145 @@ export async function decryptResidentData(
     }
   }
 
-  // Decrypt General Data
-  if (generalDek && data.encrypted_resident_name) {
-    try {
+  if (userRoles.includes('ADMIN') || userRoles.includes('BILLING')) {
+    if (data.encrypted_dek_financial) {
+      try {
+        financialDek = await decryptDataKey(
+          Buffer.from(data.encrypted_dek_financial, 'base64'),
+          KEK_FINANCIAL_PATH,
+        )
+      } catch (e) {
+        console.error('Failed to decrypt financial DEK:', e)
+      }
+    }
+  }
+
+  if (generalDek) {
+    if (data.encrypted_resident_name)
       decryptedData.resident_name = decryptData(
-        {
-          ciphertext: Buffer.from(
-            data.encrypted_resident_name.ciphertext,
-            'base64',
-          ),
-          iv: Buffer.from(data.encrypted_resident_name.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_resident_name.authTag, 'base64'),
-        },
+        data.encrypted_resident_name,
         generalDek,
       )
-    } catch (e) {
-      console.error('Failed to decrypt resident_name:', e)
-    }
-  }
-  if (generalDek && data.encrypted_avatar_url) {
-    try {
+    if (data.encrypted_avatar_url)
       decryptedData.avatar_url = decryptData(
-        {
-          ciphertext: Buffer.from(
-            data.encrypted_avatar_url.ciphertext,
-            'base64',
-          ),
-          iv: Buffer.from(data.encrypted_avatar_url.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_avatar_url.authTag, 'base64'),
-        },
+        data.encrypted_avatar_url,
         generalDek,
       )
-    } catch (e) {
-      console.error('Failed to decrypt avatar_url:', e)
-    }
   }
 
-  // Decrypt Contact Data
-  if (contactDek && data.encrypted_resident_email) {
-    try {
+  if (contactDek) {
+    if (data.encrypted_resident_email)
       decryptedData.resident_email = decryptData(
-        {
-          ciphertext: Buffer.from(
-            data.encrypted_resident_email.ciphertext,
-            'base64',
-          ),
-          iv: Buffer.from(data.encrypted_resident_email.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_resident_email.authTag, 'base64'),
-        },
+        data.encrypted_resident_email,
         contactDek,
       )
-    } catch (e) {
-      console.error('Failed to decrypt resident_email:', e)
-    }
-  }
-  if (contactDek && data.encrypted_cell_phone) {
-    try {
+    if (data.encrypted_cell_phone)
       decryptedData.cell_phone = decryptData(
-        {
-          ciphertext: Buffer.from(
-            data.encrypted_cell_phone.ciphertext,
-            'base64',
-          ),
-          iv: Buffer.from(data.encrypted_cell_phone.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_cell_phone.authTag, 'base64'),
-        },
+        data.encrypted_cell_phone,
         contactDek,
       )
-    } catch (e) {
-      console.error('Failed to decrypt cell_phone:', e)
-    }
-  }
-  if (contactDek && data.encrypted_work_phone) {
-    try {
+    if (data.encrypted_work_phone)
       decryptedData.work_phone = decryptData(
-        {
-          ciphertext: Buffer.from(
-            data.encrypted_work_phone.ciphertext,
-            'base64',
-          ),
-          iv: Buffer.from(data.encrypted_work_phone.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_work_phone.authTag, 'base64'),
-        },
+        data.encrypted_work_phone,
         contactDek,
       )
-    } catch (e) {
-      console.error('Failed to decrypt work_phone:', e)
-    }
-  }
-  if (contactDek && data.encrypted_home_phone) {
-    try {
+    if (data.encrypted_home_phone)
       decryptedData.home_phone = decryptData(
-        {
-          ciphertext: Buffer.from(
-            data.encrypted_home_phone.ciphertext,
-            'base64',
-          ),
-          iv: Buffer.from(data.encrypted_home_phone.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_home_phone.authTag, 'base64'),
-        },
+        data.encrypted_home_phone,
         contactDek,
       )
-    } catch (e) {
-      console.error('Failed to decrypt home_phone:', e)
-    }
-  }
-
-  if (contactDek && data.encrypted_dob) {
-    try {
-      decryptedData.dob = decryptData(
-        {
-          ciphertext: Buffer.from(data.encrypted_dob.ciphertext, 'base64'),
-          iv: Buffer.from(data.encrypted_dob.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_dob.authTag, 'base64'),
-        },
-        contactDek,
-      )
-    } catch (e) {
-      console.error('Failed to decrypt dob:', e)
-    }
-  }
-  if (
-    contactDek &&
-    data.emergency_contacts &&
-    Array.isArray(data.emergency_contacts)
-  ) {
-    decryptedData.emergency_contacts = data.emergency_contacts.map(
-      (contact: any) => {
-        const decryptedContact: any = {}
-        if (contact.encrypted_contact_name) {
-          try {
-            decryptedContact.contact_name = decryptData(
-              {
-                ciphertext: Buffer.from(
-                  contact.encrypted_contact_name.ciphertext,
-                  'base64',
-                ),
-                iv: Buffer.from(contact.encrypted_contact_name.iv, 'base64'),
-                authTag: Buffer.from(
-                  contact.encrypted_contact_name.authTag,
-                  'base64',
-                ),
-              },
+    if (data.encrypted_dob)
+      decryptedData.dob = decryptData(data.encrypted_dob, contactDek)
+    if (data.emergency_contacts) {
+      decryptedData.emergency_contacts = data.emergency_contacts.map(
+        (contact) => {
+          const dec: any = {}
+          if (contact.encrypted_contact_name)
+            dec.contact_name = decryptData(
+              contact.encrypted_contact_name,
               contactDek,
             )
-          } catch (e) {
-            console.error('Failed to decrypt contact_name:', e)
-          }
-        }
-        if (contact.encrypted_cell_phone) {
-          try {
-            decryptedContact.cell_phone = decryptData(
-              {
-                ciphertext: Buffer.from(
-                  contact.encrypted_cell_phone.ciphertext,
-                  'base64',
-                ),
-                iv: Buffer.from(contact.encrypted_cell_phone.iv, 'base64'),
-                authTag: Buffer.from(
-                  contact.encrypted_cell_phone.authTag,
-                  'base64',
-                ),
-              },
+          if (contact.encrypted_cell_phone)
+            dec.cell_phone = decryptData(
+              contact.encrypted_cell_phone,
               contactDek,
             )
-          } catch (e) {
-            console.error('Failed to decrypt cell_phone:', e)
-          }
-        }
-        if (contact.encrypted_work_phone) {
-          try {
-            decryptedContact.work_phone = decryptData(
-              {
-                ciphertext: Buffer.from(
-                  contact.encrypted_work_phone.ciphertext,
-                  'base64',
-                ),
-                iv: Buffer.from(contact.encrypted_work_phone.iv, 'base64'),
-                authTag: Buffer.from(
-                  contact.encrypted_work_phone.authTag,
-                  'base64',
-                ),
-              },
+          if (contact.encrypted_work_phone)
+            dec.work_phone = decryptData(
+              contact.encrypted_work_phone,
               contactDek,
             )
-          } catch (e) {
-            console.error('Failed to decrypt work_phone:', e)
-          }
-        }
-        if (contact.encrypted_home_phone) {
-          try {
-            decryptedContact.home_phone = decryptData(
-              {
-                ciphertext: Buffer.from(
-                  contact.encrypted_home_phone.ciphertext,
-                  'base64',
-                ),
-                iv: Buffer.from(contact.encrypted_home_phone.iv, 'base64'),
-                authTag: Buffer.from(
-                  contact.encrypted_home_phone.authTag,
-                  'base64',
-                ),
-              },
+          if (contact.encrypted_home_phone)
+            dec.home_phone = decryptData(
+              contact.encrypted_home_phone,
               contactDek,
             )
-          } catch (e) {
-            console.error('Failed to decrypt home_phone:', e)
-          }
-        }
-        if (contact.encrypted_relationship) {
-          const decryptedRelationships = contact.encrypted_relationship
-            .map((r: any) => {
-              try {
-                return decryptData(
-                  {
-                    ciphertext: Buffer.from(r.ciphertext, 'base64'),
-                    iv: Buffer.from(r.iv, 'base64'),
-                    authTag: Buffer.from(r.authTag, 'base64'),
-                  },
-                  contactDek,
-                )
-              } catch (e) {
-                console.error('Failed to decrypt relationship item:', e)
-                return undefined
-              }
-            })
-            .filter(Boolean)
-
-          decryptedContact.legal_relationships = decryptedRelationships.filter(
-            (r: any) => LegalRelationshipEnum.safeParse(r).success,
-          )
-          decryptedContact.personal_relationships =
-            decryptedRelationships.filter(
+          if (contact.encrypted_relationship) {
+            const decryptedRelationships = contact.encrypted_relationship
+              .map((r) => decryptData(r, contactDek))
+              .filter(Boolean)
+            dec.legal_relationships = decryptedRelationships.filter(
+              (r: any) => LegalRelationshipEnum.safeParse(r).success,
+            )
+            dec.personal_relationships = decryptedRelationships.filter(
               (r: any) => PersonalRelationshipEnum.safeParse(r).success,
             )
-        }
-        return EmergencyContactSchema.parse(decryptedContact)
-      },
-    )
+          }
+          return EmergencyContactSchema.parse(dec)
+        },
+      )
+    }
   }
 
-  // Decrypt Clinical Data
-  if (clinicalDek && data.encrypted_pcp) {
-    try {
-      decryptedData.pcp = decryptData(
-        {
-          ciphertext: Buffer.from(data.encrypted_pcp.ciphertext, 'base64'),
-          iv: Buffer.from(data.encrypted_pcp.iv, 'base64'),
-          authTag: Buffer.from(data.encrypted_pcp.authTag, 'base64'),
-        },
-        clinicalDek,
-      )
-    } catch (e) {
-      console.error('Failed to decrypt pcp:', e)
+  if (clinicalDek) {
+    if (data.encrypted_pcp)
+      decryptedData.pcp = decryptData(data.encrypted_pcp, clinicalDek)
+    if (data.encrypted_allergies) {
+      decryptedData.allergies = data.encrypted_allergies.map((allergy) => {
+        const dec: any = {}
+        if (allergy.encrypted_name)
+          dec.name = decryptData(allergy.encrypted_name, clinicalDek)
+        if (allergy.encrypted_snomed_code)
+          dec.snomed_code = decryptData(
+            allergy.encrypted_snomed_code,
+            clinicalDek,
+          )
+        if (allergy.encrypted_reaction)
+          dec.reaction = decryptData(allergy.encrypted_reaction, clinicalDek)
+        return dec
+      })
     }
+    if (data.encrypted_medications) {
+      decryptedData.medications = data.encrypted_medications.map((med) => {
+        const dec: any = {}
+        if (med.encrypted_name)
+          dec.name = decryptData(med.encrypted_name, clinicalDek)
+        if (med.encrypted_rxnorm_code)
+          dec.rxnorm_code = decryptData(med.encrypted_rxnorm_code, clinicalDek)
+        if (med.encrypted_dosage)
+          dec.dosage = decryptData(med.encrypted_dosage, clinicalDek)
+        if (med.encrypted_frequency)
+          dec.frequency = decryptData(med.encrypted_frequency, clinicalDek)
+        return dec
+      })
+    }
+  }
+
+  if (financialDek && data.encrypted_financials) {
+    decryptedData.financials = data.encrypted_financials.map((item) => {
+      const dec: any = {}
+      if (item.encrypted_amount)
+        dec.amount = parseFloat(
+          decryptData(item.encrypted_amount, financialDek),
+        )
+      if (item.encrypted_date)
+        dec.date = decryptData(item.encrypted_date, financialDek)
+      if (item.encrypted_type)
+        dec.type = decryptData(item.encrypted_type, financialDek)
+      if (item.encrypted_description)
+        dec.description = decryptData(item.encrypted_description, financialDek)
+      return dec
+    })
   }
 
   return ResidentSchema.parse(decryptedData)
