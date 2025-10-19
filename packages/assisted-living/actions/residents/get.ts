@@ -7,14 +7,21 @@ import {
   getDocWrapper,
   getDocsWrapper,
   queryWrapper,
+  collection,
 } from '@/firebase/firestore-server'
 import {
+  Allergy,
   EncryptedResident,
   Facility,
   FacilitySchema,
+  FinancialTransaction,
+  MedicalRecord,
+  Medication,
   Resident,
   ResidentDataSchema,
   ResidentSchema,
+  Vital,
+  EmergencyContact,
 } from '@/types'
 import {
   decryptResidentData,
@@ -32,6 +39,37 @@ import {
 import { notFound } from 'next/navigation'
 import { z } from 'zod'
 
+// --- Subcollection Getters ---
+
+async function getSubcollection<T>(
+  residentId: string,
+  collectionName: string,
+): Promise<T[]> {
+  const authenticatedApp = await getAuthenticatedAppAndClaims()
+  if (!authenticatedApp) throw new Error('Failed to authenticate session')
+  const { app } = authenticatedApp
+
+  const subcollectionRef = collection(
+    app,
+    `providers/GYRHOME/residents/${residentId}/${collectionName}`,
+  )
+  const snapshot = await getDocsWrapper(subcollectionRef)
+  return snapshot.docs.map((doc) => ({ ...doc.data(), id: doc.id })) as T[]
+}
+
+export const getResidentAllergies = (residentId: string) =>
+  getSubcollection<Allergy>(residentId, 'allergies')
+export const getResidentMedications = (residentId: string) =>
+  getSubcollection<Medication>(residentId, 'medications')
+export const getResidentVitals = (residentId: string) =>
+  getSubcollection<Vital>(residentId, 'vitals')
+export const getResidentMedicalRecords = (residentId: string) =>
+  getSubcollection<MedicalRecord>(residentId, 'medical_records')
+export const getResidentEmergencyContacts = (residentId: string) =>
+  getSubcollection<EmergencyContact>(residentId, 'emergency_contacts')
+export const getResidentFinancials = (residentId: string) =>
+  getSubcollection<FinancialTransaction>(residentId, 'financials')
+
 // Use a DTO for resident data
 export async function getResidentData(
   documentId: string,
@@ -42,36 +80,60 @@ export async function getResidentData(
     const { app, idToken } = authenticatedApp
     const userRoles: string[] = (idToken?.roles as string[]) || []
 
-    const residentsColRef = (
-      await collectionWrapper<EncryptedResident>(
-        app,
-        'providers/GYRHOME/residents',
-      )
-    ).withConverter(await getResidentConverter())
-    const residentDocRef = await docWrapper(residentsColRef, documentId)
-    const residentSnap = await getDocWrapper(residentDocRef)
+    const residentRef = await docWrapper(
+      (
+        await collectionWrapper<EncryptedResident>(
+          app,
+          `providers/GYRHOME/residents`,
+        )
+      ).withConverter(await getResidentConverter()),
+      documentId,
+    )
+    const residentSnap = await getDocWrapper(residentRef)
 
     if (!residentSnap.exists()) throw notFound()
 
     const resident = await decryptResidentData(residentSnap.data(), userRoles)
 
-    const validatedResident = ResidentSchema.parse(resident)
+    // Fetch subcollections in parallel
+    const [
+      allergies,
+      medications,
+      vitals,
+      medical_records,
+      emergency_contacts,
+      financials,
+    ] = await Promise.all([
+      getResidentAllergies(documentId),
+      getResidentMedications(documentId),
+      getResidentVitals(documentId),
+      getResidentMedicalRecords(documentId),
+      getResidentEmergencyContacts(documentId),
+      getResidentFinancials(documentId),
+    ])
 
-    const facilitiesColRef = (
-      await collectionWrapper<Facility>(app, 'providers/GYRHOME/facilities')
-    ).withConverter(await getFacilityConverter())
     const facilityDocRef = await docWrapper(
-      facilitiesColRef,
-      validatedResident.facility_id,
+      (
+        await collectionWrapper<Facility>(app, 'providers/GYRHOME/facilities')
+      ).withConverter(await getFacilityConverter()),
+      resident.facility_id,
     )
     const facilitySnap = await getDocWrapper(facilityDocRef)
+    const address = facilitySnap.exists()
+      ? facilitySnap.data().address
+      : 'Address not found'
 
-    if (!facilitySnap.exists()) {
-      throw new Error('Could not find linked facility for this resident')
-    }
-    const { address } = facilitySnap.data()
-
-    return { ...validatedResident, id: residentSnap.id, address }
+    return ResidentDataSchema.parse({
+      ...resident,
+      id: residentSnap.id,
+      address,
+      allergies,
+      medications,
+      vitals,
+      medical_records,
+      emergency_contacts,
+      financials,
+    })
   } catch (error: any) {
     throw new Error(`Failed to fetch resident: ${error.message}`)
   }

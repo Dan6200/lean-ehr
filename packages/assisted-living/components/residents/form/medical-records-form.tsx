@@ -23,6 +23,8 @@ import { updateMedicalRecords } from '@/actions/residents/update-medical-records
 import { Autocomplete } from '@/components/ui/autocomplete'
 import { searchSnomed } from '@/actions/lookups/search-snomed'
 
+import * as React from 'react'
+
 const FormSchema = z.object({
   medical_records: z.array(MedicalRecordSchema).nullable().optional(),
 })
@@ -33,6 +35,8 @@ export function MedicalRecordsForm({
   residentData: ResidentData
 }) {
   const router = useRouter()
+  const [deletedRecordIds, setDeletedRecordIds] = React.useState<string[]>([])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,11 +49,20 @@ export function MedicalRecordsForm({
     name: 'medical_records',
   })
 
+  const handleRemove = (index: number) => {
+    const recordId = residentData.medical_records?.[index]?.id
+    if (recordId) {
+      setDeletedRecordIds((prev) => [...prev, recordId])
+    }
+    remove(index)
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const { message, success } = await updateMedicalRecords(
         data.medical_records || [],
         residentData.id!,
+        deletedRecordIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
       if (success) {
@@ -121,7 +134,7 @@ export function MedicalRecordsForm({
                         onSearch={searchSnomed}
                         placeholder="Search SNOMED..."
                         options={[]}
-                      />{' '}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -130,7 +143,7 @@ export function MedicalRecordsForm({
               <Button
                 type="button"
                 variant="destructive"
-                onClick={() => remove(index)}
+                onClick={() => handleRemove(index)}
               >
                 <Trash2 />
               </Button>

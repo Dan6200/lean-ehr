@@ -1,17 +1,10 @@
 'use server'
-import { doc, updateDoc } from 'firebase/firestore'
-import { db } from '@/firebase/firestore-server'
-import { Vital, EncryptedVitalSchema } from '@/types'
-import { getAuthenticatedAppForUser } from '@/auth/server/auth'
-import {
-  encryptData,
-  generateDataKey,
-  KEK_CLINICAL_PATH,
-} from '@/lib/encryption'
+import { collection, doc, writeBatch } from 'firebase/firestore'
 
 export async function updateVitals(
   vitals: Vital[],
   residentId: string,
+  deletedVitalIds: string[] = [],
 ): Promise<{ success: boolean; message: string }> {
   const { currentUser } = await getAuthenticatedAppForUser()
   if (!currentUser) {
@@ -19,24 +12,21 @@ export async function updateVitals(
   }
 
   try {
-    const { plaintextDek: clinicalDek } =
-      await generateDataKey(KEK_CLINICAL_PATH)
+    const batch = writeBatch(db)
+    const vitalsRef = collection(db, 'residents', residentId, 'vitals')
 
-    const encryptedVitals = vitals.map((vital) => {
-      const enc: any = {}
-      if (vital.date) enc.encrypted_date = encryptData(vital.date, clinicalDek)
-      if (vital.loinc_code)
-        enc.encrypted_loinc_code = encryptData(vital.loinc_code, clinicalDek)
-      if (vital.value)
-        enc.encrypted_value = encryptData(vital.value, clinicalDek)
-      if (vital.unit) enc.encrypted_unit = encryptData(vital.unit, clinicalDek)
-      return EncryptedVitalSchema.parse(enc)
+    vitals.forEach((vital) => {
+      const { id, ...vitalData } = vital
+      const docRef = id ? doc(vitalsRef, id) : doc(vitalsRef)
+      batch.set(docRef, vitalData, { merge: true })
     })
 
-    const residentRef = doc(db, 'residents', residentId)
-    await updateDoc(residentRef, {
-      encrypted_vitals: encryptedVitals,
+    deletedVitalIds.forEach((id) => {
+      const docRef = doc(vitalsRef, id)
+      batch.delete(docRef)
     })
+
+    await batch.commit()
 
     return { success: true, message: 'Vitals updated successfully.' }
   } catch (error) {

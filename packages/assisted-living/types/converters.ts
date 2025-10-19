@@ -7,7 +7,7 @@ import {
   KEK_GENERAL_PATH,
   KEK_CONTACT_PATH,
   KEK_CLINICAL_PATH,
-  KEK_FINANCIAL_PATH, // Import new KEK path
+  KEK_FINANCIAL_PATH,
 } from '@/lib/encryption'
 
 import {
@@ -16,26 +16,12 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase/firestore'
 import {
-  Allergy,
-  EmergencyContactSchema,
-  EncryptedAllergySchema,
-  EncryptedEmergencyContactSchema,
-  EncryptedFinancialTransactionSchema,
-  EncryptedMedicalRecordSchema,
-  EncryptedMedicationSchema,
   EncryptedResident,
   EncryptedResidentSchema,
-  EncryptedVitalSchema,
   Facility,
   FacilitySchema,
-  FinancialTransaction,
-  LegalRelationshipEnum,
-  MedicalRecord,
-  Medication,
-  PersonalRelationshipEnum,
   Resident,
   ResidentSchema,
-  Vital,
 } from '.'
 
 // --- Converters ---
@@ -72,7 +58,7 @@ export async function encryptResident(
   encryptedData.encrypted_dek_financial =
     encryptedDekFinancial.toString('base64')
 
-  // Encrypt General Data
+  // Encrypt all fields
   if (dataToEncrypt.resident_name) {
     encryptedData.encrypted_resident_name = encryptData(
       dataToEncrypt.resident_name,
@@ -85,8 +71,6 @@ export async function encryptResident(
       generalDek,
     )
   }
-
-  // Encrypt Contact Data
   if (dataToEncrypt.resident_email) {
     encryptedData.encrypted_resident_email = encryptData(
       dataToEncrypt.resident_email,
@@ -114,156 +98,8 @@ export async function encryptResident(
   if (dataToEncrypt.dob) {
     encryptedData.encrypted_dob = encryptData(dataToEncrypt.dob, contactDek)
   }
-  if (dataToEncrypt.emergency_contacts) {
-    encryptedData.emergency_contacts = await Promise.all(
-      dataToEncrypt.emergency_contacts.map(async (contact: any) => {
-        const encryptedContact: any = {}
-        if (contact.contact_name) {
-          encryptedContact.encrypted_contact_name = encryptData(
-            contact.contact_name,
-            contactDek,
-          )
-        }
-        if (contact.cell_phone) {
-          encryptedContact.encrypted_cell_phone = encryptData(
-            contact.cell_phone,
-            contactDek,
-          )
-        }
-        if (contact.work_phone) {
-          encryptedContact.encrypted_work_phone = encryptData(
-            contact.work_phone,
-            contactDek,
-          )
-        }
-        if (contact.home_phone) {
-          encryptedContact.encrypted_home_phone = encryptData(
-            contact.home_phone,
-            contactDek,
-          )
-        }
-        if (contact.relationship) {
-          encryptedContact.encrypted_relationship = contact.relationship.map(
-            (r: string) => encryptData(r, contactDek),
-          )
-        }
-        return EncryptedEmergencyContactSchema.parse(encryptedContact)
-      }),
-    )
-  }
-
-  // Encrypt Clinical Data
   if (dataToEncrypt.pcp) {
     encryptedData.encrypted_pcp = encryptData(dataToEncrypt.pcp, clinicalDek)
-  }
-  if (dataToEncrypt.allergies) {
-    encryptedData.encrypted_allergies = dataToEncrypt.allergies.map(
-      (allergy: Allergy) => {
-        const enc: any = {}
-        if (allergy.name)
-          enc.encrypted_name = encryptData(allergy.name, clinicalDek)
-        if (allergy.snomed_code)
-          enc.encrypted_snomed_code = encryptData(
-            allergy.snomed_code,
-            clinicalDek,
-          )
-        if (allergy.reaction)
-          enc.encrypted_reaction = encryptData(allergy.reaction, clinicalDek)
-        return EncryptedAllergySchema.parse(enc)
-      },
-    )
-  }
-  if (dataToEncrypt.medications) {
-    encryptedData.encrypted_medications = dataToEncrypt.medications.map(
-      (med: Medication) => {
-        const enc: any = {}
-        if (med.name) enc.encrypted_name = encryptData(med.name, clinicalDek)
-        if (med.rxnorm_code)
-          enc.encrypted_rxnorm_code = encryptData(med.rxnorm_code, clinicalDek)
-        if (med.dosage)
-          enc.encrypted_dosage = encryptData(med.dosage, clinicalDek)
-        if (med.frequency)
-          enc.encrypted_frequency = encryptData(med.frequency, clinicalDek)
-        if (med.administrations) {
-          enc.encrypted_administrations = med.administrations.map(
-            (admin: Administration) => {
-              const adminEnc: any = {}
-              if (admin.date)
-                adminEnc.encrypted_date = encryptData(admin.date, clinicalDek)
-              if (admin.status)
-                adminEnc.encrypted_status = encryptData(
-                  admin.status,
-                  clinicalDek,
-                )
-              if (admin.administered_by)
-                adminEnc.encrypted_administered_by = encryptData(
-                  admin.administered_by,
-                  clinicalDek,
-                )
-              return EncryptedAdministrationSchema.parse(adminEnc)
-            },
-          )
-        }
-        return EncryptedMedicationSchema.parse(enc)
-      },
-    )
-  }
-  if (dataToEncrypt.medical_records) {
-    encryptedData.encrypted_medical_records = dataToEncrypt.medical_records.map(
-      (record: MedicalRecord) => {
-        const enc: any = {}
-        if (record.date)
-          enc.encrypted_date = encryptData(record.date, clinicalDek)
-        if (record.title)
-          enc.encrypted_title = encryptData(record.title, clinicalDek)
-        if (record.notes)
-          enc.encrypted_notes = encryptData(record.notes, clinicalDek)
-        if (record.snomed_code)
-          enc.encrypted_snomed_code = encryptData(
-            record.snomed_code,
-            clinicalDek,
-          )
-        return EncryptedMedicalRecordSchema.parse(enc)
-      },
-    )
-  }
-  if (dataToEncrypt.vitals) {
-    encryptedData.encrypted_vitals = dataToEncrypt.vitals.map(
-      (vital: Vital) => {
-        const enc: any = {}
-        if (vital.date)
-          enc.encrypted_date = encryptData(vital.date, clinicalDek)
-        if (vital.loinc_code)
-          enc.encrypted_loinc_code = encryptData(vital.loinc_code, clinicalDek)
-        if (vital.value)
-          enc.encrypted_value = encryptData(vital.value, clinicalDek)
-        if (vital.unit)
-          enc.encrypted_unit = encryptData(vital.unit, clinicalDek)
-        return EncryptedVitalSchema.parse(enc)
-      },
-    )
-  }
-
-  // Encrypt Financial Data
-  if (dataToEncrypt.financials) {
-    encryptedData.encrypted_financials = dataToEncrypt.financials.map(
-      (item: FinancialTransaction) => {
-        const enc: any = {}
-        if (item.amount)
-          enc.encrypted_amount = encryptData(
-            item.amount.toString(),
-            financialDek,
-          )
-        if (item.date) enc.encrypted_date = encryptData(item.date, financialDek)
-        if (item.type) enc.encrypted_type = encryptData(item.type, financialDek)
-        if (item.description)
-          enc.encrypted_description = encryptData(
-            item.description,
-            financialDek,
-          )
-        return EncryptedFinancialTransactionSchema.parse(enc)
-      },
-    )
   }
 
   return EncryptedResidentSchema.parse(encryptedData)
@@ -280,7 +116,6 @@ export async function decryptResidentData(
   let generalDek: Buffer | undefined
   let contactDek: Buffer | undefined
   let clinicalDek: Buffer | undefined
-  let financialDek: Buffer | undefined
 
   const userRoles = roles.map((role) => role.toUpperCase())
 
@@ -332,19 +167,6 @@ export async function decryptResidentData(
     }
   }
 
-  if (userRoles.includes('ADMIN') || userRoles.includes('BILLING')) {
-    if (data.encrypted_dek_financial) {
-      try {
-        financialDek = await decryptDataKey(
-          Buffer.from(data.encrypted_dek_financial, 'base64'),
-          KEK_FINANCIAL_PATH,
-        )
-      } catch (e) {
-        console.error('Failed to decrypt financial DEK:', e)
-      }
-    }
-  }
-
   if (generalDek) {
     if (data.encrypted_resident_name)
       decryptedData.resident_name = decryptData(
@@ -381,149 +203,11 @@ export async function decryptResidentData(
       )
     if (data.encrypted_dob)
       decryptedData.dob = decryptData(data.encrypted_dob, contactDek)
-    if (data.emergency_contacts) {
-      decryptedData.emergency_contacts = data.emergency_contacts.map(
-        (contact) => {
-          const dec: any = {}
-          if (contact.encrypted_contact_name)
-            dec.contact_name = decryptData(
-              contact.encrypted_contact_name,
-              contactDek,
-            )
-          if (contact.encrypted_cell_phone)
-            dec.cell_phone = decryptData(
-              contact.encrypted_cell_phone,
-              contactDek,
-            )
-          if (contact.encrypted_work_phone)
-            dec.work_phone = decryptData(
-              contact.encrypted_work_phone,
-              contactDek,
-            )
-          if (contact.encrypted_home_phone)
-            dec.home_phone = decryptData(
-              contact.encrypted_home_phone,
-              contactDek,
-            )
-          if (contact.encrypted_relationship) {
-            const decryptedRelationships = contact.encrypted_relationship
-              .map((r) => decryptData(r, contactDek))
-              .filter(Boolean)
-            dec.legal_relationships = decryptedRelationships.filter(
-              (r: any) => LegalRelationshipEnum.safeParse(r).success,
-            )
-            dec.personal_relationships = decryptedRelationships.filter(
-              (r: any) => PersonalRelationshipEnum.safeParse(r).success,
-            )
-          }
-          return EmergencyContactSchema.parse(dec)
-        },
-      )
-    }
   }
 
   if (clinicalDek) {
     if (data.encrypted_pcp)
       decryptedData.pcp = decryptData(data.encrypted_pcp, clinicalDek)
-    if (data.encrypted_allergies) {
-      decryptedData.allergies = data.encrypted_allergies.map((allergy) => {
-        const dec: any = {}
-        if (allergy.encrypted_name)
-          dec.name = decryptData(allergy.encrypted_name, clinicalDek)
-        if (allergy.encrypted_snomed_code)
-          dec.snomed_code = decryptData(
-            allergy.encrypted_snomed_code,
-            clinicalDek,
-          )
-        if (allergy.encrypted_reaction)
-          dec.reaction = decryptData(allergy.encrypted_reaction, clinicalDek)
-        return dec
-      })
-    }
-    if (data.encrypted_medications) {
-      decryptedData.medications = data.encrypted_medications.map((med) => {
-        const dec: any = {}
-        if (med.encrypted_name)
-          dec.name = decryptData(med.encrypted_name, clinicalDek)
-        if (med.encrypted_rxnorm_code)
-          dec.rxnorm_code = decryptData(med.encrypted_rxnorm_code, clinicalDek)
-        if (med.encrypted_dosage)
-          dec.dosage = decryptData(med.encrypted_dosage, clinicalDek)
-        if (med.encrypted_frequency)
-          dec.frequency = decryptData(med.encrypted_frequency, clinicalDek)
-        if (med.encrypted_administrations) {
-          dec.administrations = med.encrypted_administrations.map(
-            (admin: any) => {
-              const adminDec: any = {}
-              if (admin.encrypted_date)
-                adminDec.date = decryptData(admin.encrypted_date, clinicalDek)
-              if (admin.encrypted_status)
-                adminDec.status = decryptData(
-                  admin.encrypted_status,
-                  clinicalDek,
-                )
-              if (admin.encrypted_administered_by)
-                adminDec.administered_by = decryptData(
-                  admin.encrypted_administered_by,
-                  clinicalDek,
-                )
-              return adminDec
-            },
-          )
-        }
-        return dec
-      })
-    }
-    if (data.encrypted_medical_records) {
-      decryptedData.medical_records = data.encrypted_medical_records.map(
-        (record: any) => {
-          const dec: any = {}
-          if (record.encrypted_date)
-            dec.date = decryptData(record.encrypted_date, clinicalDek)
-          if (record.encrypted_title)
-            dec.title = decryptData(record.encrypted_title, clinicalDek)
-          if (record.encrypted_notes)
-            dec.notes = decryptData(record.encrypted_notes, clinicalDek)
-          if (record.encrypted_snomed_code)
-            dec.snomed_code = decryptData(
-              record.encrypted_snomed_code,
-              clinicalDek,
-            )
-          return dec
-        },
-      )
-    }
-    if (data.encrypted_vitals) {
-      decryptedData.vitals = data.encrypted_vitals.map((vital: any) => {
-        const dec: any = {}
-        if (vital.encrypted_date)
-          dec.date = decryptData(vital.encrypted_date, clinicalDek)
-        if (vital.encrypted_loinc_code)
-          dec.loinc_code = decryptData(vital.encrypted_loinc_code, clinicalDek)
-        if (vital.encrypted_value)
-          dec.value = decryptData(vital.encrypted_value, clinicalDek)
-        if (vital.encrypted_unit)
-          dec.unit = decryptData(vital.encrypted_unit, clinicalDek)
-        return dec
-      })
-    }
-  }
-
-  if (financialDek && data.encrypted_financials) {
-    decryptedData.financials = data.encrypted_financials.map((item) => {
-      const dec: any = {}
-      if (item.encrypted_amount)
-        dec.amount = parseFloat(
-          decryptData(item.encrypted_amount, financialDek),
-        )
-      if (item.encrypted_date)
-        dec.date = decryptData(item.encrypted_date, financialDek)
-      if (item.encrypted_type)
-        dec.type = decryptData(item.encrypted_type, financialDek)
-      if (item.encrypted_description)
-        dec.description = decryptData(item.encrypted_description, financialDek)
-      return dec
-    })
   }
 
   return ResidentSchema.parse(decryptedData)
@@ -533,16 +217,12 @@ export const getResidentConverter = async (): Promise<
   FirestoreDataConverter<EncryptedResident, Resident>
 > => ({
   toFirestore(resident: unknown): Resident {
-    // This is now synchronous and will not encrypt the data.
-    // Encryption must be handled by calling `encryptResident` before `toFirestore`.
     return ResidentSchema.parse(resident)
   },
 
   fromFirestore(
     snapshot: QueryDocumentSnapshot<DocumentData>,
   ): EncryptedResident {
-    // This is now synchronous and will not decrypt the data.
-    // Encryption must be handled by calling `decryptResident` before `fromFirestore`.
     const data = snapshot.data()
     return EncryptedResidentSchema.parse(data)
   },

@@ -1,17 +1,10 @@
 'use server'
-import { doc, updateDoc } from 'firebase/firestore'
-import { db } from '@/firebase/firestore-server'
-import { Medication, EncryptedMedicationSchema } from '@/types'
-import { getAuthenticatedAppForUser } from '@/auth/server/auth'
-import {
-  encryptData,
-  generateDataKey,
-  KEK_CLINICAL_PATH,
-} from '@/lib/encryption'
+import { collection, doc, writeBatch } from 'firebase/firestore'
 
 export async function updateMedications(
   medications: Medication[],
   residentId: string,
+  deletedMedicationIds: string[] = [],
 ): Promise<{ success: boolean; message: string }> {
   const { currentUser } = await getAuthenticatedAppForUser()
   if (!currentUser) {
@@ -19,25 +12,26 @@ export async function updateMedications(
   }
 
   try {
-    const { plaintextDek: clinicalDek } =
-      await generateDataKey(KEK_CLINICAL_PATH)
+    const batch = writeBatch(db)
+    const medicationsRef = collection(
+      db,
+      'residents',
+      residentId,
+      'medications',
+    )
 
-    const encryptedMedications = medications.map((med) => {
-      const enc: any = {}
-      if (med.name) enc.encrypted_name = encryptData(med.name, clinicalDek)
-      if (med.rxnorm_code)
-        enc.encrypted_rxnorm_code = encryptData(med.rxnorm_code, clinicalDek)
-      if (med.dosage)
-        enc.encrypted_dosage = encryptData(med.dosage, clinicalDek)
-      if (med.frequency)
-        enc.encrypted_frequency = encryptData(med.frequency, clinicalDek)
-      return EncryptedMedicationSchema.parse(enc)
+    medications.forEach((med) => {
+      const { id, ...medData } = med
+      const docRef = id ? doc(medicationsRef, id) : doc(medicationsRef)
+      batch.set(docRef, medData, { merge: true })
     })
 
-    const residentRef = doc(db, 'residents', residentId)
-    await updateDoc(residentRef, {
-      encrypted_medications: encryptedMedications,
+    deletedMedicationIds.forEach((id) => {
+      const docRef = doc(medicationsRef, id)
+      batch.delete(docRef)
     })
+
+    await batch.commit()
 
     return { success: true, message: 'Medications updated successfully.' }
   } catch (error) {

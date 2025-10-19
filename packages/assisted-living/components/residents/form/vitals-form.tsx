@@ -20,12 +20,16 @@ import { Input } from '@/components/ui/input'
 import { Trash2 } from 'lucide-react'
 import { updateVitals } from '@/actions/residents/update-vitals'
 
+import * as React from 'react'
+
 const FormSchema = z.object({
   vitals: z.array(VitalSchema).nullable().optional(),
 })
 
 export function VitalsForm({ residentData }: { residentData: ResidentData }) {
   const router = useRouter()
+  const [deletedVitalIds, setDeletedVitalIds] = React.useState<string[]>([])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -38,11 +42,20 @@ export function VitalsForm({ residentData }: { residentData: ResidentData }) {
     name: 'vitals',
   })
 
+  const handleRemove = (index: number) => {
+    const vitalId = residentData.vitals?.[index]?.id
+    if (vitalId) {
+      setDeletedVitalIds((prev) => [...prev, vitalId])
+    }
+    remove(index)
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const { message, success } = await updateVitals(
         data.vitals || [],
         residentData.id!,
+        deletedVitalIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
       if (success) {
@@ -118,7 +131,7 @@ export function VitalsForm({ residentData }: { residentData: ResidentData }) {
             <Button
               type="button"
               variant="destructive"
-              onClick={() => remove(index)}
+              onClick={() => handleRemove(index)}
             >
               <Trash2 />
             </Button>
@@ -131,6 +144,7 @@ export function VitalsForm({ residentData }: { residentData: ResidentData }) {
             append({
               date: new Date().toISOString().split('T')[0],
               loinc_code: '',
+              name: '',
               value: '',
               unit: '',
             })

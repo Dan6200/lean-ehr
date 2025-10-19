@@ -115,12 +115,6 @@ export const ResidentSchema = z.object({
   cell_phone: z.string().nullable().optional(),
   work_phone: z.string().nullable().optional(),
   home_phone: z.string().nullable().optional(),
-  emergency_contacts: z.array(EmergencyContactSchema).nullable().optional(),
-  allergies: z.array(AllergySchema).nullable().optional(),
-  medications: z.array(MedicationSchema).nullable().optional(),
-  financials: z.array(FinancialTransactionSchema).nullable().optional(),
-  medical_records: z.array(MedicalRecordSchema).nullable().optional(),
-  vitals: z.array(VitalSchema).nullable().optional(),
 })
 
 // --- Encrypted Field Schema ---
@@ -203,24 +197,6 @@ export const EncryptedResidentSchema = z.object({
   encrypted_cell_phone: EncryptedFieldSchema.nullable().optional(),
   encrypted_work_phone: EncryptedFieldSchema.nullable().optional(),
   encrypted_home_phone: EncryptedFieldSchema.nullable().optional(),
-  emergency_contacts: z
-    .array(EncryptedEmergencyContactSchema)
-    .nullable()
-    .optional(),
-  encrypted_allergies: z.array(EncryptedAllergySchema).nullable().optional(),
-  encrypted_medications: z
-    .array(EncryptedMedicationSchema)
-    .nullable()
-    .optional(),
-  encrypted_financials: z
-    .array(EncryptedFinancialTransactionSchema)
-    .nullable()
-    .optional(),
-  encrypted_medical_records: z
-    .array(EncryptedMedicalRecordSchema)
-    .nullable()
-    .optional(),
-  encrypted_vitals: z.array(EncryptedVitalSchema).nullable().optional(),
 })
 
 // --- Types ---

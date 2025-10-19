@@ -31,12 +31,18 @@ import {
 import { Trash2 } from 'lucide-react'
 import { updateFinancials } from '@/actions/residents/update-financials'
 
+import * as React from 'react'
+
 const FormSchema = z.object({
   financials: z.array(FinancialTransactionSchema).nullable().optional(),
 })
 
 export function BillingForm({ residentData }: { residentData: ResidentData }) {
   const router = useRouter()
+  const [deletedFinancialIds, setDeletedFinancialIds] = React.useState<
+    string[]
+  >([])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -49,11 +55,20 @@ export function BillingForm({ residentData }: { residentData: ResidentData }) {
     name: 'financials',
   })
 
+  const handleRemove = (index: number) => {
+    const financialId = residentData.financials?.[index]?.id
+    if (financialId) {
+      setDeletedFinancialIds((prev) => [...prev, financialId])
+    }
+    remove(index)
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const { message, success } = await updateFinancials(
         data.financials || [],
         residentData.id!,
+        deletedFinancialIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
       if (success) {
@@ -150,7 +165,7 @@ export function BillingForm({ residentData }: { residentData: ResidentData }) {
             <Button
               type="button"
               variant="destructive"
-              onClick={() => remove(index)}
+              onClick={() => handleRemove(index)}
             >
               <Trash2 />
             </Button>

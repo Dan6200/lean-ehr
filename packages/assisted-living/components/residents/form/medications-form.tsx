@@ -23,6 +23,8 @@ import { updateMedications } from '@/actions/residents/update-medications'
 import { Autocomplete } from '@/components/ui/autocomplete'
 import { searchRxNorm } from '@/actions/lookups/search-rxnorm'
 
+import * as React from 'react'
+
 const FormSchema = z.object({
   medications: z.array(MedicationSchema).nullable().optional(),
 })
@@ -33,6 +35,10 @@ export function MedicationsForm({
   residentData: ResidentData
 }) {
   const router = useRouter()
+  const [deletedMedicationIds, setDeletedMedicationIds] = React.useState<
+    string[]
+  >([])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,11 +51,20 @@ export function MedicationsForm({
     name: 'medications',
   })
 
+  const handleRemove = (index: number) => {
+    const medicationId = residentData.medications?.[index]?.id
+    if (medicationId) {
+      setDeletedMedicationIds((prev) => [...prev, medicationId])
+    }
+    remove(index)
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const { message, success } = await updateMedications(
         data.medications || [],
         residentData.id!,
+        deletedMedicationIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
       if (success) {
@@ -142,7 +157,7 @@ export function MedicationsForm({
             <Button
               type="button"
               variant="destructive"
-              onClick={() => remove(index)}
+              onClick={() => handleRemove(index)}
             >
               <Trash2 />
             </Button>

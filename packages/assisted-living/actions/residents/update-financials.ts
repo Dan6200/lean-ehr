@@ -1,20 +1,9 @@
-'use server'
-import { doc, updateDoc } from 'firebase/firestore'
-import { db } from '@/firebase/firestore-server'
-import {
-  FinancialTransaction,
-  EncryptedFinancialTransactionSchema,
-} from '@/types'
-import { getAuthenticatedAppForUser } from '@/auth/server/auth'
-import {
-  encryptData,
-  generateDataKey,
-  KEK_FINANCIAL_PATH,
-} from '@/lib/encryption'
+import { collection, doc, writeBatch } from 'firebase/firestore'
 
 export async function updateFinancials(
   financials: FinancialTransaction[],
   residentId: string,
+  deletedFinancialIds: string[] = [],
 ): Promise<{ success: boolean; message: string }> {
   const { currentUser } = await getAuthenticatedAppForUser()
   if (!currentUser) {
@@ -22,24 +11,21 @@ export async function updateFinancials(
   }
 
   try {
-    const { plaintextDek: financialDek } =
-      await generateDataKey(KEK_FINANCIAL_PATH)
+    const batch = writeBatch(db)
+    const financialsRef = collection(db, 'residents', residentId, 'financials')
 
-    const encryptedFinancials = financials.map((item) => {
-      const enc: any = {}
-      if (item.amount)
-        enc.encrypted_amount = encryptData(item.amount.toString(), financialDek)
-      if (item.date) enc.encrypted_date = encryptData(item.date, financialDek)
-      if (item.type) enc.encrypted_type = encryptData(item.type, financialDek)
-      if (item.description)
-        enc.encrypted_description = encryptData(item.description, financialDek)
-      return EncryptedFinancialTransactionSchema.parse(enc)
+    financials.forEach((item) => {
+      const { id, ...itemData } = item
+      const docRef = id ? doc(financialsRef, id) : doc(financialsRef)
+      batch.set(docRef, itemData, { merge: true })
     })
 
-    const residentRef = doc(db, 'residents', residentId)
-    await updateDoc(residentRef, {
-      encrypted_financials: encryptedFinancials,
+    deletedFinancialIds.forEach((id) => {
+      const docRef = doc(financialsRef, id)
+      batch.delete(docRef)
     })
+
+    await batch.commit()
 
     return { success: true, message: 'Financials updated successfully.' }
   } catch (error) {

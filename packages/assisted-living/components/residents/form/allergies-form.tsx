@@ -23,6 +23,8 @@ import { updateAllergies } from '@/actions/residents/update-allergies'
 import { Autocomplete } from '@/components/ui/autocomplete'
 import { searchSnomed } from '@/actions/lookups/search-snomed'
 
+import * as React from 'react'
+
 const FormSchema = z.object({
   allergies: z.array(AllergySchema).nullable().optional(),
 })
@@ -33,6 +35,8 @@ export function AllergiesForm({
   residentData: ResidentData
 }) {
   const router = useRouter()
+  const [deletedAllergyIds, setDeletedAllergyIds] = React.useState<string[]>([])
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -45,11 +49,20 @@ export function AllergiesForm({
     name: 'allergies',
   })
 
+  const handleRemove = (index: number) => {
+    const allergyId = residentData.allergies?.[index]?.id
+    if (allergyId) {
+      setDeletedAllergyIds((prev) => [...prev, allergyId])
+    }
+    remove(index)
+  }
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
       const { message, success } = await updateAllergies(
         data.allergies || [],
         residentData.id!,
+        deletedAllergyIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
       if (success) {
@@ -126,7 +139,7 @@ export function AllergiesForm({
             <Button
               type="button"
               variant="destructive"
-              onClick={() => remove(index)}
+              onClick={() => handleRemove(index)}
             >
               <Trash2 />
             </Button>
