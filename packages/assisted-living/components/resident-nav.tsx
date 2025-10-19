@@ -19,6 +19,7 @@ const navLinks = [
   { name: 'Medical Records', href: '/records' },
   { name: 'Vitals', href: '/vitals' },
   { name: 'Billing', href: '/billing' },
+  { name: 'eMAR', href: '/emar' },
 ]
 
 export function ResidentNav({ residentId }: { residentId: string }) {

@@ -21,17 +21,21 @@ import {
   EncryptedAllergySchema,
   EncryptedEmergencyContactSchema,
   EncryptedFinancialTransactionSchema,
+  EncryptedMedicalRecordSchema,
   EncryptedMedicationSchema,
   EncryptedResident,
   EncryptedResidentSchema,
+  EncryptedVitalSchema,
   Facility,
   FacilitySchema,
   FinancialTransaction,
   LegalRelationshipEnum,
+  MedicalRecord,
   Medication,
   PersonalRelationshipEnum,
   Resident,
   ResidentSchema,
+  Vital,
 } from '.'
 
 // --- Converters ---
@@ -180,6 +184,26 @@ export async function encryptResident(
           enc.encrypted_dosage = encryptData(med.dosage, clinicalDek)
         if (med.frequency)
           enc.encrypted_frequency = encryptData(med.frequency, clinicalDek)
+        if (med.administrations) {
+          enc.encrypted_administrations = med.administrations.map(
+            (admin: Administration) => {
+              const adminEnc: any = {}
+              if (admin.date)
+                adminEnc.encrypted_date = encryptData(admin.date, clinicalDek)
+              if (admin.status)
+                adminEnc.encrypted_status = encryptData(
+                  admin.status,
+                  clinicalDek,
+                )
+              if (admin.administered_by)
+                adminEnc.encrypted_administered_by = encryptData(
+                  admin.administered_by,
+                  clinicalDek,
+                )
+              return EncryptedAdministrationSchema.parse(adminEnc)
+            },
+          )
+        }
         return EncryptedMedicationSchema.parse(enc)
       },
     )
@@ -427,6 +451,26 @@ export async function decryptResidentData(
           dec.dosage = decryptData(med.encrypted_dosage, clinicalDek)
         if (med.encrypted_frequency)
           dec.frequency = decryptData(med.encrypted_frequency, clinicalDek)
+        if (med.encrypted_administrations) {
+          dec.administrations = med.encrypted_administrations.map(
+            (admin: any) => {
+              const adminDec: any = {}
+              if (admin.encrypted_date)
+                adminDec.date = decryptData(admin.encrypted_date, clinicalDek)
+              if (admin.encrypted_status)
+                adminDec.status = decryptData(
+                  admin.encrypted_status,
+                  clinicalDek,
+                )
+              if (admin.encrypted_administered_by)
+                adminDec.administered_by = decryptData(
+                  admin.encrypted_administered_by,
+                  clinicalDek,
+                )
+              return adminDec
+            },
+          )
+        }
         return dec
       })
     }

@@ -38,7 +38,15 @@ export const MedicalRecordTypeEnum = z.enum([
   'OTHER',
 ])
 
+export const AdministrationStatusEnum = z.enum(['GIVEN', 'REFUSED', 'HELD'])
+
 // --- Plaintext Schemas (for Application Use) ---
+export const AdministrationSchema = z.object({
+  date: z.string(), // ISO 8601 date string
+  status: AdministrationStatusEnum,
+  administered_by: z.string(), // User ID
+})
+
 export const VitalSchema = z.object({
   date: z.string(), // ISO 8601 date string
   loinc_code: z.string(),
@@ -65,6 +73,7 @@ export const MedicationSchema = z.object({
   rxnorm_code: z.string(),
   dosage: z.string().optional(),
   frequency: z.string().optional(),
+  administrations: z.array(AdministrationSchema).nullable().optional(),
 })
 
 export const FinancialTransactionSchema = z.object({
@@ -122,6 +131,12 @@ export const EncryptedFieldSchema = z.object({
 })
 
 // --- Encrypted Schemas (for Firestore Storage) ---
+export const EncryptedAdministrationSchema = z.object({
+  encrypted_date: EncryptedFieldSchema,
+  encrypted_status: EncryptedFieldSchema,
+  encrypted_administered_by: EncryptedFieldSchema,
+})
+
 export const EncryptedVitalSchema = z.object({
   encrypted_date: EncryptedFieldSchema,
   encrypted_loinc_code: EncryptedFieldSchema,
@@ -147,6 +162,10 @@ export const EncryptedMedicationSchema = z.object({
   encrypted_rxnorm_code: EncryptedFieldSchema.optional(),
   encrypted_dosage: EncryptedFieldSchema.optional(),
   encrypted_frequency: EncryptedFieldSchema.optional(),
+  encrypted_administrations: z
+    .array(EncryptedAdministrationSchema)
+    .nullable()
+    .optional(),
 })
 
 export const EncryptedFinancialTransactionSchema = z.object({
@@ -205,6 +224,7 @@ export const EncryptedResidentSchema = z.object({
 })
 
 // --- Types ---
+export type Administration = z.infer<typeof AdministrationSchema>
 export type Vital = z.infer<typeof VitalSchema>
 export type MedicalRecord = z.infer<typeof MedicalRecordSchema>
 export type Allergy = z.infer<typeof AllergySchema>
