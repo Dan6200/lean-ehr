@@ -1,55 +1,65 @@
 'use server'
-import { doc, updateDoc, getDoc } from 'firebase/firestore'
-import { db } from '@/firebase/firestore-server'
+import { collection, addDoc } from 'firebase/firestore'
+import { getAuthenticatedAppAndClaims } from '@/auth/server/definitions'
+import { Administration } from '@/types'
 import {
-  Administration,
-  EncryptedResident,
-  Resident,
-  Medication,
-} from '@/types'
-import { getAuthenticatedAppForUser } from '@/auth/server/auth'
-import { decryptResidentData, encryptResident } from '@/types/converters'
+  generateDataKey,
+  encryptData,
+  KEK_CLINICAL_PATH,
+} from '@/lib/encryption'
+import { collectionWrapper } from '@/firebase/firestore-server'
+
+// Helper to encrypt a single field's value
+function encryptField(value: string | number, dek: Buffer) {
+  if (value === null || typeof value === 'undefined') {
+    return null
+  }
+  const { ciphertext, iv, authTag } = encryptData(String(value), dek)
+  return {
+    ciphertext: ciphertext.toString('base64'),
+    iv: iv.toString('base64'),
+    authTag: authTag.toString('base64'),
+  }
+}
 
 export async function recordAdministration(
   residentId: string,
-  medicationName: string,
   administration: Administration,
 ): Promise<{ success: boolean; message: string }> {
-  const { currentUser } = await getAuthenticatedAppForUser()
-  if (!currentUser) {
+  const authenticatedApp = await getAuthenticatedAppAndClaims()
+  if (!authenticatedApp) {
     throw new Error('Not authenticated')
   }
+  const { app } = authenticatedApp
 
   try {
-    const residentRef = doc(db, 'residents', residentId)
-    const residentSnap = await getDoc(residentRef)
+    // 1. Generate a new DEK for this record, and encrypt it with the Clinical KEK
+    const { plaintextDek, encryptedDek } =
+      await generateDataKey(KEK_CLINICAL_PATH)
 
-    if (!residentSnap.exists()) {
-      throw new Error('Resident not found')
+    // 2. Encrypt the fields of the administration record
+    const encryptedAdminRecord: { [key: string]: any } = {
+      resident_id: residentId,
+      encrypted_dek: encryptedDek.toString('base64'),
     }
 
-    const encryptedData = residentSnap.data() as EncryptedResident
-    const residentData = await decryptResidentData(encryptedData, ['ADMIN']) // Assuming admin for now
+    // TODO: don't encrypt every key...
+    for (const key in administration) {
+      const value = (administration as any)[key]
+      if (value) {
+        encryptedAdminRecord[`encrypted_${key}`] = encryptField(
+          value,
+          plaintextDek,
+        )
+      }
+    }
 
-    const medicationIndex = residentData.medications?.findIndex(
-      (med) => med.name === medicationName,
+    // 3. Add the new encrypted document to the 'medication_administration' subcollection
+    const emarCollectionRef = collectionWrapper(
+      app,
+      `providers/GYRHOME/residents/${residentId}/medication_administration`,
     )
-
-    if (medicationIndex === undefined || medicationIndex === -1) {
-      throw new Error('Medication not found')
-    }
-
-    if (!residentData.medications![medicationIndex].administrations) {
-      residentData.medications![medicationIndex].administrations = []
-    }
-
-    residentData.medications![medicationIndex].administrations!.push(
-      administration,
-    )
-
-    const newEncryptedData = await encryptResident(residentData)
-
-    await updateDoc(residentRef, newEncryptedData)
+    await addDoc(emarCollectionRef, encryptedAdminRecord)
 
     return { success: true, message: 'Administration recorded successfully.' }
   } catch (error) {
