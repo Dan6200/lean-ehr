@@ -3,6 +3,7 @@
     "id": "0f3acca9-b52c-4447-a32c-df90ab55290c",
     "data": {
       "resident_name": "Julia White",
+      "gender": "female",
       "facility_id": "GYRH1224",
       "room_no": "310",
       "avatar_url": "/avatars/ec7a4a387ee897fe2b71654a301961f3dddfea692564b3586f91c8de09448ea8.png",
@@ -18,6 +19,7 @@
     "id": "5a166864-9968-4a62-a383-103329403af2",
     "data": {
       "resident_name": "Kayla Littel IV",
+      "gender": "female",
       "facility_id": "GYRH1268",
       "room_no": "513",
       "avatar_url": "/avatars/69e25e6c955bfd4527c621ba5efe82c2df5c71fba9bca91c67d0e8204f63e676.png",
@@ -33,6 +35,7 @@
     "id": "b0c13085-55b1-4bc6-a6e3-8cd1b41febe0",
     "data": {
       "resident_name": "Nadine Dietrich",
+      "gender": "female",
       "facility_id": "GYRH1339",
       "room_no": "4D",
       "avatar_url": "/avatars/274e98ea904705de6378d230831484cf2e343024ab714978c938c2e1aa5a9f73.png",
@@ -48,6 +51,7 @@
     "id": "104262f2-9af0-4c88-824d-b3d7a6f0b9d4",
     "data": {
       "resident_name": "Pearl O'Keefe",
+      "gender": "female",
       "facility_id": "GYRH1244",
       "room_no": "408",
       "avatar_url": "/avatars/41d13b57a71834bdd211087828e8b984be331bdfbb21030ad164689b3c5b69e6.png",
@@ -63,6 +67,7 @@
     "id": "118cf97a-5e73-4455-a992-e5fb9406318a",
     "data": {
       "resident_name": "Mr. Jeff Kautzer",
+      "gender": "male",
       "facility_id": "GYRH1224",
       "room_no": "414",
       "avatar_url": "/avatars/7fea91b0926d0f3ce26a21c6867bfdbeac3e382be7429883d54a94117e009518.png",
@@ -78,6 +83,7 @@
     "id": "908f8543-8b90-4f13-b3fa-99db06153709",
     "data": {
       "resident_name": "Stephanie Kihn",
+      "gender": "female",
       "facility_id": "GYRH1268",
       "room_no": "7A",
       "avatar_url": "/avatars/8ffff40e057ae18fe1432a1cf6d6067fd6a48122d13491d295e54689d71e32a9.png",
@@ -93,6 +99,7 @@
     "id": "1e669b52-dc68-42fa-9853-486e22c3e838",
     "data": {
       "resident_name": "Alfred Nolan",
+      "gender": "male",
       "facility_id": "GYRH1224",
       "room_no": "105",
       "avatar_url": "/avatars/662f1f53a7ab95afa37121096a4fb7882d22e0f38261eeb2346ba0678c99cbee.png",
@@ -108,6 +115,7 @@
     "id": "9189d0ac-6c01-467e-8356-ff552433321e",
     "data": {
       "resident_name": "Max Oberbrunner",
+      "gender": "male",
       "facility_id": "GYRH1369",
       "room_no": "13C",
       "avatar_url": "/avatars/83e69e32221d5864a3eed4c5fbbdf6b6aa6ad64291957fafdceb46970e2955ba.png",
@@ -123,6 +131,7 @@
     "id": "ceef3919-6895-4b85-b2b2-65b06b59bdc0",
     "data": {
       "resident_name": "Melody Hudson",
+      "gender": "female",
       "facility_id": "GYRH1296",
       "room_no": "401",
       "avatar_url": "/avatars/26cb99aa6cfd011b67a44530cf45059ba3138d8de66ebbdb317bef2a2eebe09d.png",
@@ -138,6 +147,7 @@
     "id": "1baf42cf-b526-4406-a0da-79e489b9e15b",
     "data": {
       "resident_name": "Horace Harvey",
+      "gender": "male",
       "facility_id": "GYRH1284",
       "room_no": "605",
       "avatar_url": "/avatars/ef22ef089959768c646a0bca754b780a8ce5f7e60c14aad12f750f112dd492c6.png",
@@ -153,6 +163,7 @@
     "id": "04fedc29-096d-4b18-afed-9d34886ec5d6",
     "data": {
       "resident_name": "Isabel Roob",
+      "gender": "female",
       "facility_id": "GYRH1229",
       "room_no": "315",
       "avatar_url": "/avatars/c3c089aee42141af11603d520bbd18d6de8265fece3eeb7b346941ceb624d1e6.png",
@@ -168,6 +179,7 @@
     "id": "2a67827c-d1db-4284-b36e-15b54f16c3d2",
     "data": {
       "resident_name": "Aubrey Batz",
+      "gender": "other",
       "facility_id": "GYRH1200",
       "room_no": "211",
       "avatar_url": "/avatars/79ef042e45e50ab188b1cb45f0846a3f6d3a0f66d108f89fbc7c962946678996.png",
@@ -183,6 +195,7 @@
     "id": "01acf4a8-e2c3-4faf-b9c8-7afb347704b4",
     "data": {
       "resident_name": "Louis Mitchell",
+      "gender": "male",
       "facility_id": "GYRH1158",
       "room_no": "309",
       "avatar_url": "/avatars/75b31c0cd27f63c0c56808bd00b0bc76aa7b86dacee4bb43fee9de04d24916e4.png",
@@ -198,6 +211,7 @@
     "id": "f7ca63c7-53ce-4b76-9c76-bc93f65dd188",
     "data": {
       "resident_name": "Ed Toy",
+      "gender": "male",
       "facility_id": "GYRH1263",
       "room_no": "504",
       "avatar_url": "/avatars/346af83ab029e0eaa0484dbfd669a47314a66e9f94bd6fd519704a1f31c9ce0f.png",
@@ -213,6 +227,7 @@
     "id": "4446ab4d-d310-4f6f-ab18-ca90a9dbb7cb",
     "data": {
       "resident_name": "Lindsay Miller",
+      "gender": "other",
       "facility_id": "GYRH1209",
       "room_no": "220",
       "avatar_url": "/avatars/86fa0c1d1eb85d0c37ca179407f9f4b006775451fe6cf6a1ee5d98a1fbcfda25.png",
@@ -228,6 +243,7 @@
     "id": "8129f542-1763-46b8-9710-8baa345b7daf",
     "data": {
       "resident_name": "Edmund Larkin PhD",
+      "gender": "male",
       "facility_id": "GYRH1125",
       "room_no": "202",
       "avatar_url": "/avatars/653dd04069c0f9e26c024a570f6ccf816aeff03ef49bc118f1e5a863c83b4da1.png",
@@ -243,6 +259,7 @@
     "id": "460803d7-ebfd-4cae-a86e-4151999ed3bf",
     "data": {
       "resident_name": "Yvette McKenzie",
+      "gender": "female",
       "facility_id": "GYRH1326",
       "room_no": "810",
       "avatar_url": "/avatars/e64b88aa06c7e47ab9df12f384f7824b27757a1cc451d3b024df5f20d716673a.png",
@@ -258,6 +275,7 @@
     "id": "c104409c-796d-47c3-9f92-4d50b747a917",
     "data": {
       "resident_name": "Charlie Smith",
+      "gender": "other",
       "facility_id": "GYRH1104",
       "room_no": "104",
       "avatar_url": "/avatars/7367ce22507cf9ea2271bae6ba76eda273706467dc9f9f5a9aac39671dbffeb3.png",
@@ -273,6 +291,7 @@
     "id": "8768a2a8-f812-4fba-968e-78fcf2df9040",
     "data": {
       "resident_name": "Shari Hermann",
+      "gender": "female",
       "facility_id": "GYRH1262",
       "room_no": "503",
       "avatar_url": "/avatars/6a5af109792f1039e41546f237febddfb53df625410580e29bf6231fae5c431b.png",
@@ -288,6 +307,7 @@
     "id": "4348eabd-9ecf-4263-9085-b407ea1a5633",
     "data": {
       "resident_name": "Penny Murray",
+      "gender": "female",
       "facility_id": "GYRH1169",
       "room_no": "322",
       "avatar_url": "/avatars/0157feafbfdd0fc1bfa835e25a28b8518ed242a670f9da7c4da4bda0789289a6.png",
@@ -303,6 +323,7 @@
     "id": "96476466-3d60-466b-ba77-96c7f32d87e7",
     "data": {
       "resident_name": "Dr. Grady Abbott",
+      "gender": "male",
       "facility_id": "GYRH1293",
       "room_no": "304",
       "avatar_url": "/avatars/739c42c7228e80aec90e6cecf5927e0dfb9612775c94185b9fd6b63c85782fe0.png",
@@ -318,6 +339,7 @@
     "id": "47f8bfb3-d5d1-4bbe-aed3-7ade50bf0c35",
     "data": {
       "resident_name": "Simon Rosenbaum-Jakubowski",
+      "gender": "male",
       "facility_id": "GYRH1337",
       "room_no": "4B",
       "avatar_url": "/avatars/540b65f85db94a9dada57150330a58db2041a3040ceed7bb71515775d51d3891.png",
@@ -333,6 +355,7 @@
     "id": "d283e83f-9b22-406c-b5e1-4cc7efb4947a",
     "data": {
       "resident_name": "Harvey Thiel",
+      "gender": "male",
       "facility_id": "GYRH1331",
       "room_no": "2D",
       "avatar_url": "/avatars/f98e3d55805ba361195680459a6c7c2f94494e526b021872be7ecb0997dca7fd.png",
@@ -348,6 +371,7 @@
     "id": "dbcd58a3-0bb2-4b07-ba74-b5c19561f86b",
     "data": {
       "resident_name": "Carolyn Larson",
+      "gender": "female",
       "facility_id": "GYRH1126",
       "room_no": "203",
       "avatar_url": "/avatars/83af69c5b4c85efe72a8c022ba74e1ad320103e17c9524cb5a4bed70caa6aedd.png",
@@ -363,6 +387,7 @@
     "id": "4abc5ea1-ea6a-4ac4-a354-c0c4e4dd89ac",
     "data": {
       "resident_name": "Otis Pfannerstill",
+      "gender": "male",
       "facility_id": "GYRH1311",
       "room_no": "605",
       "avatar_url": "/avatars/17507d7664868af9ad6b9c367d8238dce92079d6b012ccb085dc623e911b4699.png",
@@ -378,6 +403,7 @@
     "id": "0e6fec0c-5dcd-4636-b469-697633ce5385",
     "data": {
       "resident_name": "Marilyn Abbott",
+      "gender": "female",
       "facility_id": "GYRH1318",
       "room_no": "706",
       "avatar_url": "/avatars/c9d464245851871c56e1500a61a4e3cdaf3be1fce2f8d0ae4d0582be4b0da4c0.png",
@@ -393,6 +419,7 @@
     "id": "eb15a741-a8d7-41fa-8da8-6cad84dbf517",
     "data": {
       "resident_name": "Carl Donnelly",
+      "gender": "male",
       "facility_id": "GYRH1157",
       "room_no": "308",
       "avatar_url": "/avatars/4a939f9a38a1bc11f563c2a714a4aaab06e68bc9439795b046170508e4ec5e07.png",
@@ -408,6 +435,7 @@
     "id": "6392ee3c-acbe-47ef-a598-badc0a3fd17a",
     "data": {
       "resident_name": "Marty Spinka",
+      "gender": "other",
       "facility_id": "GYRH1317",
       "room_no": "705",
       "avatar_url": "/avatars/32e5596f052907968cb6aae86e84ca1d89bf6a4b7f0fefc99f4e54e715dc4943.png",
@@ -423,6 +451,7 @@
     "id": "89f3f7ee-3630-4c12-8344-fed48788064f",
     "data": {
       "resident_name": "April Heller",
+      "gender": "female",
       "facility_id": "GYRH1335",
       "room_no": "3D",
       "avatar_url": "/avatars/3e28ebf911d594249ccf7e2603b6647908c6e51c5e3a3a1d70ec052b8d9347b7.png",
@@ -438,6 +467,7 @@
     "id": "3e36b4df-01ac-45a9-ab76-45570fffa226",
     "data": {
       "resident_name": "Yvonne Howell",
+      "gender": "female",
       "facility_id": "GYRH1167",
       "room_no": "319",
       "avatar_url": "/avatars/0508335f7668bc78771dbd719df2252a30223daba3e3e9078167d8f0c34790e2.png",
@@ -453,6 +483,7 @@
     "id": "a7729195-4ca1-46ec-8fa8-8cf0ad486a14",
     "data": {
       "resident_name": "Mr. Pedro Bauch",
+      "gender": "male",
       "facility_id": "GYRH1190",
       "room_no": "201",
       "avatar_url": "/avatars/87166c2ae96dd7fbd054d84ddd9d9310b5a5970fec716093ca94c50ce1503176.png",
@@ -468,6 +499,7 @@
     "id": "a41e142e-8a3d-4ae5-aa9f-6c89d1aebf5e",
     "data": {
       "resident_name": "Luther Greenfelder",
+      "gender": "male",
       "facility_id": "GYRH1366",
       "room_no": "12D",
       "avatar_url": "/avatars/d55a45edc953050b4717e92fb5749cfd82499fc88195f902bde773e253aab427.png",
@@ -483,6 +515,7 @@
     "id": "0e6fab45-b80a-44c2-936b-82359aa08eb3",
     "data": {
       "resident_name": "Katie Nader",
+      "gender": "female",
       "facility_id": "GYRH1349",
       "room_no": "7B",
       "avatar_url": "/avatars/b2de30ff9dbec8fc58b23dcb60e78a6c001db2eb4df3b90cc7e7c75fa8443843.png",
@@ -498,6 +531,7 @@
     "id": "5a4b4a54-bda5-4b83-87ae-d0a2a8c7deea",
     "data": {
       "resident_name": "Sara Hills",
+      "gender": "female",
       "facility_id": "GYRH1165",
       "room_no": "316",
       "avatar_url": "/avatars/e5f459226a8bd1643a82cd408c8dd454531d5b931eb7c9c5f388b175ea0ea685.png",
@@ -513,6 +547,7 @@
     "id": "ef3a5b6e-a9ee-4107-9200-d0b148be0b19",
     "data": {
       "resident_name": "Louis Brakus",
+      "gender": "male",
       "facility_id": "GYRH1303",
       "room_no": "503",
       "avatar_url": "/avatars/f83e56a7a78d3bfa7f20e86bfdcc0734f3b14be1f8b9734e58e5b590af5364cd.png",
@@ -528,6 +563,7 @@
     "id": "89ece503-1298-4226-bbf6-5b699a5d909e",
     "data": {
       "resident_name": "Aubrey Batz",
+      "gender": "other",
       "facility_id": "GYRH1137",
       "room_no": "214",
       "avatar_url": "/avatars/0a28ded5a789268ec084c31b35054af70b960472af535bd81131c508a62e9e84.png",
@@ -543,6 +579,7 @@
     "id": "c23c7720-b76a-402c-bb74-316f49819b55",
     "data": {
       "resident_name": "Allen Kunde II",
+      "gender": "male",
       "facility_id": "GYRH1280",
       "room_no": "601",
       "avatar_url": "/avatars/84200e670dce97636ade02e7563e91dec072fce84857930ee6cf07f0b68e8171.png",
@@ -558,6 +595,7 @@
     "id": "14601ae1-9d14-4a70-9c7c-dc21784fffe4",
     "data": {
       "resident_name": "Joshua O'Reilly",
+      "gender": "male",
       "facility_id": "GYRH1235",
       "room_no": "321",
       "avatar_url": "/avatars/8abe1769e123465fff145477436ee447b8ace18c6ee5db565a09d1fb0384e493.png",
@@ -573,6 +611,7 @@
     "id": "6d59ca51-b89d-420e-8cdf-1ad75191d20f",
     "data": {
       "resident_name": "Boyd Nader",
+      "gender": "male",
       "facility_id": "GYRH1363",
       "room_no": "12A",
       "avatar_url": "/avatars/0db7951c58ec1375db1b788e480d13b7f8b5b28cf082fe812d64e6db8ef58710.png",
@@ -588,6 +627,7 @@
     "id": "1ede394b-d1ca-4652-9ed8-fe6bf3ac23c5",
     "data": {
       "resident_name": "Jana Stroman",
+      "gender": "female",
       "facility_id": "GYRH1328",
       "room_no": "2A",
       "avatar_url": "/avatars/4f27c7b0cb4e73f83210a29f7835e3575355583ceac39aa988b77baa93affd04.png",
@@ -603,6 +643,7 @@
     "id": "fd7208ba-2b4f-4ffc-b127-a6ef2e123fc5",
     "data": {
       "resident_name": "Aubrey Conroy",
+      "gender": "other",
       "facility_id": "GYRH1355",
       "room_no": "9A",
       "avatar_url": "/avatars/af8fec787dbf289c6b60bbbfc5f23fdeadd3e19ca7cd42ea6f153c04eb326854.png",
@@ -618,6 +659,7 @@
     "id": "adb2fb62-6ace-4629-9186-55bd92d1863e",
     "data": {
       "resident_name": "Kyle Lockman",
+      "gender": "male",
       "facility_id": "GYRH1265",
       "room_no": "506",
       "avatar_url": "/avatars/005468bdd4305e48c65371a0ca366e782ac1d0124a79d64d37854f91bda42b2a.png",
@@ -633,6 +675,7 @@
     "id": "6e595fea-e43a-494b-bd60-e864926e65f9",
     "data": {
       "resident_name": "Adrian Stroman",
+      "gender": "other",
       "facility_id": "GYRH1152",
       "room_no": "303",
       "avatar_url": "/avatars/b4d00cebe121959e86276ca85e3fc90913978128076411ca873fbf52fb71556e.png",
@@ -648,6 +691,7 @@
     "id": "09fddcb1-f404-462a-9473-1c6f38c7bb16",
     "data": {
       "resident_name": "Rudy Stroman",
+      "gender": "male",
       "facility_id": "GYRH1208",
       "room_no": "219",
       "avatar_url": "/avatars/214e8529c4b6c9f029e1f06b45191b559d8d25be462aa717622ba606fa24998a.png",
@@ -663,6 +707,7 @@
     "id": "274b866e-aacc-4622-8b62-cef60b117dab",
     "data": {
       "resident_name": "Dr. Myrtle Nicolas",
+      "gender": "female",
       "facility_id": "GYRH1279",
       "room_no": "120",
       "avatar_url": "/avatars/084f08fd03ccb03a3415c473a0056ea0b8801d085cfa9e379eb17e349a1fd966.png",
@@ -678,6 +723,7 @@
     "id": "1d9cf7c8-72d6-4413-a7fb-ece4d5a56d76",
     "data": {
       "resident_name": "Gerald Bartell Sr.",
+      "gender": "male",
       "facility_id": "GYRH1333",
       "room_no": "3B",
       "avatar_url": "/avatars/f6ef57e74ab7d7f9c75db5d6e6e4a0c1636231a394f072be7b0532cd0083a7f8.png",
@@ -693,6 +739,7 @@
     "id": "d3a284c6-b788-4e5c-9182-7097f416862e",
     "data": {
       "resident_name": "Frederick Kunze",
+      "gender": "male",
       "facility_id": "GYRH1230",
       "room_no": "316",
       "avatar_url": "/avatars/e80a027442e7aa33564b6987c228bc001a819b18f7de079060482ff4e198be45.png",
@@ -708,6 +755,7 @@
     "id": "db0cb954-b91c-4080-8f60-e82527593ca4",
     "data": {
       "resident_name": "Mona Padberg",
+      "gender": "female",
       "facility_id": "GYRH1315",
       "room_no": "703",
       "avatar_url": "/avatars/209a1b8de64178d0a65217c9f8abece353b1f35ca0e568500cd2fcd4d323f899.png",
@@ -723,6 +771,7 @@
     "id": "c6ab3eba-18e3-4659-bad6-26a4752793d4",
     "data": {
       "resident_name": "Olivia Mann",
+      "gender": "female",
       "facility_id": "GYRH1101",
       "room_no": "101",
       "avatar_url": "/avatars/7c064bad7e48eb31ae9cedcb5edda31a400ce805c418bb2b30e3ce347e63e362.png",
@@ -738,6 +787,7 @@
     "id": "395e74d0-42ce-47b7-90c0-565d74ced080",
     "data": {
       "resident_name": "Barry Blanda I",
+      "gender": "male",
       "facility_id": "GYRH1120",
       "room_no": "121",
       "avatar_url": "/avatars/28b2d6c8e065a398fa0a623e7d52bbef35d6b026690443f8d63a22bcfdea2436.png",
@@ -753,6 +803,7 @@
     "id": "95c9f435-7658-4fa4-a103-9153810229ab",
     "data": {
       "resident_name": "Van Feil III",
+      "gender": "male",
       "facility_id": "GYRH1174",
       "room_no": "328",
       "avatar_url": "/avatars/d7c7168f1593246591d41d69088b6c38f8cca510c4b064857a045249107a9ffc.png",
@@ -768,6 +819,7 @@
     "id": "c543c599-2a70-468f-9e83-9c0ac000502f",
     "data": {
       "resident_name": "Corey Skiles",
+      "gender": "other",
       "facility_id": "GYRH1370",
       "room_no": "13D",
       "avatar_url": "/avatars/070d454ae388689f959e2cf4c0d508ae2cae5da6510e8902a5692a84e536c97e.png",
@@ -783,6 +835,7 @@
     "id": "536bfc40-2b22-467d-9b3a-4bf3a594147e",
     "data": {
       "resident_name": "Mr. Ken Swift-Kautzer",
+      "gender": "male",
       "facility_id": "GYRH1178",
       "room_no": "332",
       "avatar_url": "/avatars/28367ed36017d7f3dc769b1b5fc45311d8a8798285f25c717400591bd82fc878.png",
@@ -798,6 +851,7 @@
     "id": "4bb90784-310d-4cc0-9dcb-4866f031932b",
     "data": {
       "resident_name": "Lee Turner",
+      "gender": "other",
       "facility_id": "GYRH1290",
       "room_no": "301",
       "avatar_url": "/avatars/28c11069741a0274d023aae12b016f692fd4fb9389c0329995fe77482a933d6e.png",
@@ -813,6 +867,7 @@
     "id": "2370f81f-e769-4b74-81ae-6433d49ac7e0",
     "data": {
       "resident_name": "Beulah Haley",
+      "gender": "female",
       "facility_id": "GYRH1329",
       "room_no": "2B",
       "avatar_url": "/avatars/8b8729d6158b61ea2bbcfe1858a9edc3b81d3551e727ebd24e8a17f8e136eeeb.png",
@@ -828,6 +883,7 @@
     "id": "ea159fb4-387b-458a-9f63-1534579399f0",
     "data": {
       "resident_name": "Sammy Pfannerstill",
+      "gender": "other",
       "facility_id": "GYRH1194",
       "room_no": "205",
       "avatar_url": "/avatars/bf6e0969c5bdc7334bef268a3d2d71aa557cc1fdb437d6d7dabbc9e762f78bfa.png",
@@ -843,6 +899,7 @@
     "id": "86bb4852-6f6b-41e9-9828-6118bcb8f565",
     "data": {
       "resident_name": "Kelly Schneider",
+      "gender": "other",
       "facility_id": "GYRH1375",
       "room_no": "15B",
       "avatar_url": "/avatars/fddc4728ccc6edcbaa9db9ccb55d641cc3354f7b00b1b5e0dacb6cfabf60e3c7.png",
@@ -858,6 +915,7 @@
     "id": "4f650040-0eae-4540-a87e-8b444e3c881e",
     "data": {
       "resident_name": "Henry Veum DDS",
+      "gender": "male",
       "facility_id": "GYRH1226",
       "room_no": "312",
       "avatar_url": "/avatars/20a9a81e0a6a844173946b1311a5e6152bdbe46f914a0a7731a67042481e30af.png",
@@ -873,6 +931,7 @@
     "id": "3cb70a4d-a2dd-4c22-a286-ea6937063b79",
     "data": {
       "resident_name": "Noah Casper",
+      "gender": "male",
       "facility_id": "GYRH1238",
       "room_no": "402",
       "avatar_url": "/avatars/96f5642d0427d030c5a05b48d78ee84044ee966962579a6930f627443aeeedbc.png",
@@ -888,6 +947,7 @@
     "id": "775f7fb3-e2ac-4989-b4d8-9c63d1819a15",
     "data": {
       "resident_name": "Johnathan Haag",
+      "gender": "male",
       "facility_id": "GYRH1183",
       "room_no": "106",
       "avatar_url": "/avatars/b1166433e0595c29e309caf815d6982cc3f9968755270f679411fd835cdb9683.png",
@@ -903,6 +963,7 @@
     "id": "a5258c6e-18ce-454c-aa37-bbd54288bb6a",
     "data": {
       "resident_name": "Mae Prohaska",
+      "gender": "female",
       "facility_id": "GYRH1102",
       "room_no": "102",
       "avatar_url": "/avatars/9a27986d6f1c2af03971594d6f3612a0c08f00a1213f79c77e8213a3bfb0ac8f.png",
@@ -918,6 +979,7 @@
     "id": "49cae88b-5cca-4c23-8b01-90ff6b85f5bd",
     "data": {
       "resident_name": "Laurie Jacobson",
+      "gender": "female",
       "facility_id": "GYRH1289",
       "room_no": "616",
       "avatar_url": "/avatars/c877753a4296837b247775dc2db87e4c08131cf473edf0c88664727e88fe5033.png",
@@ -933,6 +995,7 @@
     "id": "aa9ed249-62ba-4f87-b65d-262f8c256a41",
     "data": {
       "resident_name": "Dr. Winston Bergstrom I",
+      "gender": "male",
       "facility_id": "GYRH1129",
       "room_no": "206",
       "avatar_url": "/avatars/765812ab046458556db2f76dc685716d370445f808e7960de2936158d8155888.png",
@@ -948,6 +1011,7 @@
     "id": "ee3357dc-540d-4c83-a04c-0213aac2d805",
     "data": {
       "resident_name": "Kyle Treutel-Willms PhD",
+      "gender": "male",
       "facility_id": "GYRH1239",
       "room_no": "403",
       "avatar_url": "/avatars/4b5da1401d5e3eb16b4db8e831d006463a030a9c653c49f0f0eee60f56a5774f.png",
@@ -963,6 +1027,7 @@
     "id": "4a3f79bd-b9af-45ce-919f-d24ac4624598",
     "data": {
       "resident_name": "Mr. Conrad Larkin",
+      "gender": "male",
       "facility_id": "GYRH1202",
       "room_no": "213",
       "avatar_url": "/avatars/01e8a3975c66d6c016afb46f5bf726cc695d471273da2b0d1596cee062735d41.png",
@@ -978,6 +1043,7 @@
     "id": "e71fd68b-1979-40a6-89e8-d3e2ac8fd935",
     "data": {
       "resident_name": "Ron Marquardt",
+      "gender": "male",
       "facility_id": "GYRH1325",
       "room_no": "807",
       "avatar_url": "/avatars/6b31f10096d6f5e3d8225048525ee511f170c668f3478a04a5d72d2b791920d2.png",
@@ -993,6 +1059,7 @@
     "id": "bbd080fa-b1dc-4570-a3bb-27e78119795b",
     "data": {
       "resident_name": "Harold Rogahn",
+      "gender": "male",
       "facility_id": "GYRH1252",
       "room_no": "416",
       "avatar_url": "/avatars/b3689388cb7bc1372b06e53357a6a9c3d1c4bc46798ea12b8b2be08c0a995bb1.png",
@@ -1008,6 +1075,7 @@
     "id": "cfef5206-ffe4-4077-9897-d16ef9458a3a",
     "data": {
       "resident_name": "Kendra Rice",
+      "gender": "female",
       "facility_id": "GYRH1342",
       "room_no": "5C",
       "avatar_url": "/avatars/c32ed430a656bc38e10838af4f6f33ebecb075ee5ac7ad048b0faeb4ec99bb4a.png",
@@ -1023,6 +1091,7 @@
     "id": "4fdc834f-3173-428e-ad78-a150edf21434",
     "data": {
       "resident_name": "Henrietta Rowe",
+      "gender": "female",
       "facility_id": "GYRH1307",
       "room_no": "601",
       "avatar_url": "/avatars/8eae673873198bf3ec831e94e3af876d9453dac1668cff2a917bbc66f221ce05.png",
@@ -1038,6 +1107,7 @@
     "id": "e9e31f7a-132a-4e63-ab70-474d87839404",
     "data": {
       "resident_name": "Carl DuBuque",
+      "gender": "male",
       "facility_id": "GYRH1316",
       "room_no": "704",
       "avatar_url": "/avatars/7e60858c981297f0a7ce45a34f6e049533f6eb1faf672192ce0b9c056211af49.png",
@@ -1053,6 +1123,7 @@
     "id": "d1d1003a-c9a5-4842-b595-0394362d1733",
     "data": {
       "resident_name": "Emily Boyle",
+      "gender": "female",
       "facility_id": "GYRH1253",
       "room_no": "417",
       "avatar_url": "/avatars/37de3f5a7b27cb6943d49217876a2a2f256866f9308a4643da1d3caa3507b37d.png",
@@ -1068,6 +1139,7 @@
     "id": "7070fbcd-caab-4c15-9d8a-3f054179e782",
     "data": {
       "resident_name": "Kathy Hansen",
+      "gender": "female",
       "facility_id": "GYRH1134",
       "room_no": "211",
       "avatar_url": "/avatars/df0a75e853ee30443a17764b78ec80819afb9a61220555ed796c5510869a667b.png",
@@ -1083,6 +1155,7 @@
     "id": "82e3f812-ade4-4701-ab0b-1bb920bbafc7",
     "data": {
       "resident_name": "Shari Stokes",
+      "gender": "female",
       "facility_id": "GYRH1211",
       "room_no": "222",
       "avatar_url": "/avatars/e2e0ab27835faad4e4f9fbb776545493ce470bdf992afac3f2e92fa511ee78c6.png",
@@ -1098,6 +1171,7 @@
     "id": "1b9783a5-3d72-44ac-93ba-93bf9dc2dfce",
     "data": {
       "resident_name": "Ms. Sherry Steuber",
+      "gender": "female",
       "facility_id": "GYRH1338",
       "room_no": "4C",
       "avatar_url": "/avatars/a2120afb5efbc3e57c2984e9f100dd7f615686eb0e20e4bbeb16220a12743642.png",
@@ -1113,6 +1187,7 @@
     "id": "3a2cb053-cfb8-4fa8-baf4-7a728f775627",
     "data": {
       "resident_name": "Kent Davis",
+      "gender": "male",
       "facility_id": "GYRH1136",
       "room_no": "213",
       "avatar_url": "/avatars/9cc9ce31242cba554f17c6cf73986572bf89a93185fc0ad687a7d29b34628614.png",
@@ -1128,6 +1203,7 @@
     "id": "36b1d0b9-6e92-4ce4-be45-5769303200ee",
     "data": {
       "resident_name": "Rogelio Torphy",
+      "gender": "male",
       "facility_id": "GYRH1133",
       "room_no": "210",
       "avatar_url": "/avatars/bbd4f8a843932922a4548f8e1f25f30cd1ca3e59353d06b224a1e6f556091742.png",
@@ -1143,6 +1219,7 @@
     "id": "84544b7f-dfb3-4456-8081-7f985ce4ac1a",
     "data": {
       "resident_name": "Margie Ratke",
+      "gender": "female",
       "facility_id": "GYRH1334",
       "room_no": "3C",
       "avatar_url": "/avatars/87bcf21e56566312731fdfb4d08ce5fed1bda80055f9144804cfc14030d8beed.png",
@@ -1158,6 +1235,7 @@
     "id": "2ab9a786-fefd-4631-b0ac-4ae421fc7aca",
     "data": {
       "resident_name": "Moses Reynolds",
+      "gender": "male",
       "facility_id": "GYRH1177",
       "room_no": "331",
       "avatar_url": "/avatars/eaefe544bd2948f22e4f55dd3834951aed28d470db9fd69c8044f4e75076a54f.png",
@@ -1173,6 +1251,7 @@
     "id": "4c4bc0f1-6fdb-4e9d-9c32-b477d5e3ddac",
     "data": {
       "resident_name": "Marian O'Connell-Stamm IV",
+      "gender": "female",
       "facility_id": "GYRH1108",
       "room_no": "108",
       "avatar_url": "/avatars/b36ec627465dd62bfd69ceda3facb2a5c7163b2ef7a4af4133ee49c916aa82e3.png",
@@ -1188,6 +1267,7 @@
     "id": "656c5012-8059-453e-96cb-cc054ac60c7f",
     "data": {
       "resident_name": "Lorena Hermiston II",
+      "gender": "female",
       "facility_id": "GYRH1270",
       "room_no": "515",
       "avatar_url": "/avatars/b7fa0a03d2d51954f47e876258395fb2dc6bd0a3886d810075ec8502c43ff5a7.png",
@@ -1203,6 +1283,7 @@
     "id": "03ef989d-a8fa-4685-a42d-c963c8ed89ab",
     "data": {
       "resident_name": "Minnie Romaguera",
+      "gender": "female",
       "facility_id": "GYRH1313",
       "room_no": "701",
       "avatar_url": "/avatars/d521fe98063c5af624831ea93142be2e375e79aeb4bb2248dccf008499dee25a.png",
@@ -1218,6 +1299,7 @@
     "id": "ea0b8cd8-b347-4438-bfe8-87b8c1c04d4a",
     "data": {
       "resident_name": "Myra O'Reilly",
+      "gender": "female",
       "facility_id": "GYRH1254",
       "room_no": "418",
       "avatar_url": "/avatars/1f2a51ea63d597fac4bba05941ffcb462f4318191383cd649baacbf264480003.png",
@@ -1233,6 +1315,7 @@
     "id": "2d8744b3-30c9-470a-b69f-1524a8f1f2cc",
     "data": {
       "resident_name": "Edna Zemlak",
+      "gender": "female",
       "facility_id": "GYRH1146",
       "room_no": "223",
       "avatar_url": "/avatars/e612399dd20d4a0198c4793753b22409c6fe54f55f63eb1d9839199284b24baf.png",
@@ -1248,6 +1331,7 @@
     "id": "23c79137-726e-48fc-966b-fa1e3ddb1ff7",
     "data": {
       "resident_name": "Della Cruickshank",
+      "gender": "female",
       "facility_id": "GYRH1294",
       "room_no": "305",
       "avatar_url": "/avatars/66d87e3fb1357f5a2f2994d3d2bce72abf81427b43fedc88bdc605a08be53835.png",
@@ -1263,6 +1347,7 @@
     "id": "850babaf-3187-4961-9018-03a0d9de7680",
     "data": {
       "resident_name": "Floyd Gutmann",
+      "gender": "male",
       "facility_id": "GYRH1291",
       "room_no": "302",
       "avatar_url": "/avatars/deb35cab30a234135683b065ae23e63c691302e3598e736e15f19077bc1450d1.png",
@@ -1278,6 +1363,7 @@
     "id": "ef895a25-7b81-44ea-abb4-0b9342112033",
     "data": {
       "resident_name": "Shelia Beer",
+      "gender": "female",
       "facility_id": "GYRH1330",
       "room_no": "2C",
       "avatar_url": "/avatars/e7c988fd4e37775b7132186292a1e3ab537b7e3e2bfb36daca9a5635b368ab0a.png",
@@ -1293,6 +1379,7 @@
     "id": "5af3676c-60bc-4025-9bbb-93ed39374cbc",
     "data": {
       "resident_name": "Faith Cartwright",
+      "gender": "female",
       "facility_id": "GYRH1173",
       "room_no": "327",
       "avatar_url": "/avatars/ab500d2f1bb2558038d0fe5c2e9dd79dc90e5e8de0e238aa27261aed8dee8400.png",
@@ -1308,6 +1395,7 @@
     "id": "88410e36-90b1-45ae-8679-129acf2f1220",
     "data": {
       "resident_name": "Jason Klein",
+      "gender": "male",
       "facility_id": "GYRH1267",
       "room_no": "512",
       "avatar_url": "/avatars/c294406b547221bb705912617f21c65546ae6929607c2dbbb7b051a35a581f23.png",
@@ -1323,6 +1411,7 @@
     "id": "94e83d71-6229-48f7-b49d-a000125a325e",
     "data": {
       "resident_name": "Roy Zemlak",
+      "gender": "male",
       "facility_id": "GYRH1264",
       "room_no": "505",
       "avatar_url": "/avatars/92a081459c30a71fd8e8582129c4f53ecca7dd38d91b373c28b73a3c9795fe08.png",
@@ -1346,7 +1435,8 @@
       "resident_email": "Dr.Victor100@hotmail.com",
       "cell_phone": "(258) 980-7312",
       "work_phone": "(637) 443-2961",
-      "home_phone": "(821) 621-5061"
+      "home_phone": "(821) 621-5061",
+      "gender": "male"
     }
   },
   {
@@ -1361,7 +1451,8 @@
       "resident_email": "RosaBeatty100@hotmail.com",
       "cell_phone": "(637) 443-2961",
       "work_phone": "(821) 621-5061",
-      "home_phone": "(944) 766-2845"
+      "home_phone": "(944) 766-2845",
+      "gender": "female"
     }
   },
   {
@@ -1376,7 +1467,8 @@
       "resident_email": "RexTremblay100@hotmail.com",
       "cell_phone": "(821) 621-5061",
       "work_phone": "(944) 766-2845",
-      "home_phone": "(543) 574-3683"
+      "home_phone": "(543) 574-3683",
+      "gender": "male"
     }
   },
   {
@@ -1391,7 +1483,8 @@
       "resident_email": "BobbieHegmann100@hotmail.com",
       "cell_phone": "(944) 766-2845",
       "work_phone": "(543) 574-3683",
-      "home_phone": "(377) 714-4279"
+      "home_phone": "(377) 714-4279",
+      "gender": "male"
     }
   },
   {
@@ -1406,7 +1499,8 @@
       "resident_email": "NatashaHarvey100@hotmail.com",
       "cell_phone": "(543) 574-3683",
       "work_phone": "(377) 714-4279",
-      "home_phone": "(772) 504-8122"
+      "home_phone": "(772) 504-8122",
+      "gender": "female"
     }
   },
   {
@@ -1421,7 +1515,8 @@
       "resident_email": "ChadBauch100@hotmail.com",
       "cell_phone": "(377) 714-4279",
       "work_phone": "(772) 504-8122",
-      "home_phone": "(239) 733-9104"
+      "home_phone": "(239) 733-9104",
+      "gender": "female"
     }
   },
   {
@@ -1436,7 +1531,8 @@
       "resident_email": "Dr.Simon100@hotmail.com",
       "cell_phone": "(772) 504-8122",
       "work_phone": "(239) 733-9104",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -1451,7 +1547,8 @@
       "resident_email": "EdwardWintheiser100@hotmail.com",
       "cell_phone": "(239) 733-9104",
       "work_phone": null,
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -1466,7 +1563,8 @@
       "resident_email": "LynnFeeney100@hotmail.com",
       "cell_phone": null,
       "work_phone": null,
-      "home_phone": "(625) 852-9258"
+      "home_phone": "(625) 852-9258",
+      "gender": "other"
     }
   },
   {
@@ -1481,7 +1579,8 @@
       "resident_email": "YolandaBartoletti-Fahey100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(625) 852-9258",
-      "home_phone": "(980) 442-2923"
+      "home_phone": "(980) 442-2923",
+      "gender": "male"
     }
   },
   {
@@ -1496,7 +1595,8 @@
       "resident_email": "BenHartmann100@hotmail.com",
       "cell_phone": "(625) 852-9258",
       "work_phone": "(980) 442-2923",
-      "home_phone": "(206) 526-9632"
+      "home_phone": "(206) 526-9632",
+      "gender": "other"
     }
   },
   {
@@ -1511,7 +1611,8 @@
       "resident_email": "WillardKoss100@hotmail.com",
       "cell_phone": "(980) 442-2923",
       "work_phone": "(206) 526-9632",
-      "home_phone": "(336) 542-8073"
+      "home_phone": "(336) 542-8073",
+      "gender": "male"
     }
   },
   {
@@ -1526,7 +1627,8 @@
       "resident_email": "PamFritsch100@hotmail.com",
       "cell_phone": "(206) 526-9632",
       "work_phone": "(336) 542-8073",
-      "home_phone": "(317) 352-7288"
+      "home_phone": "(317) 352-7288",
+      "gender": "male"
     }
   },
   {
@@ -1541,7 +1643,8 @@
       "resident_email": "Mrs.Cecilia100@hotmail.com",
       "cell_phone": "(336) 542-8073",
       "work_phone": "(317) 352-7288",
-      "home_phone": "(988) 486-1201"
+      "home_phone": "(988) 486-1201",
+      "gender": "other"
     }
   },
   {
@@ -1556,7 +1659,8 @@
       "resident_email": "ShermanKeebler100@hotmail.com",
       "cell_phone": "(317) 352-7288",
       "work_phone": "(988) 486-1201",
-      "home_phone": "(627) 280-7820"
+      "home_phone": "(627) 280-7820",
+      "gender": "female"
     }
   },
   {
@@ -1571,7 +1675,8 @@
       "resident_email": "LynnSwift100@hotmail.com",
       "cell_phone": "(988) 486-1201",
       "work_phone": "(627) 280-7820",
-      "home_phone": "(444) 516-6097"
+      "home_phone": "(444) 516-6097",
+      "gender": "other"
     }
   },
   {
@@ -1586,7 +1691,8 @@
       "resident_email": "DaveKohler100@hotmail.com",
       "cell_phone": "(627) 280-7820",
       "work_phone": "(444) 516-6097",
-      "home_phone": "(343) 987-9535"
+      "home_phone": "(343) 987-9535",
+      "gender": "male"
     }
   },
   {
@@ -1601,7 +1707,8 @@
       "resident_email": "NaomiLebsack100@hotmail.com",
       "cell_phone": "(444) 516-6097",
       "work_phone": "(343) 987-9535",
-      "home_phone": "(710) 769-9358"
+      "home_phone": "(710) 769-9358",
+      "gender": "other"
     }
   },
   {
@@ -1616,7 +1723,8 @@
       "resident_email": "MarianWillms100@hotmail.com",
       "cell_phone": "(343) 987-9535",
       "work_phone": "(710) 769-9358",
-      "home_phone": "(498) 984-6744"
+      "home_phone": "(498) 984-6744",
+      "gender": "female"
     }
   },
   {
@@ -1631,7 +1739,8 @@
       "resident_email": "EdmundSchimmel100@hotmail.com",
       "cell_phone": "(710) 769-9358",
       "work_phone": "(498) 984-6744",
-      "home_phone": "(355) 931-8746"
+      "home_phone": "(355) 931-8746",
+      "gender": "other"
     }
   },
   {
@@ -1646,7 +1755,8 @@
       "resident_email": "ClaraStehr100@hotmail.com",
       "cell_phone": "(498) 984-6744",
       "work_phone": "(355) 931-8746",
-      "home_phone": "(900) 251-2510"
+      "home_phone": "(900) 251-2510",
+      "gender": "other"
     }
   },
   {
@@ -1661,7 +1771,8 @@
       "resident_email": "Ms.Mamie100@hotmail.com",
       "cell_phone": "(355) 931-8746",
       "work_phone": "(900) 251-2510",
-      "home_phone": "(990) 970-2988"
+      "home_phone": "(990) 970-2988",
+      "gender": "female"
     }
   },
   {
@@ -1676,7 +1787,8 @@
       "resident_email": "BradfordKassulke100@hotmail.com",
       "cell_phone": "(900) 251-2510",
       "work_phone": "(990) 970-2988",
-      "home_phone": "(607) 791-2164"
+      "home_phone": "(607) 791-2164",
+      "gender": "other"
     }
   },
   {
@@ -1691,7 +1803,8 @@
       "resident_email": "SheldonRice100@hotmail.com",
       "cell_phone": "(990) 970-2988",
       "work_phone": "(607) 791-2164",
-      "home_phone": "(964) 206-5160"
+      "home_phone": "(964) 206-5160",
+      "gender": "male"
     }
   },
   {
@@ -1706,7 +1819,8 @@
       "resident_email": "MissLola100@hotmail.com",
       "cell_phone": "(607) 791-2164",
       "work_phone": "(964) 206-5160",
-      "home_phone": "(876) 997-3506"
+      "home_phone": "(876) 997-3506",
+      "gender": "male"
     }
   },
   {
@@ -1721,7 +1835,8 @@
       "resident_email": "JuanMonahan100@hotmail.com",
       "cell_phone": "(964) 206-5160",
       "work_phone": "(876) 997-3506",
-      "home_phone": "(867) 335-5654"
+      "home_phone": "(867) 335-5654",
+      "gender": "female"
     }
   },
   {
@@ -1736,7 +1851,8 @@
       "resident_email": "ElaineDibbert100@hotmail.com",
       "cell_phone": "(876) 997-3506",
       "work_phone": "(867) 335-5654",
-      "home_phone": "(234) 729-9637"
+      "home_phone": "(234) 729-9637",
+      "gender": "female"
     }
   },
   {
@@ -1751,7 +1867,8 @@
       "resident_email": "JoelLakin100@hotmail.com",
       "cell_phone": "(867) 335-5654",
       "work_phone": "(234) 729-9637",
-      "home_phone": "(374) 869-9627"
+      "home_phone": "(374) 869-9627",
+      "gender": "female"
     }
   },
   {
@@ -1766,7 +1883,8 @@
       "resident_email": "VictorHayes100@hotmail.com",
       "cell_phone": "(234) 729-9637",
       "work_phone": "(374) 869-9627",
-      "home_phone": "(300) 781-1502"
+      "home_phone": "(300) 781-1502",
+      "gender": "other"
     }
   },
   {
@@ -1781,7 +1899,8 @@
       "resident_email": "PamelaSporer-Purdy100@hotmail.com",
       "cell_phone": "(374) 869-9627",
       "work_phone": "(300) 781-1502",
-      "home_phone": "(647) 503-8519"
+      "home_phone": "(647) 503-8519",
+      "gender": "other"
     }
   },
   {
@@ -1796,7 +1915,8 @@
       "resident_email": "PeterKihn100@hotmail.com",
       "cell_phone": "(300) 781-1502",
       "work_phone": "(647) 503-8519",
-      "home_phone": "(355) 866-0824"
+      "home_phone": "(355) 866-0824",
+      "gender": "male"
     }
   },
   {
@@ -1811,7 +1931,8 @@
       "resident_email": "JuanaPfeffer100@hotmail.com",
       "cell_phone": "(647) 503-8519",
       "work_phone": "(355) 866-0824",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -1826,7 +1947,8 @@
       "resident_email": "DexterOrn100@hotmail.com",
       "cell_phone": "(355) 866-0824",
       "work_phone": null,
-      "home_phone": "(733) 471-0953"
+      "home_phone": "(733) 471-0953",
+      "gender": "female"
     }
   },
   {
@@ -1841,7 +1963,8 @@
       "resident_email": "Dr.Clark100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(733) 471-0953",
-      "home_phone": "(546) 715-5431"
+      "home_phone": "(546) 715-5431",
+      "gender": "male"
     }
   },
   {
@@ -1856,7 +1979,8 @@
       "resident_email": "DouglasOberbrunner100@hotmail.com",
       "cell_phone": "(733) 471-0953",
       "work_phone": "(546) 715-5431",
-      "home_phone": "(260) 229-9034"
+      "home_phone": "(260) 229-9034",
+      "gender": "male"
     }
   },
   {
@@ -1871,7 +1995,8 @@
       "resident_email": "GregoryKessler100@hotmail.com",
       "cell_phone": "(546) 715-5431",
       "work_phone": "(260) 229-9034",
-      "home_phone": "(232) 353-7863"
+      "home_phone": "(232) 353-7863",
+      "gender": "female"
     }
   },
   {
@@ -1886,7 +2011,8 @@
       "resident_email": "ErnestHand100@hotmail.com",
       "cell_phone": "(260) 229-9034",
       "work_phone": "(232) 353-7863",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -1901,7 +2027,8 @@
       "resident_email": "RomanStark100@hotmail.com",
       "cell_phone": "(232) 353-7863",
       "work_phone": null,
-      "home_phone": "(243) 602-4708"
+      "home_phone": "(243) 602-4708",
+      "gender": "male"
     }
   },
   {
@@ -1916,7 +2043,8 @@
       "resident_email": "ClarenceWalsh100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(243) 602-4708",
-      "home_phone": "(337) 907-8057"
+      "home_phone": "(337) 907-8057",
+      "gender": "other"
     }
   },
   {
@@ -1931,7 +2059,8 @@
       "resident_email": "NealSchmitt100@hotmail.com",
       "cell_phone": "(243) 602-4708",
       "work_phone": "(337) 907-8057",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -1946,7 +2075,8 @@
       "resident_email": "KelvinCormier100@hotmail.com",
       "cell_phone": "(337) 907-8057",
       "work_phone": null,
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -1961,7 +2091,8 @@
       "resident_email": "FlorenceDach100@hotmail.com",
       "cell_phone": null,
       "work_phone": null,
-      "home_phone": "(751) 974-2785"
+      "home_phone": "(751) 974-2785",
+      "gender": "male"
     }
   },
   {
@@ -1976,7 +2107,8 @@
       "resident_email": "Mr.Irving100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(751) 974-2785",
-      "home_phone": "(589) 783-0085"
+      "home_phone": "(589) 783-0085",
+      "gender": "other"
     }
   },
   {
@@ -1991,7 +2123,8 @@
       "resident_email": "DorothyKunde100@hotmail.com",
       "cell_phone": "(751) 974-2785",
       "work_phone": "(589) 783-0085",
-      "home_phone": "(569) 619-6070"
+      "home_phone": "(569) 619-6070",
+      "gender": "other"
     }
   },
   {
@@ -2006,7 +2139,8 @@
       "resident_email": "CrystalQuigley100@hotmail.com",
       "cell_phone": "(589) 783-0085",
       "work_phone": "(569) 619-6070",
-      "home_phone": "(634) 854-3057"
+      "home_phone": "(634) 854-3057",
+      "gender": "female"
     }
   },
   {
@@ -2021,7 +2155,8 @@
       "resident_email": "TraceySchoen100@hotmail.com",
       "cell_phone": "(569) 619-6070",
       "work_phone": "(634) 854-3057",
-      "home_phone": "(286) 924-3698"
+      "home_phone": "(286) 924-3698",
+      "gender": "other"
     }
   },
   {
@@ -2036,7 +2171,8 @@
       "resident_email": "ShirleyStehr100@hotmail.com",
       "cell_phone": "(634) 854-3057",
       "work_phone": "(286) 924-3698",
-      "home_phone": "(448) 910-5884"
+      "home_phone": "(448) 910-5884",
+      "gender": "other"
     }
   },
   {
@@ -2051,7 +2187,8 @@
       "resident_email": "Mr.Alexander100@hotmail.com",
       "cell_phone": "(286) 924-3698",
       "work_phone": "(448) 910-5884",
-      "home_phone": "(602) 792-8859"
+      "home_phone": "(602) 792-8859",
+      "gender": "male"
     }
   },
   {
@@ -2066,7 +2203,8 @@
       "resident_email": "DalePowlowski100@hotmail.com",
       "cell_phone": "(448) 910-5884",
       "work_phone": "(602) 792-8859",
-      "home_phone": "(481) 492-0885"
+      "home_phone": "(481) 492-0885",
+      "gender": "other"
     }
   },
   {
@@ -2081,7 +2219,8 @@
       "resident_email": "IsabelCartwright100@hotmail.com",
       "cell_phone": "(602) 792-8859",
       "work_phone": "(481) 492-0885",
-      "home_phone": "(590) 419-8751"
+      "home_phone": "(590) 419-8751",
+      "gender": "male"
     }
   },
   {
@@ -2096,7 +2235,8 @@
       "resident_email": "BlancheJerde100@hotmail.com",
       "cell_phone": "(481) 492-0885",
       "work_phone": "(590) 419-8751",
-      "home_phone": "(627) 806-7974"
+      "home_phone": "(627) 806-7974",
+      "gender": "female"
     }
   },
   {
@@ -2111,7 +2251,8 @@
       "resident_email": "BrianVandervort100@hotmail.com",
       "cell_phone": "(590) 419-8751",
       "work_phone": "(627) 806-7974",
-      "home_phone": "(627) 435-6796"
+      "home_phone": "(627) 435-6796",
+      "gender": "female"
     }
   },
   {
@@ -2126,7 +2267,8 @@
       "resident_email": "JaimeBailey100@hotmail.com",
       "cell_phone": "(627) 806-7974",
       "work_phone": "(627) 435-6796",
-      "home_phone": "(697) 526-0486"
+      "home_phone": "(697) 526-0486",
+      "gender": "other"
     }
   },
   {
@@ -2141,7 +2283,8 @@
       "resident_email": "AndresStroman100@hotmail.com",
       "cell_phone": "(627) 435-6796",
       "work_phone": "(697) 526-0486",
-      "home_phone": "(691) 509-3694"
+      "home_phone": "(691) 509-3694",
+      "gender": "other"
     }
   },
   {
@@ -2156,7 +2299,8 @@
       "resident_email": "CalebMetz100@hotmail.com",
       "cell_phone": "(697) 526-0486",
       "work_phone": "(691) 509-3694",
-      "home_phone": "(980) 706-5385"
+      "home_phone": "(980) 706-5385",
+      "gender": "male"
     }
   },
   {
@@ -2171,7 +2315,8 @@
       "resident_email": "DwightFadel100@hotmail.com",
       "cell_phone": "(691) 509-3694",
       "work_phone": "(980) 706-5385",
-      "home_phone": "(934) 379-1884"
+      "home_phone": "(934) 379-1884",
+      "gender": "male"
     }
   },
   {
@@ -2186,7 +2331,8 @@
       "resident_email": "Dr.Gerard100@hotmail.com",
       "cell_phone": "(980) 706-5385",
       "work_phone": "(934) 379-1884",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -2201,7 +2347,8 @@
       "resident_email": "JessieWiza100@hotmail.com",
       "cell_phone": "(934) 379-1884",
       "work_phone": null,
-      "home_phone": "(549) 719-8564"
+      "home_phone": "(549) 719-8564",
+      "gender": "female"
     }
   },
   {
@@ -2216,7 +2363,8 @@
       "resident_email": "Mr.Jay100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(549) 719-8564",
-      "home_phone": "(891) 526-6232"
+      "home_phone": "(891) 526-6232",
+      "gender": "male"
     }
   },
   {
@@ -2231,7 +2379,8 @@
       "resident_email": "MargieRussel100@hotmail.com",
       "cell_phone": "(549) 719-8564",
       "work_phone": "(891) 526-6232",
-      "home_phone": "(285) 305-4486"
+      "home_phone": "(285) 305-4486",
+      "gender": "female"
     }
   },
   {
@@ -2246,7 +2395,8 @@
       "resident_email": "Ms.Claire100@hotmail.com",
       "cell_phone": "(891) 526-6232",
       "work_phone": "(285) 305-4486",
-      "home_phone": "(300) 279-7070"
+      "home_phone": "(300) 279-7070",
+      "gender": "male"
     }
   },
   {
@@ -2261,7 +2411,8 @@
       "resident_email": "MelindaReichel100@hotmail.com",
       "cell_phone": "(285) 305-4486",
       "work_phone": "(300) 279-7070",
-      "home_phone": "(994) 754-3588"
+      "home_phone": "(994) 754-3588",
+      "gender": "female"
     }
   },
   {
@@ -2276,7 +2427,8 @@
       "resident_email": "Dr.Christopher100@hotmail.com",
       "cell_phone": "(300) 279-7070",
       "work_phone": "(994) 754-3588",
-      "home_phone": "(490) 505-5097"
+      "home_phone": "(490) 505-5097",
+      "gender": "male"
     }
   },
   {
@@ -2291,7 +2443,8 @@
       "resident_email": "JeremyKulas100@hotmail.com",
       "cell_phone": "(994) 754-3588",
       "work_phone": "(490) 505-5097",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -2306,7 +2459,8 @@
       "resident_email": "MercedesRunte100@hotmail.com",
       "cell_phone": "(490) 505-5097",
       "work_phone": null,
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -2321,7 +2475,8 @@
       "resident_email": "MarieChristiansen100@hotmail.com",
       "cell_phone": null,
       "work_phone": null,
-      "home_phone": "(757) 647-7438"
+      "home_phone": "(757) 647-7438",
+      "gender": "female"
     }
   },
   {
@@ -2336,7 +2491,8 @@
       "resident_email": "LyndaSporer100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(757) 647-7438",
-      "home_phone": "(427) 993-1317"
+      "home_phone": "(427) 993-1317",
+      "gender": "female"
     }
   },
   {
@@ -2351,7 +2507,8 @@
       "resident_email": "LeslieHills100@hotmail.com",
       "cell_phone": "(757) 647-7438",
       "work_phone": "(427) 993-1317",
-      "home_phone": "(785) 217-2828"
+      "home_phone": "(785) 217-2828",
+      "gender": "female"
     }
   },
   {
@@ -2366,7 +2523,8 @@
       "resident_email": "SonyaMoore100@hotmail.com",
       "cell_phone": "(427) 993-1317",
       "work_phone": "(785) 217-2828",
-      "home_phone": "(483) 391-2133"
+      "home_phone": "(483) 391-2133",
+      "gender": "other"
     }
   },
   {
@@ -2381,7 +2539,8 @@
       "resident_email": "RickUpton-Wolff100@hotmail.com",
       "cell_phone": "(785) 217-2828",
       "work_phone": "(483) 391-2133",
-      "home_phone": "(486) 416-3366"
+      "home_phone": "(486) 416-3366",
+      "gender": "other"
     }
   },
   {
@@ -2396,7 +2555,8 @@
       "resident_email": "DanielGrimes100@hotmail.com",
       "cell_phone": "(483) 391-2133",
       "work_phone": "(486) 416-3366",
-      "home_phone": "(341) 643-8183"
+      "home_phone": "(341) 643-8183",
+      "gender": "other"
     }
   },
   {
@@ -2411,7 +2571,8 @@
       "resident_email": "BenjaminBarrows100@hotmail.com",
       "cell_phone": "(486) 416-3366",
       "work_phone": "(341) 643-8183",
-      "home_phone": "(280) 731-5432"
+      "home_phone": "(280) 731-5432",
+      "gender": "other"
     }
   },
   {
@@ -2426,7 +2587,8 @@
       "resident_email": "Mr.Antonio100@hotmail.com",
       "cell_phone": "(341) 643-8183",
       "work_phone": "(280) 731-5432",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -2441,7 +2603,8 @@
       "resident_email": "FrancisSauer100@hotmail.com",
       "cell_phone": "(280) 731-5432",
       "work_phone": null,
-      "home_phone": "(988) 945-4557"
+      "home_phone": "(988) 945-4557",
+      "gender": "female"
     }
   },
   {
@@ -2456,7 +2619,8 @@
       "resident_email": "GerardoStamm100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(988) 945-4557",
-      "home_phone": "(744) 984-0802"
+      "home_phone": "(744) 984-0802",
+      "gender": "female"
     }
   },
   {
@@ -2471,7 +2635,8 @@
       "resident_email": "ChristineHarvey100@hotmail.com",
       "cell_phone": "(988) 945-4557",
       "work_phone": "(744) 984-0802",
-      "home_phone": "(720) 360-6870"
+      "home_phone": "(720) 360-6870",
+      "gender": "male"
     }
   },
   {
@@ -2486,7 +2651,8 @@
       "resident_email": "BeulahRippin-Dibbert100@hotmail.com",
       "cell_phone": "(744) 984-0802",
       "work_phone": "(720) 360-6870",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -2501,7 +2667,8 @@
       "resident_email": "TracyWisoky100@hotmail.com",
       "cell_phone": "(720) 360-6870",
       "work_phone": null,
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -2516,7 +2683,8 @@
       "resident_email": "LoreneChamplin100@hotmail.com",
       "cell_phone": null,
       "work_phone": null,
-      "home_phone": "(852) 658-7920"
+      "home_phone": "(852) 658-7920",
+      "gender": "male"
     }
   },
   {
@@ -2531,7 +2699,8 @@
       "resident_email": "ViolaBernhard100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(852) 658-7920",
-      "home_phone": "(737) 324-4047"
+      "home_phone": "(737) 324-4047",
+      "gender": "male"
     }
   },
   {
@@ -2546,7 +2715,8 @@
       "resident_email": "Dr.Darin100@hotmail.com",
       "cell_phone": "(852) 658-7920",
       "work_phone": "(737) 324-4047",
-      "home_phone": "(469) 732-0148"
+      "home_phone": "(469) 732-0148",
+      "gender": "other"
     }
   },
   {
@@ -2561,7 +2731,8 @@
       "resident_email": "AngelinaRussel100@hotmail.com",
       "cell_phone": "(737) 324-4047",
       "work_phone": "(469) 732-0148",
-      "home_phone": "(652) 475-3139"
+      "home_phone": "(652) 475-3139",
+      "gender": "male"
     }
   },
   {
@@ -2576,7 +2747,8 @@
       "resident_email": "Mrs.Myra100@hotmail.com",
       "cell_phone": "(469) 732-0148",
       "work_phone": "(652) 475-3139",
-      "home_phone": "(543) 953-9427"
+      "home_phone": "(543) 953-9427",
+      "gender": "female"
     }
   },
   {
@@ -2591,7 +2763,8 @@
       "resident_email": "LuzSchamberger100@hotmail.com",
       "cell_phone": "(652) 475-3139",
       "work_phone": "(543) 953-9427",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -2606,7 +2779,8 @@
       "resident_email": "CameronWaters100@hotmail.com",
       "cell_phone": "(543) 953-9427",
       "work_phone": null,
-      "home_phone": "(736) 888-5864"
+      "home_phone": "(736) 888-5864",
+      "gender": "other"
     }
   },
   {
@@ -2621,7 +2795,8 @@
       "resident_email": "ShellyHahn100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(736) 888-5864",
-      "home_phone": "(452) 751-7087"
+      "home_phone": "(452) 751-7087",
+      "gender": "female"
     }
   },
   {
@@ -2636,7 +2811,8 @@
       "resident_email": "DeborahSipes100@hotmail.com",
       "cell_phone": "(736) 888-5864",
       "work_phone": "(452) 751-7087",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -2651,7 +2827,8 @@
       "resident_email": "FrancesBauch100@hotmail.com",
       "cell_phone": "(452) 751-7087",
       "work_phone": null,
-      "home_phone": "(472) 501-6096"
+      "home_phone": "(472) 501-6096",
+      "gender": "male"
     }
   },
   {
@@ -2666,7 +2843,8 @@
       "resident_email": "MargaritaBoyer100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(472) 501-6096",
-      "home_phone": "(334) 888-8602"
+      "home_phone": "(334) 888-8602",
+      "gender": "male"
     }
   },
   {
@@ -2681,7 +2859,8 @@
       "resident_email": "MarcellaRatke100@hotmail.com",
       "cell_phone": "(472) 501-6096",
       "work_phone": "(334) 888-8602",
-      "home_phone": "(525) 720-0157"
+      "home_phone": "(525) 720-0157",
+      "gender": "female"
     }
   },
   {
@@ -2696,7 +2875,8 @@
       "resident_email": "MarilynMayer100@hotmail.com",
       "cell_phone": "(334) 888-8602",
       "work_phone": "(525) 720-0157",
-      "home_phone": "(328) 975-4397"
+      "home_phone": "(328) 975-4397",
+      "gender": "male"
     }
   },
   {
@@ -2711,7 +2891,8 @@
       "resident_email": "AlbertoJohnston100@hotmail.com",
       "cell_phone": "(525) 720-0157",
       "work_phone": "(328) 975-4397",
-      "home_phone": "(661) 951-7614"
+      "home_phone": "(661) 951-7614",
+      "gender": "male"
     }
   },
   {
@@ -2726,7 +2907,8 @@
       "resident_email": "Dr.Trevor100@hotmail.com",
       "cell_phone": "(328) 975-4397",
       "work_phone": "(661) 951-7614",
-      "home_phone": "(441) 964-7667"
+      "home_phone": "(441) 964-7667",
+      "gender": "male"
     }
   },
   {
@@ -2741,7 +2923,8 @@
       "resident_email": "Ms.Angel100@hotmail.com",
       "cell_phone": "(661) 951-7614",
       "work_phone": "(441) 964-7667",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -2756,7 +2939,8 @@
       "resident_email": "JamieBlock100@hotmail.com",
       "cell_phone": "(441) 964-7667",
       "work_phone": null,
-      "home_phone": "(607) 631-4277"
+      "home_phone": "(607) 631-4277",
+      "gender": "male"
     }
   },
   {
@@ -2771,7 +2955,8 @@
       "resident_email": "JulieKuhic100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(607) 631-4277",
-      "home_phone": "(364) 769-7811"
+      "home_phone": "(364) 769-7811",
+      "gender": "other"
     }
   },
   {
@@ -2786,7 +2971,8 @@
       "resident_email": "LeonardSkiles-Yundt100@hotmail.com",
       "cell_phone": "(607) 631-4277",
       "work_phone": "(364) 769-7811",
-      "home_phone": "(318) 510-1467"
+      "home_phone": "(318) 510-1467",
+      "gender": "female"
     }
   },
   {
@@ -2801,7 +2987,8 @@
       "resident_email": "DwayneChristiansen100@hotmail.com",
       "cell_phone": "(364) 769-7811",
       "work_phone": "(318) 510-1467",
-      "home_phone": "(675) 853-8891"
+      "home_phone": "(675) 853-8891",
+      "gender": "other"
     }
   },
   {
@@ -2816,7 +3003,8 @@
       "resident_email": "HattieHackett100@hotmail.com",
       "cell_phone": "(318) 510-1467",
       "work_phone": "(675) 853-8891",
-      "home_phone": "(863) 250-8255"
+      "home_phone": "(863) 250-8255",
+      "gender": "other"
     }
   },
   {
@@ -2831,7 +3019,8 @@
       "resident_email": "KristenLeannon100@hotmail.com",
       "cell_phone": "(675) 853-8891",
       "work_phone": "(863) 250-8255",
-      "home_phone": "(406) 663-8797"
+      "home_phone": "(406) 663-8797",
+      "gender": "male"
     }
   },
   {
@@ -2846,7 +3035,8 @@
       "resident_email": "Mr.Bryan100@hotmail.com",
       "cell_phone": "(863) 250-8255",
       "work_phone": "(406) 663-8797",
-      "home_phone": "(335) 881-8160"
+      "home_phone": "(335) 881-8160",
+      "gender": "other"
     }
   },
   {
@@ -2861,7 +3051,8 @@
       "resident_email": "EarnestDietrich100@hotmail.com",
       "cell_phone": "(406) 663-8797",
       "work_phone": "(335) 881-8160",
-      "home_phone": "(674) 895-0429"
+      "home_phone": "(674) 895-0429",
+      "gender": "other"
     }
   },
   {
@@ -2876,7 +3067,8 @@
       "resident_email": "AdamPfannerstill100@hotmail.com",
       "cell_phone": "(335) 881-8160",
       "work_phone": "(674) 895-0429",
-      "home_phone": "(749) 983-8703"
+      "home_phone": "(749) 983-8703",
+      "gender": "male"
     }
   },
   {
@@ -2891,7 +3083,8 @@
       "resident_email": "IvanMedhurst100@hotmail.com",
       "cell_phone": "(674) 895-0429",
       "work_phone": "(749) 983-8703",
-      "home_phone": "(582) 403-5158"
+      "home_phone": "(582) 403-5158",
+      "gender": "female"
     }
   },
   {
@@ -2906,7 +3099,8 @@
       "resident_email": "GerardoZboncak100@hotmail.com",
       "cell_phone": "(749) 983-8703",
       "work_phone": "(582) 403-5158",
-      "home_phone": "(687) 361-6964"
+      "home_phone": "(687) 361-6964",
+      "gender": "male"
     }
   },
   {
@@ -2921,7 +3115,8 @@
       "resident_email": "HerbertGottlieb100@hotmail.com",
       "cell_phone": "(582) 403-5158",
       "work_phone": "(687) 361-6964",
-      "home_phone": "(325) 443-0616"
+      "home_phone": "(325) 443-0616",
+      "gender": "male"
     }
   },
   {
@@ -2936,7 +3131,8 @@
       "resident_email": "EvelynHuel100@hotmail.com",
       "cell_phone": "(687) 361-6964",
       "work_phone": "(325) 443-0616",
-      "home_phone": "(328) 863-1211"
+      "home_phone": "(328) 863-1211",
+      "gender": "male"
     }
   },
   {
@@ -2951,7 +3147,8 @@
       "resident_email": "TerriGlover100@hotmail.com",
       "cell_phone": "(325) 443-0616",
       "work_phone": "(328) 863-1211",
-      "home_phone": "(366) 581-5173"
+      "home_phone": "(366) 581-5173",
+      "gender": "female"
     }
   },
   {
@@ -2966,7 +3163,8 @@
       "resident_email": "ClaytonWeimann100@hotmail.com",
       "cell_phone": "(328) 863-1211",
       "work_phone": "(366) 581-5173",
-      "home_phone": "(704) 693-2358"
+      "home_phone": "(704) 693-2358",
+      "gender": "female"
     }
   },
   {
@@ -2981,7 +3179,8 @@
       "resident_email": "TrevorKautzer100@hotmail.com",
       "cell_phone": "(366) 581-5173",
       "work_phone": "(704) 693-2358",
-      "home_phone": "(899) 949-0956"
+      "home_phone": "(899) 949-0956",
+      "gender": "female"
     }
   },
   {
@@ -2996,7 +3195,8 @@
       "resident_email": "CaryGerlach100@hotmail.com",
       "cell_phone": "(704) 693-2358",
       "work_phone": "(899) 949-0956",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -3011,7 +3211,8 @@
       "resident_email": "EvanHalvorson100@hotmail.com",
       "cell_phone": "(899) 949-0956",
       "work_phone": null,
-      "home_phone": "(970) 463-9005"
+      "home_phone": "(970) 463-9005",
+      "gender": "female"
     }
   },
   {
@@ -3026,7 +3227,8 @@
       "resident_email": "RosaKris100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(970) 463-9005",
-      "home_phone": "(481) 389-2546"
+      "home_phone": "(481) 389-2546",
+      "gender": "other"
     }
   },
   {
@@ -3041,7 +3243,8 @@
       "resident_email": "BillAnkunding100@hotmail.com",
       "cell_phone": "(970) 463-9005",
       "work_phone": "(481) 389-2546",
-      "home_phone": "(215) 388-7424"
+      "home_phone": "(215) 388-7424",
+      "gender": "male"
     }
   },
   {
@@ -3056,7 +3259,8 @@
       "resident_email": "MaxSchmitt100@hotmail.com",
       "cell_phone": "(481) 389-2546",
       "work_phone": "(215) 388-7424",
-      "home_phone": "(442) 290-3027"
+      "home_phone": "(442) 290-3027",
+      "gender": "male"
     }
   },
   {
@@ -3071,7 +3275,8 @@
       "resident_email": "Ms.Delia100@hotmail.com",
       "cell_phone": "(215) 388-7424",
       "work_phone": "(442) 290-3027",
-      "home_phone": "(921) 608-4221"
+      "home_phone": "(921) 608-4221",
+      "gender": "male"
     }
   },
   {
@@ -3086,7 +3291,8 @@
       "resident_email": "MaxineWilderman100@hotmail.com",
       "cell_phone": "(442) 290-3027",
       "work_phone": "(921) 608-4221",
-      "home_phone": "(677) 779-3157"
+      "home_phone": "(677) 779-3157",
+      "gender": "other"
     }
   },
   {
@@ -3101,7 +3307,8 @@
       "resident_email": "NathanWest100@hotmail.com",
       "cell_phone": "(921) 608-4221",
       "work_phone": "(677) 779-3157",
-      "home_phone": "(823) 456-4372"
+      "home_phone": "(823) 456-4372",
+      "gender": "other"
     }
   },
   {
@@ -3116,7 +3323,8 @@
       "resident_email": "VivianSchaefer100@hotmail.com",
       "cell_phone": "(677) 779-3157",
       "work_phone": "(823) 456-4372",
-      "home_phone": "(502) 405-4954"
+      "home_phone": "(502) 405-4954",
+      "gender": "female"
     }
   },
   {
@@ -3131,7 +3339,8 @@
       "resident_email": "KariVandervort100@hotmail.com",
       "cell_phone": "(823) 456-4372",
       "work_phone": "(502) 405-4954",
-      "home_phone": "(366) 810-0625"
+      "home_phone": "(366) 810-0625",
+      "gender": "female"
     }
   },
   {
@@ -3146,7 +3355,8 @@
       "resident_email": "DorisGulgowski100@hotmail.com",
       "cell_phone": "(502) 405-4954",
       "work_phone": "(366) 810-0625",
-      "home_phone": "(366) 794-6918"
+      "home_phone": "(366) 794-6918",
+      "gender": "male"
     }
   },
   {
@@ -3161,7 +3371,8 @@
       "resident_email": "JimmySwaniawski100@hotmail.com",
       "cell_phone": "(366) 810-0625",
       "work_phone": "(366) 794-6918",
-      "home_phone": "(265) 917-9906"
+      "home_phone": "(265) 917-9906",
+      "gender": "male"
     }
   },
   {
@@ -3176,7 +3387,8 @@
       "resident_email": "EugeneSwaniawski-Kertzmann100@hotmail.com",
       "cell_phone": "(366) 794-6918",
       "work_phone": "(265) 917-9906",
-      "home_phone": "(693) 327-4117"
+      "home_phone": "(693) 327-4117",
+      "gender": "other"
     }
   },
   {
@@ -3191,7 +3403,8 @@
       "resident_email": "ErinMoore-Bogan100@hotmail.com",
       "cell_phone": "(265) 917-9906",
       "work_phone": "(693) 327-4117",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -3206,7 +3419,8 @@
       "resident_email": "Mr.Miguel100@hotmail.com",
       "cell_phone": "(693) 327-4117",
       "work_phone": null,
-      "home_phone": "(678) 365-3511"
+      "home_phone": "(678) 365-3511",
+      "gender": "other"
     }
   },
   {
@@ -3221,7 +3435,8 @@
       "resident_email": "JosephineCollins100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(678) 365-3511",
-      "home_phone": "(443) 767-6481"
+      "home_phone": "(443) 767-6481",
+      "gender": "male"
     }
   },
   {
@@ -3236,7 +3451,8 @@
       "resident_email": "LelandSchuster100@hotmail.com",
       "cell_phone": "(678) 365-3511",
       "work_phone": "(443) 767-6481",
-      "home_phone": "(635) 675-8468"
+      "home_phone": "(635) 675-8468",
+      "gender": "female"
     }
   },
   {
@@ -3251,7 +3467,8 @@
       "resident_email": "CourtneyFeeney100@hotmail.com",
       "cell_phone": "(443) 767-6481",
       "work_phone": "(635) 675-8468",
-      "home_phone": "(599) 458-5010"
+      "home_phone": "(599) 458-5010",
+      "gender": "other"
     }
   },
   {
@@ -3266,7 +3483,8 @@
       "resident_email": "MissClaudia100@hotmail.com",
       "cell_phone": "(635) 675-8468",
       "work_phone": "(599) 458-5010",
-      "home_phone": "(285) 361-4005"
+      "home_phone": "(285) 361-4005",
+      "gender": "female"
     }
   },
   {
@@ -3281,7 +3499,8 @@
       "resident_email": "GerardWelch100@hotmail.com",
       "cell_phone": "(599) 458-5010",
       "work_phone": "(285) 361-4005",
-      "home_phone": "(504) 817-0851"
+      "home_phone": "(504) 817-0851",
+      "gender": "female"
     }
   },
   {
@@ -3296,7 +3515,8 @@
       "resident_email": "DaisyKessler100@hotmail.com",
       "cell_phone": "(285) 361-4005",
       "work_phone": "(504) 817-0851",
-      "home_phone": "(620) 512-4224"
+      "home_phone": "(620) 512-4224",
+      "gender": "male"
     }
   },
   {
@@ -3311,7 +3531,8 @@
       "resident_email": "JohnFritsch100@hotmail.com",
       "cell_phone": "(504) 817-0851",
       "work_phone": "(620) 512-4224",
-      "home_phone": "(670) 944-6887"
+      "home_phone": "(670) 944-6887",
+      "gender": "male"
     }
   },
   {
@@ -3326,7 +3547,8 @@
       "resident_email": "MichaelFeeney100@hotmail.com",
       "cell_phone": "(620) 512-4224",
       "work_phone": "(670) 944-6887",
-      "home_phone": "(525) 478-4771"
+      "home_phone": "(525) 478-4771",
+      "gender": "other"
     }
   },
   {
@@ -3341,7 +3563,8 @@
       "resident_email": "Mrs.Winifred100@hotmail.com",
       "cell_phone": "(670) 944-6887",
       "work_phone": "(525) 478-4771",
-      "home_phone": "(363) 849-7485"
+      "home_phone": "(363) 849-7485",
+      "gender": "female"
     }
   },
   {
@@ -3356,7 +3579,8 @@
       "resident_email": "WoodrowPurdy100@hotmail.com",
       "cell_phone": "(525) 478-4771",
       "work_phone": "(363) 849-7485",
-      "home_phone": "(913) 273-7557"
+      "home_phone": "(913) 273-7557",
+      "gender": "other"
     }
   },
   {
@@ -3371,7 +3595,8 @@
       "resident_email": "JennaHarris100@hotmail.com",
       "cell_phone": "(363) 849-7485",
       "work_phone": "(913) 273-7557",
-      "home_phone": "(540) 747-9668"
+      "home_phone": "(540) 747-9668",
+      "gender": "other"
     }
   },
   {
@@ -3386,7 +3611,8 @@
       "resident_email": "DeniseWisoky100@hotmail.com",
       "cell_phone": "(913) 273-7557",
       "work_phone": "(540) 747-9668",
-      "home_phone": "(340) 485-9305"
+      "home_phone": "(340) 485-9305",
+      "gender": "female"
     }
   },
   {
@@ -3401,7 +3627,8 @@
       "resident_email": "BryantFerry100@hotmail.com",
       "cell_phone": "(540) 747-9668",
       "work_phone": "(340) 485-9305",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -3416,7 +3643,8 @@
       "resident_email": "TheodoreRogahn100@hotmail.com",
       "cell_phone": "(340) 485-9305",
       "work_phone": null,
-      "home_phone": "(219) 311-6095"
+      "home_phone": "(219) 311-6095",
+      "gender": "female"
     }
   },
   {
@@ -3431,7 +3659,8 @@
       "resident_email": "OraSchuppe100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(219) 311-6095",
-      "home_phone": "(972) 612-2302"
+      "home_phone": "(972) 612-2302",
+      "gender": "male"
     }
   },
   {
@@ -3446,7 +3675,8 @@
       "resident_email": "IsabelO'Connell100@hotmail.com",
       "cell_phone": "(219) 311-6095",
       "work_phone": "(972) 612-2302",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -3461,7 +3691,8 @@
       "resident_email": "JudyCronin-Carroll100@hotmail.com",
       "cell_phone": "(972) 612-2302",
       "work_phone": null,
-      "home_phone": "(399) 902-5002"
+      "home_phone": "(399) 902-5002",
+      "gender": "male"
     }
   },
   {
@@ -3476,7 +3707,8 @@
       "resident_email": "YolandaWiza100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(399) 902-5002",
-      "home_phone": "(554) 276-6470"
+      "home_phone": "(554) 276-6470",
+      "gender": "other"
     }
   },
   {
@@ -3491,7 +3723,8 @@
       "resident_email": "AllisonHerzog100@hotmail.com",
       "cell_phone": "(399) 902-5002",
       "work_phone": "(554) 276-6470",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -3506,7 +3739,8 @@
       "resident_email": "AlvinBalistreri100@hotmail.com",
       "cell_phone": "(554) 276-6470",
       "work_phone": null,
-      "home_phone": "(354) 397-5933"
+      "home_phone": "(354) 397-5933",
+      "gender": "female"
     }
   },
   {
@@ -3521,7 +3755,8 @@
       "resident_email": "ZacharyHeidenreich-Purdy100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(354) 397-5933",
-      "home_phone": "(729) 203-1554"
+      "home_phone": "(729) 203-1554",
+      "gender": "other"
     }
   },
   {
@@ -3536,7 +3771,8 @@
       "resident_email": "HopeOberbrunner100@hotmail.com",
       "cell_phone": "(354) 397-5933",
       "work_phone": "(729) 203-1554",
-      "home_phone": "(482) 992-2163"
+      "home_phone": "(482) 992-2163",
+      "gender": "male"
     }
   },
   {
@@ -3551,7 +3787,8 @@
       "resident_email": "MarcellaGreenholt100@hotmail.com",
       "cell_phone": "(729) 203-1554",
       "work_phone": "(482) 992-2163",
-      "home_phone": "(757) 830-0578"
+      "home_phone": "(757) 830-0578",
+      "gender": "male"
     }
   },
   {
@@ -3566,7 +3803,8 @@
       "resident_email": "KerryLeuschke-Zemlak100@hotmail.com",
       "cell_phone": "(482) 992-2163",
       "work_phone": "(757) 830-0578",
-      "home_phone": "(290) 282-3877"
+      "home_phone": "(290) 282-3877",
+      "gender": "female"
     }
   },
   {
@@ -3581,7 +3819,8 @@
       "resident_email": "Mr.Eduardo100@hotmail.com",
       "cell_phone": "(757) 830-0578",
       "work_phone": "(290) 282-3877",
-      "home_phone": "(622) 743-0078"
+      "home_phone": "(622) 743-0078",
+      "gender": "male"
     }
   },
   {
@@ -3596,7 +3835,8 @@
       "resident_email": "MarionLang100@hotmail.com",
       "cell_phone": "(290) 282-3877",
       "work_phone": "(622) 743-0078",
-      "home_phone": "(379) 423-4182"
+      "home_phone": "(379) 423-4182",
+      "gender": "female"
     }
   },
   {
@@ -3611,7 +3851,8 @@
       "resident_email": "Mrs.Marion100@hotmail.com",
       "cell_phone": "(622) 743-0078",
       "work_phone": "(379) 423-4182",
-      "home_phone": "(910) 868-3290"
+      "home_phone": "(910) 868-3290",
+      "gender": "male"
     }
   },
   {
@@ -3626,7 +3867,8 @@
       "resident_email": "ErvinVonRueden100@hotmail.com",
       "cell_phone": "(379) 423-4182",
       "work_phone": "(910) 868-3290",
-      "home_phone": "(976) 597-9656"
+      "home_phone": "(976) 597-9656",
+      "gender": "female"
     }
   },
   {
@@ -3641,7 +3883,8 @@
       "resident_email": "LeticiaO'Kon100@hotmail.com",
       "cell_phone": "(910) 868-3290",
       "work_phone": "(976) 597-9656",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -3656,7 +3899,8 @@
       "resident_email": "Dr.Tony100@hotmail.com",
       "cell_phone": "(976) 597-9656",
       "work_phone": null,
-      "home_phone": "(425) 804-5469"
+      "home_phone": "(425) 804-5469",
+      "gender": "male"
     }
   },
   {
@@ -3671,7 +3915,8 @@
       "resident_email": "LindseyRaynor100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(425) 804-5469",
-      "home_phone": "(928) 842-8802"
+      "home_phone": "(928) 842-8802",
+      "gender": "male"
     }
   },
   {
@@ -3686,7 +3931,8 @@
       "resident_email": "AndreCarroll100@hotmail.com",
       "cell_phone": "(425) 804-5469",
       "work_phone": "(928) 842-8802",
-      "home_phone": "(380) 823-1219"
+      "home_phone": "(380) 823-1219",
+      "gender": "other"
     }
   },
   {
@@ -3701,7 +3947,8 @@
       "resident_email": "AntoinetteOkuneva100@hotmail.com",
       "cell_phone": "(928) 842-8802",
       "work_phone": "(380) 823-1219",
-      "home_phone": "(595) 349-0332"
+      "home_phone": "(595) 349-0332",
+      "gender": "other"
     }
   },
   {
@@ -3716,7 +3963,8 @@
       "resident_email": "MissKristi100@hotmail.com",
       "cell_phone": "(380) 823-1219",
       "work_phone": "(595) 349-0332",
-      "home_phone": "(774) 391-1521"
+      "home_phone": "(774) 391-1521",
+      "gender": "female"
     }
   },
   {
@@ -3731,7 +3979,8 @@
       "resident_email": "WalterKuphal100@hotmail.com",
       "cell_phone": "(595) 349-0332",
       "work_phone": "(774) 391-1521",
-      "home_phone": "(910) 397-7597"
+      "home_phone": "(910) 397-7597",
+      "gender": "other"
     }
   },
   {
@@ -3746,7 +3995,8 @@
       "resident_email": "EverettBlick100@hotmail.com",
       "cell_phone": "(774) 391-1521",
       "work_phone": "(910) 397-7597",
-      "home_phone": "(822) 531-4467"
+      "home_phone": "(822) 531-4467",
+      "gender": "female"
     }
   },
   {
@@ -3761,7 +4011,8 @@
       "resident_email": "EllenDaniel100@hotmail.com",
       "cell_phone": "(910) 397-7597",
       "work_phone": "(822) 531-4467",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -3776,7 +4027,8 @@
       "resident_email": "LeroyMaggio100@hotmail.com",
       "cell_phone": "(822) 531-4467",
       "work_phone": null,
-      "home_phone": "(419) 641-6844"
+      "home_phone": "(419) 641-6844",
+      "gender": "female"
     }
   },
   {
@@ -3791,7 +4043,8 @@
       "resident_email": "HarveyNicolas100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(419) 641-6844",
-      "home_phone": "(440) 991-7201"
+      "home_phone": "(440) 991-7201",
+      "gender": "other"
     }
   },
   {
@@ -3806,7 +4059,8 @@
       "resident_email": "DarnellConsidine100@hotmail.com",
       "cell_phone": "(419) 641-6844",
       "work_phone": "(440) 991-7201",
-      "home_phone": "(396) 702-6403"
+      "home_phone": "(396) 702-6403",
+      "gender": "female"
     }
   },
   {
@@ -3821,7 +4075,8 @@
       "resident_email": "ShawnaStanton100@hotmail.com",
       "cell_phone": "(440) 991-7201",
       "work_phone": "(396) 702-6403",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -3836,7 +4091,8 @@
       "resident_email": "CharlotteWillms100@hotmail.com",
       "cell_phone": "(396) 702-6403",
       "work_phone": null,
-      "home_phone": "(917) 446-2584"
+      "home_phone": "(917) 446-2584",
+      "gender": "male"
     }
   },
   {
@@ -3851,7 +4107,8 @@
       "resident_email": "MiltonHeidenreich100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(917) 446-2584",
-      "home_phone": "(805) 438-7578"
+      "home_phone": "(805) 438-7578",
+      "gender": "other"
     }
   },
   {
@@ -3866,7 +4123,8 @@
       "resident_email": "Mr.Bob100@hotmail.com",
       "cell_phone": "(917) 446-2584",
       "work_phone": "(805) 438-7578",
-      "home_phone": "(816) 481-2431"
+      "home_phone": "(816) 481-2431",
+      "gender": "female"
     }
   },
   {
@@ -3881,7 +4139,8 @@
       "resident_email": "AlbertoJerde100@hotmail.com",
       "cell_phone": "(805) 438-7578",
       "work_phone": "(816) 481-2431",
-      "home_phone": "(581) 329-5224"
+      "home_phone": "(581) 329-5224",
+      "gender": "other"
     }
   },
   {
@@ -3896,7 +4155,8 @@
       "resident_email": "MissBarbara100@hotmail.com",
       "cell_phone": "(816) 481-2431",
       "work_phone": "(581) 329-5224",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -3911,7 +4171,8 @@
       "resident_email": "PatGleichner100@hotmail.com",
       "cell_phone": "(581) 329-5224",
       "work_phone": null,
-      "home_phone": "(326) 891-7530"
+      "home_phone": "(326) 891-7530",
+      "gender": "other"
     }
   },
   {
@@ -3926,7 +4187,8 @@
       "resident_email": "SylviaOndricka100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(326) 891-7530",
-      "home_phone": "(395) 400-6853"
+      "home_phone": "(395) 400-6853",
+      "gender": "male"
     }
   },
   {
@@ -3941,7 +4203,8 @@
       "resident_email": "AllenGislason100@hotmail.com",
       "cell_phone": "(326) 891-7530",
       "work_phone": "(395) 400-6853",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -3956,7 +4219,8 @@
       "resident_email": "MelvinPadberg100@hotmail.com",
       "cell_phone": "(395) 400-6853",
       "work_phone": null,
-      "home_phone": "(998) 688-2711"
+      "home_phone": "(998) 688-2711",
+      "gender": "male"
     }
   },
   {
@@ -3971,7 +4235,8 @@
       "resident_email": "LoisMcCullough100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(998) 688-2711",
-      "home_phone": "(559) 778-2191"
+      "home_phone": "(559) 778-2191",
+      "gender": "male"
     }
   },
   {
@@ -3986,7 +4251,8 @@
       "resident_email": "DoloresGibson100@hotmail.com",
       "cell_phone": "(998) 688-2711",
       "work_phone": "(559) 778-2191",
-      "home_phone": "(260) 438-6958"
+      "home_phone": "(260) 438-6958",
+      "gender": "male"
     }
   },
   {
@@ -4001,7 +4267,8 @@
       "resident_email": "VincentVolkman100@hotmail.com",
       "cell_phone": "(559) 778-2191",
       "work_phone": "(260) 438-6958",
-      "home_phone": "(695) 638-7259"
+      "home_phone": "(695) 638-7259",
+      "gender": "other"
     }
   },
   {
@@ -4016,7 +4283,8 @@
       "resident_email": "TiffanyKeebler100@hotmail.com",
       "cell_phone": "(260) 438-6958",
       "work_phone": "(695) 638-7259",
-      "home_phone": "(433) 732-5934"
+      "home_phone": "(433) 732-5934",
+      "gender": "other"
     }
   },
   {
@@ -4031,7 +4299,8 @@
       "resident_email": "SalvatoreSchmeler100@hotmail.com",
       "cell_phone": "(695) 638-7259",
       "work_phone": "(433) 732-5934",
-      "home_phone": "(931) 219-0478"
+      "home_phone": "(931) 219-0478",
+      "gender": "female"
     }
   },
   {
@@ -4046,7 +4315,8 @@
       "resident_email": "BelindaWaters100@hotmail.com",
       "cell_phone": "(433) 732-5934",
       "work_phone": "(931) 219-0478",
-      "home_phone": "(605) 823-8103"
+      "home_phone": "(605) 823-8103",
+      "gender": "female"
     }
   },
   {
@@ -4061,7 +4331,8 @@
       "resident_email": "EuniceRodriguez100@hotmail.com",
       "cell_phone": "(931) 219-0478",
       "work_phone": "(605) 823-8103",
-      "home_phone": "(613) 998-0984"
+      "home_phone": "(613) 998-0984",
+      "gender": "male"
     }
   },
   {
@@ -4076,7 +4347,8 @@
       "resident_email": "KerrySipes-Barrows100@hotmail.com",
       "cell_phone": "(605) 823-8103",
       "work_phone": "(613) 998-0984",
-      "home_phone": "(919) 458-3528"
+      "home_phone": "(919) 458-3528",
+      "gender": "other"
     }
   },
   {
@@ -4091,7 +4363,8 @@
       "resident_email": "NormanMcCullough100@hotmail.com",
       "cell_phone": "(613) 998-0984",
       "work_phone": "(919) 458-3528",
-      "home_phone": "(806) 942-6712"
+      "home_phone": "(806) 942-6712",
+      "gender": "male"
     }
   },
   {
@@ -4106,7 +4379,8 @@
       "resident_email": "RickyBayer100@hotmail.com",
       "cell_phone": "(919) 458-3528",
       "work_phone": "(806) 942-6712",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "female"
     }
   },
   {
@@ -4121,7 +4395,8 @@
       "resident_email": "NancyBarton100@hotmail.com",
       "cell_phone": "(806) 942-6712",
       "work_phone": null,
-      "home_phone": null
+      "home_phone": null,
+      "gender": "other"
     }
   },
   {
@@ -4136,7 +4411,8 @@
       "resident_email": "ErikaHoppe100@hotmail.com",
       "cell_phone": null,
       "work_phone": null,
-      "home_phone": "(628) 426-6908"
+      "home_phone": "(628) 426-6908",
+      "gender": "other"
     }
   },
   {
@@ -4151,7 +4427,8 @@
       "resident_email": "ArleneMcCullough100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(628) 426-6908",
-      "home_phone": "(397) 946-9183"
+      "home_phone": "(397) 946-9183",
+      "gender": "female"
     }
   },
   {
@@ -4166,7 +4443,8 @@
       "resident_email": "AdrienneGutmann100@hotmail.com",
       "cell_phone": "(628) 426-6908",
       "work_phone": "(397) 946-9183",
-      "home_phone": "(377) 270-1541"
+      "home_phone": "(377) 270-1541",
+      "gender": "male"
     }
   },
   {
@@ -4181,7 +4459,8 @@
       "resident_email": "Mr.Jermaine100@hotmail.com",
       "cell_phone": "(397) 946-9183",
       "work_phone": "(377) 270-1541",
-      "home_phone": "(363) 529-9618"
+      "home_phone": "(363) 529-9618",
+      "gender": "female"
     }
   },
   {
@@ -4196,7 +4475,8 @@
       "resident_email": "ShannonStanton100@hotmail.com",
       "cell_phone": "(377) 270-1541",
       "work_phone": "(363) 529-9618",
-      "home_phone": "(574) 408-5612"
+      "home_phone": "(574) 408-5612",
+      "gender": "male"
     }
   },
   {
@@ -4211,7 +4491,8 @@
       "resident_email": "ClaudiaDickens100@hotmail.com",
       "cell_phone": "(363) 529-9618",
       "work_phone": "(574) 408-5612",
-      "home_phone": null
+      "home_phone": null,
+      "gender": "male"
     }
   },
   {
@@ -4226,7 +4507,8 @@
       "resident_email": "TaraRice-Hackett100@hotmail.com",
       "cell_phone": "(574) 408-5612",
       "work_phone": null,
-      "home_phone": "(699) 817-6536"
+      "home_phone": "(699) 817-6536",
+      "gender": "male"
     }
   },
   {
@@ -4241,7 +4523,8 @@
       "resident_email": "ClydeGreenholt100@hotmail.com",
       "cell_phone": null,
       "work_phone": "(699) 817-6536",
-      "home_phone": "(774) 443-4462"
+      "home_phone": "(774) 443-4462",
+      "gender": "female"
     }
   }
 ]
