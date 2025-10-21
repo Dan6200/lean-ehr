@@ -68,7 +68,7 @@ export const AllergySchema = z.object({
   reaction: z.string().optional(),
 })
 
-export const MedicationSchema = z.object({
+export const PrescriptionSchema = z.object({
   name: z.string(),
   rxnorm_code: z.string(),
   dosage: z.string().optional(),
@@ -78,8 +78,8 @@ export const MedicationSchema = z.object({
 export const EmarRecordSchema = z.object({
   id: z.string(),
   resident_id: z.string(),
-  medication_statement_id: z.string(),
-  medication_name: z.string(),
+  prescription_id: z.string(), // Renamed from medication_statement_id
+  prescription_name: z.string(), // Renamed from medication_name
   recorder_id: z.string(),
   status: z.string(),
   administration_route: z.string(),
@@ -215,7 +215,7 @@ export type Administration = z.infer<typeof AdministrationSchema>
 export type Observation = z.infer<typeof ObservationSchema>
 export type DiagnosticHistory = z.infer<typeof DiagnosticHistorySchema>
 export type Allergy = z.infer<typeof AllergySchema>
-export type Medication = z.infer<typeof MedicationSchema>
+export type Prescription = z.infer<typeof PrescriptionSchema>
 export type FinancialTransaction = z.infer<typeof FinancialTransactionSchema>
 export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
 export type Resident = z.infer<typeof ResidentSchema>
@@ -232,7 +232,7 @@ export const ResidentDataSchema = ResidentSchema.extend({
   id: z.string().optional(),
   address: z.string(),
   allergies: z.array(AllergySchema),
-  medications: z.array(MedicationSchema),
+  prescriptions: z.array(PrescriptionSchema),
   observations: z.array(ObservationSchema),
   diagnostic_history: z.array(DiagnosticHistorySchema),
   emergency_contacts: z.array(EmergencyContactSchema),
