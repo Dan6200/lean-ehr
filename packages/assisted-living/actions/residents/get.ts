@@ -7,7 +7,6 @@ import {
   getDocWrapper,
   getDocsWrapper,
   queryWrapper,
-  collection,
 } from '@/firebase/firestore-server'
 import {
   Allergy,
@@ -28,6 +27,7 @@ import {
   DiagnosticHistorySchema,
   EmergencyContactSchema,
   FinancialTransactionSchema,
+  EmarRecordSchema,
 } from '@/types'
 import {
   decryptResidentData,
@@ -51,14 +51,14 @@ import { decryptData } from '@/lib/encryption'
 async function getSubcollection<T extends z.ZodTypeAny>(
   residentId: string,
   collectionName: string,
-  kekPath: string, // Pass KEK path instead of DEK
   schema: T,
+  kekPath: string,
 ): Promise<z.infer<T>[]> {
   const authenticatedApp = await getAuthenticatedAppAndClaims()
   if (!authenticatedApp) throw new Error('Failed to authenticate session')
   const { app } = authenticatedApp
 
-  const subcollectionRef = collection(
+  const subcollectionRef = await collectionWrapper(
     app,
     `providers/GYRHOME/residents/${residentId}/${collectionName}`,
   )
@@ -100,6 +100,38 @@ import {
   KEK_FINANCIAL_PATH,
 } from '@/lib/encryption'
 
+type SubCollectionName =
+  | 'allergies'
+  | 'prescriptions'
+  | 'observations'
+  | 'diagnostic_history'
+  | 'emergency_contacts'
+  | 'financials'
+  | 'emar'
+
+const subCollectionMap: {
+  [key: string]: [z.ZodObject<any> | z.ZodEffects<any>, string]
+} = {
+  allergies: [AllergySchema, KEK_CONTACT_PATH],
+  prescriptions: [PrescriptionSchema, KEK_CLINICAL_PATH],
+  observations: [ObservationSchema, KEK_CLINICAL_PATH],
+  diagnostic_history: [DiagnosticHistorySchema, KEK_CLINICAL_PATH],
+  emergency_contacts: [EmergencyContactSchema, KEK_CONTACT_PATH],
+  financials: [FinancialTransactionSchema, KEK_FINANCIAL_PATH],
+  emar: [EmarRecordSchema, KEK_CLINICAL_PATH],
+}
+
+export async function getNestedResidentData(
+  residentId: string,
+  subCollectionName: SubCollectionName,
+) {
+  return getSubcollection(
+    residentId,
+    subCollectionName,
+    ...subCollectionMap[subCollectionName],
+  )
+}
+
 // Use a DTO for resident data
 export async function getResidentData(
   documentId: string,
@@ -134,51 +166,12 @@ export async function getResidentData(
       emergency_contacts,
       financials,
       emar,
-    ] = await Promise.all([
-      getSubcollection(
-        documentId,
-        'allergies',
-        KEK_CLINICAL_PATH,
-        AllergySchema,
+    ] = await Promise.all(
+      Object.entries(subCollectionMap).map(
+        ([subcolName, subcolSchemaAndPath]) =>
+          getSubcollection(documentId, subcolName, ...subcolSchemaAndPath),
       ),
-      getSubcollection(
-        documentId,
-        'prescriptions',
-        KEK_CLINICAL_PATH,
-        PrescriptionSchema,
-      ),
-
-      getSubcollection(
-        documentId,
-        'observations',
-        KEK_CLINICAL_PATH,
-        ObservationSchema,
-      ),
-      getSubcollection(
-        documentId,
-        'diagnostic_history',
-        KEK_CLINICAL_PATH,
-        DiagnosticHistorySchema,
-      ),
-      getSubcollection(
-        documentId,
-        'emergency_contacts',
-        KEK_CONTACT_PATH,
-        EmergencyContactSchema,
-      ),
-      getSubcollection(
-        documentId,
-        'financials',
-        KEK_FINANCIAL_PATH,
-        FinancialTransactionSchema,
-      ),
-      getSubcollection(
-        documentId,
-        'medication_administration',
-        KEK_CLINICAL_PATH,
-        EmarRecordSchema,
-      ),
-    ])
+    )
 
     const facilityDocRef = await docWrapper(
       (
@@ -253,7 +246,7 @@ export async function getAllFacilities(): Promise<Facility[]> {
   }
 }
 
-export async function getAllResidentsData({
+export async function getAllResidents({
   limit = 100,
   nextCursorId,
   prevCursorId,
@@ -363,6 +356,7 @@ export async function getAllResidentsData({
       hasPrevPage,
     }
   } catch (error: any) {
+    console.error(error)
     throw new Error(`Failed to fetch all residents data: ${error.message}`)
   }
 }
