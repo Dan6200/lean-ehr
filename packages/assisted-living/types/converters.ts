@@ -36,6 +36,7 @@ import {
   PersonalRelationshipEnum,
   Resident,
   ResidentSchema,
+  EncryptedEmarRecordSchema,
 } from '.'
 
 // --- Converters ---
@@ -55,7 +56,6 @@ export async function encryptResident(
   const encryptedData: any = {}
 
   encryptedData.facility_id = dataToEncrypt.facility_id
-  encryptedData.room_no = dataToEncrypt.room_no
 
   const { plaintextDek: generalDek, encryptedDek: encryptedDekGeneral } =
     await generateDataKey(KEK_GENERAL_PATH)
@@ -76,6 +76,18 @@ export async function encryptResident(
   if (dataToEncrypt.resident_name) {
     encryptedData.encrypted_resident_name = encryptData(
       dataToEncrypt.resident_name,
+      generalDek,
+    )
+  }
+  if (dataToEncrypt.room_no) {
+    encryptedData.encrypted_room_no = encryptData(
+      dataToEncrypt.room_no,
+      generalDek,
+    )
+  }
+  if (dataToEncrypt.gender) {
+    encryptedData.encrypted_gender = encryptData(
+      dataToEncrypt.gender,
       generalDek,
     )
   }
@@ -125,11 +137,10 @@ export async function decryptResidentData(
 ): Promise<Resident> {
   const decryptedData: Partial<Resident> = {}
   decryptedData.facility_id = data.facility_id
-  decryptedData.room_no = data.room_no
 
-  let generalDek: Buffer | undefined
-  let contactDek: Buffer | undefined
-  let clinicalDek: Buffer | undefined
+  let generalDek: Buffer | string | Uint8Array | undefined
+  let contactDek: Buffer | string | Uint8Array | undefined
+  let clinicalDek: Buffer | string | Uint8Array | undefined
 
   const userRoles = roles.map((role) => role.toUpperCase())
 
@@ -187,11 +198,15 @@ export async function decryptResidentData(
         data.encrypted_resident_name,
         generalDek,
       )
+    if (data.encrypted_gender)
+      decryptedData.gender = decryptData(data.encrypted_gender, generalDek)
     if (data.encrypted_avatar_url)
       decryptedData.avatar_url = decryptData(
         data.encrypted_avatar_url,
         generalDek,
       )
+    if (data.encrypted_room_no)
+      decryptedData.room_no = decryptData(data.encrypted_room_no, generalDek)
   }
 
   if (contactDek) {
@@ -245,3 +260,81 @@ export const getResidentConverter = async (): Promise<
 export const getFacilityConverter = async function () {
   return facilityConverter
 }
+// --- Subcollection Converters ---
+
+// Generic encryption function for subcollection items
+async function encryptSubcollectionItem<
+  T extends { id?: string; [field: string]: any },
+>(item: T, kekPath: string): Promise<any> {
+  const { plaintextDek, encryptedDek } = await generateDataKey(kekPath)
+  const encryptedData: any = { encrypted_dek: encryptedDek.toString('base64') }
+
+  for (const key in item) {
+    if (key !== 'id') {
+      // Don't encrypt the ID
+      encryptedData[`encrypted_${key}`] = encryptData(
+        String((item as any)[key]),
+        plaintextDek,
+      )
+    }
+  }
+  return encryptedData
+}
+
+// Generic decryption function for subcollection items
+export async function decryptSubcollectionItem<T>(
+  data: any,
+  kekPath: string,
+): Promise<T> {
+  const dek = await decryptDataKey(
+    Buffer.from(data.encrypted_dek, 'base64'),
+    kekPath,
+  )
+  const decryptedData: any = { id: data.id }
+
+  for (const key in data) {
+    if (key.startsWith('encrypted_') && key !== 'encrypted_dek') {
+      const newKey = key.replace('encrypted_', '')
+      decryptedData[newKey] = decryptData(data[key], dek)
+    }
+  }
+  return decryptedData as T
+}
+
+// Prescription Converter
+export const getPrescriptionConverter = async (): Promise<
+  FirestoreDataConverter<Prescription>
+> => ({
+  async toFirestore(prescription: Prescription): Promise<DocumentData> {
+    return encryptSubcollectionItem(prescription, KEK_CLINICAL_PATH)
+  },
+  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): Prescription {
+    return EncryptedPrescriptionSchema.parse(snapshot.data()) as any // Cast needed as it's encrypted
+  },
+})
+
+// Financial Transaction Converter
+export const getFinancialTransactionConverter = async (): Promise<
+  FirestoreDataConverter<FinancialTransaction>
+> => ({
+  async toFirestore(transaction: FinancialTransaction): Promise<DocumentData> {
+    return encryptSubcollectionItem(transaction, KEK_FINANCIAL_PATH)
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot<DocumentData>,
+  ): FinancialTransaction {
+    return EncryptedFinancialTransactionSchema.parse(snapshot.data()) as any
+  },
+})
+
+// EmarRecord (Prescription Administration) Converter
+export const getEmarRecordConverter = async (): Promise<
+  FirestoreDataConverter<any, DocumentData>
+> => ({
+  async toFirestore(adminRecord: any): Promise<DocumentData> {
+    return encryptSubcollectionItem(adminRecord, KEK_CLINICAL_PATH)
+  },
+  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): any {
+    return EncryptedEmarRecordSchema.parse(snapshot.data())
+  },
+})
