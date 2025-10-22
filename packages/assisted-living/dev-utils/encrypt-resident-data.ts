@@ -62,7 +62,28 @@ function groupDataByResident(items: any[]) {
 async function processAllData() {
   console.log('--- Starting Efficient Bulk Data Encryption Process ---')
 
-  // 1. Load all data into memory
+  // 1. Setup file streams
+  const streams: { [key: string]: fs.WriteStream } = {}
+  const openStream = (filePath: string) => {
+    const stream = fs.createWriteStream(filePath, { encoding: 'utf-8' })
+    stream.write('[')
+    return stream
+  }
+
+  streams.residents = openStream(
+    path.join(process.cwd(), 'demo-data/residents/data.json'),
+  )
+  for (const sc of SUBCOLLECTIONS) {
+    streams[sc.name] = openStream(
+      path.join(process.cwd(), `demo-data/${sc.name}/data.json`),
+    )
+  }
+
+  let isFirstResident = true
+  const isFirstItem: { [key: string]: boolean } = {}
+  SUBCOLLECTIONS.forEach((sc) => (isFirstItem[sc.name] = true))
+
+  // 2. Load all data into memory
   const residents = loadSubcollectionData('residents')
   const subcollectionData: { [key: string]: { [key: string]: any[] } } = {}
   for (const sc of SUBCOLLECTIONS) {
@@ -70,11 +91,7 @@ async function processAllData() {
     subcollectionData[sc.name] = groupDataByResident(items)
   }
 
-  const encryptedResidents = []
-  const encryptedSubcollections: { [key: string]: any[] } = {}
-  SUBCOLLECTIONS.forEach((sc) => (encryptedSubcollections[sc.name] = []))
-
-  // 2. Main loop through each resident
+  // 3. Main loop through each resident
   for (const resident of residents) {
     console.log(`Processing resident ${resident.id}...`)
     const residentId = resident.id
@@ -153,11 +170,15 @@ async function processAllData() {
         resident.data.pcp,
         clinicalDek,
       )
-    encryptedResidents.push(encryptedResident)
 
-    // c. Encrypt all subcollection items for this resident using the DEKs generated above
+    // Stream the resident object
+    if (!isFirstResident) streams.residents.write(',')
+    streams.residents.write(JSON.stringify(encryptedResident, null, 2))
+    isFirstResident = false
+
+    // c. Encrypt and stream all subcollection items for this resident
     for (const sc of SUBCOLLECTIONS) {
-      console.log(`\tProcessing ${sc.name} for ${residentId}...`)
+      console.log(`	Processing ${sc.name} for ${residentId}...`)
       const residentItems = subcollectionData[sc.name]?.[residentId] || []
       let dek: Buffer, encrypted_dek: Buffer | string | Uint8Array
       if (sc.kekPath === KEK_CLINICAL_PATH) {
@@ -194,29 +215,21 @@ async function processAllData() {
             )
           }
         }
-        encryptedSubcollections[sc.name].push({
-          id: item.id,
-          data: encryptedItemData,
-        })
+
+        if (!isFirstItem[sc.name]) streams[sc.name].write(',')
+        streams[sc.name].write(
+          JSON.stringify({ id: item.id, data: encryptedItemData }, null, 2),
+        )
+        isFirstItem[sc.name] = false
       }
     }
   }
 
-  // 3. Write all encrypted files
-  console.log('Writing encrypted files...')
-  fs.writeFileSync(
-    path.join(process.cwd(), 'demo-data/residents/data.json'),
-    JSON.stringify(encryptedResidents, null, 2),
-  )
-  for (const sc of SUBCOLLECTIONS) {
-    const outputPath = path.join(
-      process.cwd(),
-      `demo-data/${sc.name}/data.json`,
-    )
-    fs.writeFileSync(
-      outputPath,
-      JSON.stringify(encryptedSubcollections[sc.name], null, 2),
-    )
+  // 4. Close all streams
+  console.log('\nClosing all file streams...')
+  for (const key in streams) {
+    streams[key].write(']')
+    streams[key].end()
   }
 
   console.log('--- All data encrypted successfully! ---')
