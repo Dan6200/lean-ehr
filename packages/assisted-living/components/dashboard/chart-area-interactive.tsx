@@ -1,13 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  XAxis,
-  ResponsiveContainer,
-} from 'recharts'
+import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts'
 
 import { useIsMobile } from '@/hooks/use-mobile'
 import {
@@ -32,8 +26,12 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { getAllResidents } from '@/actions/residents/get'
-import { FinancialTransaction, ResidentData } from '@/types'
+import { getAllResidents, getNestedResidentData } from '@/actions/residents/get'
+import {
+  EmergencyContactSchema,
+  FinancialTransaction,
+  ResidentData,
+} from '@/types'
 
 const chartConfig = {
   charges: {
@@ -53,10 +51,14 @@ export function ChartAreaInteractive() {
 
   React.useEffect(() => {
     async function fetchData() {
-      const residents = await getAllResidents()
-      const allTransactions = residents.flatMap(
-        (r: ResidentData) => r.financials || [],
+      const { residents } = await getAllResidents({})
+      const [allTransactions] = await Promise.all(
+        residents.flatMap(
+          (r) => getNestedResidentData(r.id, 'financials') || [],
+        ),
       )
+
+      console.log('all transactions', allTransactions)
 
       // Aggregate data by date
       const aggregatedData = allTransactions.reduce(
@@ -159,79 +161,77 @@ export function ChartAreaInteractive() {
           config={chartConfig}
           className="aspect-auto h-[400px] w-full"
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={filteredData}>
-              <defs>
-                <linearGradient id="fillCharges" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-charges)"
-                    stopOpacity={1.0}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-charges)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-                <linearGradient id="fillPayments" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="5%"
-                    stopColor="var(--color-payments)"
-                    stopOpacity={0.8}
-                  />
-                  <stop
-                    offset="95%"
-                    stopColor="var(--color-payments)"
-                    stopOpacity={0.1}
-                  />
-                </linearGradient>
-              </defs>
-              <CartesianGrid vertical={false} />
-              <XAxis
-                dataKey="date"
-                tickLine={false}
-                axisLine={false}
-                tickMargin={8}
-                minTickGap={32}
-                tickFormatter={(value) => {
-                  const date = new Date(value)
-                  return date.toLocaleDateString('en-US', {
-                    month: 'short',
-                    day: 'numeric',
-                  })
-                }}
-              />
-              <ChartTooltip
-                cursor={false}
-                content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                      })
-                    }}
-                    indicator="dot"
-                  />
-                }
-              />
-              <Area
-                dataKey="payments"
-                type="natural"
-                fill="url(#fillPayments)"
-                stroke="var(--color-payments)"
-                stackId="a"
-              />
-              <Area
-                dataKey="charges"
-                type="natural"
-                fill="url(#fillCharges)"
-                stroke="var(--color-charges)"
-                stackId="a"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          <AreaChart data={filteredData}>
+            <defs>
+              <linearGradient id="fillCharges" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-charges)"
+                  stopOpacity={1.0}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-charges)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+              <linearGradient id="fillPayments" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-payments)"
+                  stopOpacity={0.8}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-payments)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+            </defs>
+            <CartesianGrid vertical={false} />
+            <XAxis
+              dataKey="date"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={8}
+              minTickGap={32}
+              tickFormatter={(value) => {
+                const date = new Date(value)
+                return date.toLocaleDateString('en-US', {
+                  month: 'short',
+                  day: 'numeric',
+                })
+              }}
+            />
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  labelFormatter={(value) => {
+                    return new Date(value).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })
+                  }}
+                  indicator="dot"
+                />
+              }
+            />
+            <Area
+              dataKey="payments"
+              type="natural"
+              fill="url(#fillPayments)"
+              stroke="var(--color-payments)"
+              stackId="a"
+            />
+            <Area
+              dataKey="charges"
+              type="natural"
+              fill="url(#fillCharges)"
+              stroke="var(--color-charges)"
+              stackId="a"
+            />
+          </AreaChart>
         </ChartContainer>
       </CardContent>
     </Card>
