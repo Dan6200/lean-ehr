@@ -3,6 +3,63 @@ export type Nullable<T> = T | null | undefined
 import { z } from 'zod'
 
 // --- Enums ---
+export const ObservationStatusEnum = z.enum([
+  'registered',
+  'preliminary',
+  'final',
+  'amended',
+  'corrected',
+  'cancelled',
+  'entered-in-error',
+  'unknown',
+])
+export const AllergyClinicalStatusEnum = z.enum([
+  'active',
+  'inactive',
+  'resolved',
+])
+export const AllergyVerificationStatusEnum = z.enum([
+  'unconfirmed',
+  'presumed',
+  'confirmed',
+  'refuted',
+  'entered-in-error',
+])
+export const AllergyTypeEnum = z.enum(['allergy', 'intolerance'])
+export const ConditionStatusEnum = z.enum([
+  'active',
+  'recurrence',
+  'remission',
+  'resolved',
+])
+export const PrescriptionStatusEnum = z.enum([
+  'recorded',
+  'entered-in-error',
+  'draft',
+])
+export const PrescriptionAdherenceStatusEnum = z.enum([
+  'taking',
+  'taking-as-directed',
+  'taking-not-as-directed',
+  'not-taking',
+  'on-hold',
+  'on-hold-as-directed',
+  'on-hold-not-as-directed',
+  'stopped',
+  'stopped-as-directed',
+  'stopped-not-as-directed',
+  'unknown',
+])
+export const AdministrationStatusEnum = z.enum([
+  'in-progress',
+  'not-done',
+  'on-hold',
+  'completed',
+  'entered-in-error',
+  'stopped',
+  'unknown',
+])
+
 export const LegalRelationshipEnum = z.enum([
   'HCP_AGENT_DURABLE',
   'POA_FINANCIAL',
@@ -28,68 +85,111 @@ export const RelationshipEnum = z.union([
   PersonalRelationshipEnum,
 ])
 
-export const FinancialTransactionTypeEnum = z.enum(['PAYMENT', 'CHARGE'])
-
-export const MedicalRecordTypeEnum = z.enum([
-  'NURSING_NOTE',
-  'PHYSICIAN_ORDER',
-  'INCIDENT_REPORT',
-  'CONSULTATION',
-  'OTHER',
+export const FinancialTransactionTypeEnum = z.enum([
+  'CHARGE',
+  'PAYMENT',
+  'ADJUSTMENT',
 ])
 
-export const AdministrationStatusEnum = z.enum(['GIVEN', 'REFUSED', 'HELD'])
-
 // --- Plaintext Schemas (for Application Use) ---
-export const AdministrationSchema = z.object({
-  date: z.string(), // ISO 8601 date string
-  status: AdministrationStatusEnum,
-  administered_by: z.string(), // User ID
+
+const SnomedConceptSchema = z.object({
+  name: z.string(),
+  snomed_code: z.string(),
 })
 
-export const ObservationSchema = z.object({
-  date: z.string(), // ISO 8601 date string
-  loinc_code: z.string(),
-  name: z.string(), // The display name for the LOINC code
-  value: z.string(),
-  unit: z.string().optional(),
+const StrengthSchema = z.object({
+  value: z.number(),
+  unit: z.string(),
 })
 
-export const DiagnosticHistorySchema = z.object({
-  date: z.string(), // ISO 8601 date string
-  title: z.string(),
-  notes: z.string(),
-  snomed_code: z.string(), // SNOMED code for the record type
+const MedicationSchema = z.object({
+  rxnorm_code: z.string(),
+  snomed_code: z.string(),
+  name: z.string(),
+  strength: StrengthSchema,
+})
+
+const DoseAndRateSchema = z.object({
+  doseQuantity: StrengthSchema,
+})
+
+const DosageInstructionSchema = z.object({
+  timing: z.string(),
+  site: SnomedConceptSchema,
+  route: SnomedConceptSchema,
+  method: SnomedConceptSchema,
+  doseAndRate: z.array(DoseAndRateSchema),
 })
 
 export const AllergySchema = z.object({
-  name: z.string(),
-  snomed_code: z.string(),
-  reaction: z.string().optional(),
+  resident_id: z.string(),
+  recorder_id: z.string(),
+  clinicalStatus: AllergyClinicalStatusEnum,
+  verificationStatus: AllergyVerificationStatusEnum,
+  type: AllergyTypeEnum,
+  recordedDate: z.string(),
+  substance: SnomedConceptSchema,
+  reaction: z.object({
+    code: z.string(),
+    name: z.string(),
+    severity: z.string(),
+  }),
 })
 
 export const PrescriptionSchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
+  effective_period_start: z.string(),
+  effective_period_end: z.string(),
+  status: PrescriptionStatusEnum,
+  adherence: PrescriptionAdherenceStatusEnum,
+  medication: MedicationSchema,
+  dosageInstruction: z.array(DosageInstructionSchema),
+})
+
+export const ObservationSchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
+  status: ObservationStatusEnum,
+  effective_datetime: z.string(),
+  loinc_code: z.string(),
   name: z.string(),
-  rxnorm_code: z.string(),
-  dosage: z.string().optional(),
-  frequency: z.string().optional(),
+  value: z.number(),
+  unit: z.string(),
+  body_site: SnomedConceptSchema,
+  method: SnomedConceptSchema,
+  device: z.object({ name: z.string(), udi_code: z.string() }),
+})
+
+export const DiagnosticHistorySchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
+  clinicalStatus: ConditionStatusEnum,
+  recordedDate: z.string(),
+  onsetDateTime: z.string(),
+  abatementDateTime: z.string().nullable(),
+  title: z.string(),
+  snomed_code: z.string(),
 })
 
 export const EmarRecordSchema = z.object({
-  id: z.string(),
   resident_id: z.string(),
-  prescription_id: z.string(), // Renamed from medication_statement_id
-  prescription_name: z.string(), // Renamed from medication_name
+  prescription_id: z.string(),
+  medication: MedicationSchema,
   recorder_id: z.string(),
-  status: z.string(),
-  administration_route: z.string(),
-  administered_dosage: z.string(),
-  administration_datetime: z.string(),
+  status: AdministrationStatusEnum,
+  effective_datetime: z.string(),
+  dosage: z.object({
+    route: SnomedConceptSchema,
+    administeredDose: StrengthSchema,
+  }),
 })
 
 export const FinancialTransactionSchema = z.object({
+  resident_id: z.string(),
   amount: z.number(),
-  date: z.string(), // ISO 8601 date string
+  occurrence_datetime: z.string(),
   type: FinancialTransactionTypeEnum,
   description: z.string(),
 })
@@ -137,63 +237,73 @@ export const EncryptedFieldSchema = z.object({
 })
 
 // --- Encrypted Schemas (for Firestore Storage) ---
-export const EncryptedAdministrationSchema = z.object({
-  encrypted_date: EncryptedFieldSchema,
-  encrypted_status: EncryptedFieldSchema,
-  encrypted_administered_by: EncryptedFieldSchema,
-})
-
-export const EncryptedObservationSchema = z.object({
-  encrypted_date: EncryptedFieldSchema,
-  encrypted_loinc_code: EncryptedFieldSchema,
-  encrypted_value: EncryptedFieldSchema,
-  encrypted_unit: EncryptedFieldSchema.optional(),
-})
-
-export const EncryptedDiagnosticHistorySchema = z.object({
-  encrypted_date: EncryptedFieldSchema,
-  encrypted_title: EncryptedFieldSchema,
-  encrypted_notes: EncryptedFieldSchema,
-  encrypted_snomed_code: EncryptedFieldSchema,
-})
 
 export const EncryptedAllergySchema = z.object({
-  encrypted_name: EncryptedFieldSchema,
-  encrypted_snomed_code: EncryptedFieldSchema.optional(),
-  encrypted_reaction: EncryptedFieldSchema.optional(),
+  encrypted_dek: z.string(),
+  encrypted_clinicalStatus: EncryptedFieldSchema,
+  encrypted_verificationStatus: EncryptedFieldSchema,
+  encrypted_type: EncryptedFieldSchema,
+  encrypted_recordedDate: EncryptedFieldSchema,
+  encrypted_substance: EncryptedFieldSchema,
+  encrypted_reaction: EncryptedFieldSchema,
 })
 
 export const EncryptedPrescriptionSchema = z.object({
+  encrypted_dek: z.string(),
+  encrypted_effective_period_start: EncryptedFieldSchema,
+  encrypted_effective_period_end: EncryptedFieldSchema,
+  encrypted_status: EncryptedFieldSchema,
+  encrypted_adherence: EncryptedFieldSchema,
+  encrypted_medication: EncryptedFieldSchema,
+  encrypted_dosageInstruction: EncryptedFieldSchema,
+})
+
+export const EncryptedObservationSchema = z.object({
+  encrypted_dek: z.string(),
+  encrypted_status: EncryptedFieldSchema,
+  encrypted_effective_datetime: EncryptedFieldSchema,
+  encrypted_loinc_code: EncryptedFieldSchema,
   encrypted_name: EncryptedFieldSchema,
-  encrypted_rxnorm_code: EncryptedFieldSchema.optional(),
-  encrypted_dosage: EncryptedFieldSchema.optional(),
-  encrypted_frequency: EncryptedFieldSchema.optional(),
+  encrypted_value: EncryptedFieldSchema,
+  encrypted_unit: EncryptedFieldSchema,
+  encrypted_body_site: EncryptedFieldSchema,
+  encrypted_method: EncryptedFieldSchema,
+  encrypted_device: EncryptedFieldSchema,
+})
+
+export const EncryptedDiagnosticHistorySchema = z.object({
+  encrypted_dek: z.string(),
+  encrypted_clinicalStatus: EncryptedFieldSchema,
+  encrypted_recordedDate: EncryptedFieldSchema,
+  encrypted_onsetDateTime: EncryptedFieldSchema,
+  encrypted_abatementDateTime: EncryptedFieldSchema.nullable(),
+  encrypted_title: EncryptedFieldSchema,
+  encrypted_snomed_code: EncryptedFieldSchema,
 })
 
 export const EncryptedEmarRecordSchema = z.object({
-  encrypted_resident_id: EncryptedFieldSchema,
-  encrypted_prescription_id: EncryptedFieldSchema,
-  encrypted_prescription_name: EncryptedFieldSchema,
-  encrypted_recorder_id: EncryptedFieldSchema,
+  encrypted_dek: z.string(),
+  encrypted_medication: EncryptedFieldSchema,
   encrypted_status: EncryptedFieldSchema,
-  encrypted_administration_route: EncryptedFieldSchema,
-  encrypted_administered_dosage: EncryptedFieldSchema,
-  encrypted_administration_datetime: EncryptedFieldSchema,
+  encrypted_effective_datetime: EncryptedFieldSchema,
+  encrypted_dosage: EncryptedFieldSchema,
 })
 
 export const EncryptedFinancialTransactionSchema = z.object({
+  encrypted_dek: z.string(),
   encrypted_amount: EncryptedFieldSchema,
-  encrypted_date: EncryptedFieldSchema,
+  encrypted_occurrence_datetime: EncryptedFieldSchema,
   encrypted_type: EncryptedFieldSchema,
   encrypted_description: EncryptedFieldSchema,
 })
 
 export const EncryptedEmergencyContactSchema = z.object({
+  encrypted_dek: z.string(),
   encrypted_contact_name: EncryptedFieldSchema.nullable().optional(),
   encrypted_cell_phone: EncryptedFieldSchema,
   encrypted_work_phone: EncryptedFieldSchema.nullable().optional(),
   encrypted_home_phone: EncryptedFieldSchema.nullable().optional(),
-  encrypted_relationship: z.array(EncryptedFieldSchema).nullable().optional(),
+  encrypted_relationship: EncryptedFieldSchema.nullable().optional(),
 })
 
 export const EncryptedResidentSchema = z.object({
@@ -204,7 +314,7 @@ export const EncryptedResidentSchema = z.object({
   encrypted_dek_general: z.string(),
   encrypted_dek_contact: z.string(),
   encrypted_dek_clinical: z.string(),
-  encrypted_dek_financial: z.string(), // New DEK for financial data
+  encrypted_dek_financial: z.string(),
 
   // Encrypted data fields
   encrypted_avatar_url: EncryptedFieldSchema.nullable().optional(),
@@ -220,7 +330,6 @@ export const EncryptedResidentSchema = z.object({
 })
 
 // --- Types ---
-export type Administration = z.infer<typeof AdministrationSchema>
 export type Observation = z.infer<typeof ObservationSchema>
 export type DiagnosticHistory = z.infer<typeof DiagnosticHistorySchema>
 export type Allergy = z.infer<typeof AllergySchema>
@@ -228,7 +337,7 @@ export type Prescription = z.infer<typeof PrescriptionSchema>
 export type FinancialTransaction = z.infer<typeof FinancialTransactionSchema>
 export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
 export type Resident = z.infer<typeof ResidentSchema>
-export type EncryptedResident = z.infer<typeof EncryptedResidentSchema>
+export type EmarRecord = z.infer<typeof EmarRecordSchema>
 
 // --- Other Schemas & Types (unchanged) ---
 export const FacilitySchema = z.object({
@@ -236,6 +345,12 @@ export const FacilitySchema = z.object({
   address: z.string(),
 })
 export type Facility = z.infer<typeof FacilitySchema>
+
+export const LeanResidentDataSchema = ResidentSchema.extend({
+  id: z.string().optional(),
+  address: z.string(),
+})
+export type LeanResidentData = z.infer<typeof LeanResidentDataSchema>
 
 export const ResidentDataSchema = ResidentSchema.extend({
   id: z.string().optional(),
