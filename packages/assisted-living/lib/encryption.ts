@@ -55,6 +55,11 @@ export const KEK_FINANCIAL_PATH = getKmsConfig(
   `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-financial" --format="value(name)"`,
 )
 
+// export const KEK_RESPONDER_PATH = getKmsConfig(
+//   'KEK_RESPONDER_PATH',
+//   `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-responder" --format="value(name)"`,
+// )
+
 const kmsClient = new KeyManagementServiceClient()
 
 // --- DEK Generation and Wrapping/Unwrapping ---
