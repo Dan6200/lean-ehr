@@ -1,4 +1,12 @@
 demo-data/residents/data.json
+demo-data/allergies/
+demo-data/diagnostic_history/
+demo-data/emergency_contacts/data.json
+demo-data/financials/
+demo-data/observations/
+demo-data/prescription_administration/
+demo-data/prescriptions/
+
 public/auth-service-worker.js*
 tmp_build/
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
