@@ -26,12 +26,6 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { getAllResidents, getNestedResidentData } from '@/actions/residents/get'
-import {
-  EmergencyContactSchema,
-  FinancialTransaction,
-  ResidentData,
-} from '@/types'
 
 const chartConfig = {
   charges: {
@@ -42,70 +36,34 @@ const chartConfig = {
     label: 'Payments',
     color: 'hsl(var(--chart-2))',
   },
+  adjustments: {
+    label: 'Adjustments',
+    color: 'hsl(var(--chart-3))',
+  },
 } satisfies ChartConfig
 
-export function ChartAreaInteractive() {
+interface ChartAreaInteractiveProps {
+  chartData: any[]
+}
+
+export function ChartAreaInteractive({ chartData }: ChartAreaInteractiveProps) {
   const isMobile = useIsMobile()
   const [timeRange, setTimeRange] = React.useState('90d')
-  const [chartData, setChartData] = React.useState<any[]>([])
-
-  React.useEffect(() => {
-    async function fetchData() {
-      const { residents } = await getAllResidents({})
-      const [allTransactions] = await Promise.all(
-        residents.flatMap(
-          (r) => getNestedResidentData(r.id, 'financials') || [],
-        ),
-      )
-
-      console.log('all transactions', allTransactions)
-
-      // Aggregate data by date
-      const aggregatedData = allTransactions.reduce(
-        (
-          acc: {
-            [key: string]: { date: string; charges: number; payments: number }
-          },
-          item: FinancialTransaction,
-        ) => {
-          const date = item.date.split('T')[0] // Group by day
-          if (!acc[date]) {
-            acc[date] = { date, charges: 0, payments: 0 }
-          }
-          if (item.type === 'CHARGE') {
-            acc[date].charges += item.amount
-          } else {
-            acc[date].payments += item.amount
-          }
-          return acc
-        },
-        {},
-      )
-
-      const formattedData = Object.values(aggregatedData).sort(
-        (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-      )
-
-      setChartData(formattedData)
-    }
-
-    fetchData()
-  }, [])
 
   React.useEffect(() => {
     if (isMobile) {
-      setTimeRange('7d')
+      setTimeRange('30d')
     }
   }, [isMobile])
 
   const filteredData = chartData.filter((item) => {
     const date = new Date(item.date)
     const now = new Date()
-    let daysToSubtract = 90
-    if (timeRange === '30d') {
+    let daysToSubtract = 180
+    if (timeRange === '90d') {
+      daysToSubtract = 90
+    } else if (timeRange === '30d') {
       daysToSubtract = 30
-    } else if (timeRange === '7d') {
-      daysToSubtract = 7
     }
     const startDate = new Date(now)
     startDate.setDate(startDate.getDate() - daysToSubtract)
@@ -118,7 +76,7 @@ export function ChartAreaInteractive() {
         <CardTitle>Financial Overview</CardTitle>
         <CardDescription>
           <span className="hidden @[540px]/card:block">
-            Total charges and payments over the last 3 months.
+            Total charges, payments, and adjustments over the last 3 months.
           </span>
           <span className="@[540px]/card:hidden">Last 3 months</span>
         </CardDescription>
@@ -130,9 +88,9 @@ export function ChartAreaInteractive() {
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
           >
+            <ToggleGroupItem value="180d">Last 6 months</ToggleGroupItem>
             <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
             <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
           </ToggleGroup>
           <Select value={timeRange} onValueChange={setTimeRange}>
             <SelectTrigger
@@ -143,14 +101,14 @@ export function ChartAreaInteractive() {
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
+              <SelectItem value="180d" className="rounded-lg">
+                Last 6 months
+              </SelectItem>
               <SelectItem value="90d" className="rounded-lg">
                 Last 3 months
               </SelectItem>
               <SelectItem value="30d" className="rounded-lg">
                 Last 30 days
-              </SelectItem>
-              <SelectItem value="7d" className="rounded-lg">
-                Last 7 days
               </SelectItem>
             </SelectContent>
           </Select>
@@ -184,6 +142,18 @@ export function ChartAreaInteractive() {
                 <stop
                   offset="95%"
                   stopColor="var(--color-payments)"
+                  stopOpacity={0.1}
+                />
+              </linearGradient>
+              <linearGradient id="fillAdjustments" x1="0" y1="0" x2="0" y2="1">
+                <stop
+                  offset="5%"
+                  stopColor="var(--color-adjustments)"
+                  stopOpacity={0.6}
+                />
+                <stop
+                  offset="95%"
+                  stopColor="var(--color-adjustments)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -229,6 +199,13 @@ export function ChartAreaInteractive() {
               type="natural"
               fill="url(#fillCharges)"
               stroke="var(--color-charges)"
+              stackId="a"
+            />
+            <Area
+              dataKey="adjustments"
+              type="natural"
+              fill="url(#fillAdjustments)"
+              stroke="var(--color-adjustments)"
               stackId="a"
             />
           </AreaChart>
