@@ -1,8 +1,14 @@
 'use server'
-import { initializeServerApp } from 'firebase/app'
+import {
+  initializeServerApp,
+  initializeApp,
+  deleteApp,
+  getApp,
+} from 'firebase/app'
+import { randomBytes } from 'crypto'
 import { cookies, headers } from 'next/headers'
 import { firebaseConfig } from '@/firebase/config'
-import { connectAuthEmulator, getAuth } from 'firebase/auth'
+import { getAuth, signInWithCustomToken } from 'firebase/auth'
 
 // Environment variables for Cloud Function URLs
 const REVOKE_SESSIONS_FUNCTION_URL = process.env.REVOKE_SESSIONS_FUNCTION_URL
@@ -10,7 +16,6 @@ const VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL =
   process.env.VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL
 const VERIFY_SESSION_COOKIE_FUNCTION_URL =
   process.env.VERIFY_SESSION_COOKIE_FUNCTION_URL
-const authHost = process.env.NEXT_PUBLIC_FIREBASE_AUTH_EMULATOR_HOST!
 
 /**
  * Revokes all sessions for the given user by calling a Cloud Function.
@@ -78,105 +83,80 @@ export async function getVerifiedSessionCookie(): Promise<any> {
       'Session cookie verification failed via Cloud Function:',
       error,
     )
-    await deleteSessionCookie() // Delete invalid session cookie
+    return null
+  }
+}
+
+export async function getAuthenticatedAppAndClaims(): Promise<{
+  app: ReturnType<typeof initializeApp>
+  idToken: any // This will be the decoded ID token
+  appName: string
+} | null> {
+  const sessionCookie = (await cookies()).get('__session')?.value
+  if (!sessionCookie) {
+    // No session cookie, so no authenticated user
+    return null
+  }
+
+  if (!VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL) {
+    console.error(
+      'VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL is not set.',
+    )
+    return null
+  }
+
+  try {
+    const response = await fetch(
+      VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sessionCookie }),
+      },
+    )
+    const result = await response.json()
+
+    if (!response.ok || !result.customToken || !result.decodedClaims) {
+      throw new Error(
+        result.error ||
+          'Failed to verify session cookie or create custom token via Cloud Function',
+      )
+    }
+
+    const appName = `server-${randomBytes(16).toString('hex')}`
+    const serverApp = initializeApp(firebaseConfig, appName)
+    const serverAuth = getAuth(serverApp)
+    await signInWithCustomToken(serverAuth, result.customToken)
+
+    if (!serverAuth.currentUser) {
+      throw new Error('FirebaseServerApp: Failed to sign in with custom token.')
+    }
+
+    return {
+      app: serverApp,
+      idToken: result.decodedClaims,
+      appName: appName,
+    }
+  } catch (error: any) {
+    console.error(
+      'Failed to initialize Firebase app with session cookie:',
+      error,
+    )
+    // Also, delete the potentially invalid cookie to prevent redirect loops
+    await deleteSessionCookie()
     return null
   }
 }
 
 /**
- * Attempts to authenticate the user by checking the Authorization header (service worker) first,
- * then falling back to the __session cookie (Cloud Function).
- * Returns a FirebaseServerApp instance and decoded ID token claims.
- * @returns An object containing the FirebaseServerApp instance and the decoded ID token, or null if authentication fails.
+ * Deletes a temporary Firebase app instance.
+ * @param appName The unique name of the app to delete.
  */
-export async function getAuthenticatedAppAndClaims(): Promise<{
-  app: ReturnType<typeof initializeServerApp>
-  idToken: any // This will be the decoded ID token
-} | null> {
-  let authIdToken: string | undefined
-  let decodedIdToken: any // This will hold the decoded ID token from the Cloud Function
-
-  // 1. Try to get ID token from Authorization header (Service Worker path)
-  const authorizationHeader = (await headers()).get('Authorization')
-  const idTokenFromHeader = authorizationHeader?.split('Bearer ')[1]
-
-  if (idTokenFromHeader) {
-    authIdToken = idTokenFromHeader // Use the original ID token for FirebaseServerApp
+export async function deleteServerApp(appName: string) {
+  try {
+    const app = getApp(appName)
+    await deleteApp(app)
+  } catch (error) {
+    console.error(`Failed to delete server app ${appName}:`, error)
   }
-
-  // 2. Fallback to __session cookie if no valid ID token from header path
-  if (!authIdToken) {
-    const sessionCookie = (await cookies()).get('__session')?.value
-    if (sessionCookie) {
-      if (!VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL) {
-        console.error(
-          'VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL is not set.',
-        )
-        return null
-      }
-      try {
-        const response = await fetch(
-          VERIFY_SESSION_COOKIE_AND_CREATE_CUSTOM_TOKEN_FUNCTION_URL,
-          {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sessionCookie }),
-          },
-        )
-        const result = await response.json()
-
-        if (!response.ok || !result.customToken || !result.decodedClaims) {
-          throw new Error(
-            result.error ||
-              'Failed to verify session cookie or create custom token via Cloud Function',
-          )
-        }
-        authIdToken = result.customToken // Use the custom token from CF as authIdToken
-        decodedIdToken = result.decodedClaims // Get decoded claims from CF
-      } catch (error) {
-        console.warn(
-          'Session cookie verification/custom token creation failed via Cloud Function:',
-          error,
-        )
-        await deleteSessionCookie() // Delete invalid session cookie
-        return null
-      }
-    }
-  }
-
-  // If we have a valid authIdToken (from either source), initialize FirebaseServerApp
-  if (authIdToken) {
-    try {
-      const serverApp = initializeServerApp(firebaseConfig, {
-        authIdToken,
-        releaseOnDeref: headers(),
-      })
-
-      const serverAuth = getAuth(serverApp)
-      if (process.env.NODE_ENV === 'development')
-        try {
-          connectAuthEmulator(serverAuth, authHost) // Always throws an error due to race-conditions
-        } catch {}
-
-      await serverAuth.authStateReady()
-
-      // if (!serverAuth.currentUser) { // Don't make this check
-      //   throw new Error('FirebaseServerApp: User authentication failed.')
-      // }
-
-      // If we used the session cookie path, we already have the claims.
-      // If we used the header path, we need to get them now.
-      if (!decodedIdToken) {
-        const idTokenResult = await serverAuth.currentUser?.getIdTokenResult()
-        decodedIdToken = idTokenResult?.claims
-      }
-
-      return { app: serverApp, idToken: decodedIdToken }
-    } catch (error: any) {
-      console.error('Failed to initialize FirebaseServerApp with token:', error)
-      return null
-    }
-  }
-
-  return null
 }
