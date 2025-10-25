@@ -10,7 +10,6 @@ import {
 } from '@/firebase/firestore-server'
 import {
   Allergy,
-  EncryptedResident,
   Facility,
   FacilitySchema,
   FinancialTransaction,
@@ -102,7 +101,7 @@ import {
   KEK_FINANCIAL_PATH,
 } from '@/lib/encryption'
 
-const subCollectionMap: SubCollectionMapType = {
+const subCollectionMap = {
   allergies: [AllergySchema, KEK_CONTACT_PATH],
   prescriptions: [PrescriptionSchema, KEK_CLINICAL_PATH],
   observations: [ObservationSchema, KEK_CLINICAL_PATH],
@@ -110,7 +109,7 @@ const subCollectionMap: SubCollectionMapType = {
   emergency_contacts: [EmergencyContactSchema, KEK_CONTACT_PATH],
   financials: [FinancialTransactionSchema, KEK_FINANCIAL_PATH],
   emar: [EmarRecordSchema, KEK_CLINICAL_PATH],
-}
+} as const
 
 type SubCollectionKey = keyof typeof subCollectionMap
 
@@ -118,11 +117,8 @@ export async function getNestedResidentData<K extends SubCollectionKey>(
   residentId: string,
   subCollectionName: K,
 ) {
-  return getSubcollection(
-    residentId,
-    subCollectionName,
-    ...(subCollectionMap[subCollectionName] as SubCollectionArgs<K>),
-  )
+  const [schema, kekPath] = subCollectionMap[subCollectionName]
+  return getSubcollection(residentId, subCollectionName, schema, kekPath)
 }
 
 // Use a DTO for resident data
@@ -160,9 +156,8 @@ export async function getResidentData(
       financials,
       emar,
     ] = await Promise.all(
-      Object.entries(subCollectionMap).map(
-        ([subcolName, subcolSchemaAndPath]) =>
-          getSubcollection(documentId, subcolName, ...subcolSchemaAndPath),
+      Object.entries(subCollectionMap).map(([subcolName]) =>
+        getNestedResidentData(documentId, subcolName as SubCollectionKey),
       ),
     )
 
