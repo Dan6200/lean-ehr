@@ -28,6 +28,8 @@ import {
   EmergencyContactSchema,
   FinancialTransactionSchema,
   EmarRecordSchema,
+  SubCollectionMapType,
+  SubCollectionArgs,
 } from '@/types'
 import {
   decryptResidentData,
@@ -100,18 +102,7 @@ import {
   KEK_FINANCIAL_PATH,
 } from '@/lib/encryption'
 
-type SubCollectionName =
-  | 'allergies'
-  | 'prescriptions'
-  | 'observations'
-  | 'diagnostic_history'
-  | 'emergency_contacts'
-  | 'financials'
-  | 'emar'
-
-const subCollectionMap: {
-  [key: string]: [z.ZodObject<any> | z.ZodEffects<any>, string]
-} = {
+const subCollectionMap: SubCollectionMapType = {
   allergies: [AllergySchema, KEK_CONTACT_PATH],
   prescriptions: [PrescriptionSchema, KEK_CLINICAL_PATH],
   observations: [ObservationSchema, KEK_CLINICAL_PATH],
@@ -121,14 +112,16 @@ const subCollectionMap: {
   emar: [EmarRecordSchema, KEK_CLINICAL_PATH],
 }
 
-export async function getNestedResidentData(
+type SubCollectionKey = keyof typeof subCollectionMap
+
+export async function getNestedResidentData<K extends SubCollectionKey>(
   residentId: string,
-  subCollectionName: SubCollectionName,
+  subCollectionName: K,
 ) {
   return getSubcollection(
     residentId,
     subCollectionName,
-    ...subCollectionMap[subCollectionName],
+    ...(subCollectionMap[subCollectionName] as SubCollectionArgs<K>),
   )
 }
 

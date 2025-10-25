@@ -1,5 +1,10 @@
 export type Nullable<T> = T | null | undefined
 
+import {
+  KEK_CONTACT_PATH,
+  KEK_CLINICAL_PATH,
+  KEK_FINANCIAL_PATH,
+} from '@/lib/encryption'
 import { z } from 'zod'
 
 // --- Enums ---
@@ -92,6 +97,55 @@ export const FinancialTransactionTypeEnum = z.enum([
 ])
 
 // --- Plaintext Schemas (for Application Use) ---
+
+type CollectionEntry =
+  | {
+      key: 'allergies'
+      schema: typeof AllergySchema
+      path: typeof KEK_CONTACT_PATH
+    }
+  | {
+      key: 'prescriptions'
+      schema: typeof PrescriptionSchema
+      path: typeof KEK_CLINICAL_PATH
+    }
+  | {
+      key: 'observations'
+      schema: typeof ObservationSchema
+      path: typeof KEK_CLINICAL_PATH
+    }
+  | {
+      key: 'diagnostic_history'
+      schema: typeof DiagnosticHistorySchema
+      path: typeof KEK_CLINICAL_PATH
+    }
+  | {
+      key: 'emergency_contacts'
+      schema: typeof EmergencyContactSchema
+      path: typeof KEK_CONTACT_PATH
+    }
+  | {
+      key: 'financials'
+      schema: typeof FinancialTransactionSchema
+      path: typeof KEK_FINANCIAL_PATH
+    }
+  | {
+      key: 'emar'
+      schema: typeof EmarRecordSchema
+      path: typeof KEK_CLINICAL_PATH
+    }
+
+export type SubCollectionArgs<K extends CollectionEntry['key']> =
+  Extract<CollectionEntry, { key: K }> extends {
+    schema: infer S
+    path: infer P
+  }
+    ? [S, P]
+    : never
+
+export type SubCollectionMapType = {
+  [K in CollectionEntry['key']]: SubCollectionArgs<K>
+}
 
 const SnomedConceptSchema = z.object({
   name: z.string(),
