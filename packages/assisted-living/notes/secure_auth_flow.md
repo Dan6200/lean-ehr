@@ -35,3 +35,28 @@ The flow is as follows:
 - **No On-Disk Refresh Tokens:** The most valuable prize for an attacker—the long-lived refresh token—is never stored in the browser's persistent storage.
 
 This pattern requires the server-side architecture we are currently implementing (i.e., the ability to handle session cookies to create authenticated app instances) to function.
+
+---
+
+## Architectural Decision: Server-Side Data Access
+
+While the "Temporary Per-Request App" pattern described above is a valid way to enforce Firestore security rules on the server, its complexity can be significant, requiring careful state management (passing the `app` instance) and cleanup (`try...finally`) throughout the server-side codebase.
+
+After consideration, a decision was made to pivot to a simpler server-side architecture:
+
+1.  **Use the Firebase Admin SDK:** All server-side data fetching will be performed using the Firebase Admin SDK.
+2.  **Bypass Security Rules:** The Admin SDK operates with privileged access, bypassing all Firestore security rules. This simplifies the code immensely as there is no need to manage per-user authentication states on the server.
+3.  **Lock Down Client-Side Access:** To compensate for the server bypassing security rules, the `firestore.rules` are configured to **deny all read and write access from any client**. This ensures that the database is only accessible via the trusted server-side backend code.
+
+This approach centralizes all data access logic on the server and relies on server-side code and endpoint security rather than Firestore rules for data protection.
+
+---
+
+## Addendum: Incompatibility with Service Worker Token Flow
+
+An important consequence of adopting the `inMemoryPersistence` strategy is that it is **incompatible** with a service worker flow that relies on attaching bearer tokens to outgoing requests for persistent sessions.
+
+- **The Conflict:** The service worker needs to ask the client-side Firebase SDK for the current user's ID token. The SDK can only do this long-term if it has a Refresh Token stored persistently.
+- **The Consequence:** By using `inMemoryPersistence`, we intentionally discard the Refresh Token when the page is closed. On the next visit, the client-side SDK has no user, and the service worker cannot get an ID token.
+
+This reinforces the architectural decision to rely **exclusively on the `HttpOnly` session cookie** for all subsequent server-side authentication after the initial login. The bearer token flow is not viable in this high-security model.
