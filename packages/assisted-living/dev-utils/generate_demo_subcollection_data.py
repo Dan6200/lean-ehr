@@ -135,6 +135,7 @@ if __name__ == '__main__':
         num_allergies = random.randint(0, 2)
         for i in range(num_allergies):
             if snomed_allergy_names and snomed_allergy_reactions and snomed_allergy_substances:
+                allergy_name = snomed_allergy_names[i % len(snomed_allergy_names)]
                 reaction = snomed_allergy_reactions[i % len(snomed_allergy_reactions)]
                 substance = snomed_allergy_substances[i % len(snomed_allergy_substances)]
                 all_allergies.append({
@@ -144,6 +145,7 @@ if __name__ == '__main__':
                         'recorder_id': random.choice(STAFF_IDS),
                         'clinicalStatus': random.choice(ALLERGY_STATUSES['clinical']),
                         'verificationStatus': random.choice(ALLERGY_STATUSES['verification']),
+                        'name': allergy_name,
                         'type': random.choice(ALLERGY_TYPES),
                         'recordedDate': get_random_datetime(START_DATE, END_DATE),
                         'substance': substance,
