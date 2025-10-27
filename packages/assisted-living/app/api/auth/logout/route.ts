@@ -1,41 +1,29 @@
 import { NextResponse, NextRequest } from 'next/server'
 import {
-  getRevokeSessions,
   deleteSessionCookie,
-  getSessionCookie,
-  getVerifiedSessionCookie,
+  verifySession,
+  revokeAllSessions,
 } from '@/auth/server/definitions'
 
 // The endpoint the client calls to sign out and clear the session.
 export async function POST(_request: NextRequest) {
   try {
-    // FOR SERVICE-WORKER AUTH FLOW, THERE SHOULD BE NO SESSION COOKIE SET!
-    if (!(await getSessionCookie())) {
-      return NextResponse.json(
-        { message: 'Signed out successfully' },
-        { status: 200 },
-      )
-    }
-    // 2. Decode the session cookie to get the UID
-    // Use checkRevoked: true to ensure the cookie hasn't been manually revoked already
-    const result = await getVerifiedSessionCookie()
-    if (!result) throw new Error('Failed to retrive idToken')
-    const uid = result.idToken?.uid
-    await Promise.all([
-      // This immediately invalidates ALL session cookies for this user across all devices.
-      getRevokeSessions(uid),
-      deleteSessionCookie(),
-    ])
+    // verifySession will throw if the cookie is missing or invalid.
+    const decodedClaims = await verifySession()
+    const uid = decodedClaims.uid
+
+    // Revoke all refresh tokens for the user and delete the session cookie.
+    await Promise.all([revokeAllSessions(uid), deleteSessionCookie()])
 
     return NextResponse.json(
-      { message: 'Signed out and session revoked successfully' },
+      { message: 'Signed out and all sessions revoked successfully' },
       { status: 200 },
     )
   } catch (error) {
-    // If the cookie was invalid, expired, or already revoked, we still clear the client cookie (done above)
-    // and just log the error. The response remains successful for the client flow.
-    console.error('Error during session revocation, but cookie cleared:', error)
-    await deleteSessionCookie()
+    // This block will run if the cookie is already invalid, expired, or missing.
+    // In this case, we still want to ensure the client-side cookie is cleared.
+    console.error('Error during logout, forcing cookie deletion:', error)
+    await deleteSessionCookie() // Ensure client cookie is removed
     return NextResponse.json(
       { message: 'Logout successful, session cleanup complete' },
       { status: 200 },
