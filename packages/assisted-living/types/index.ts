@@ -6,6 +6,12 @@ import {
   KEK_FINANCIAL_PATH,
 } from '@/lib/encryption'
 import { z } from 'zod'
+import {
+  decryptEmergencyContact,
+  decryptFinancialTransaction,
+  getEmergencyContactsConverter,
+  getFinancialsConverter,
+} from './converters'
 
 // --- Enums ---
 export const ObservationStatusEnum = z.enum([
@@ -99,13 +105,28 @@ export const FinancialTransactionTypeEnum = z.enum([
 // --- Plaintext Schemas (for Application Use) ---
 
 export type SubCollectionMapType = {
-  allergies: [typeof AllergySchema, typeof KEK_CONTACT_PATH]
-  prescriptions: [typeof PrescriptionSchema, typeof KEK_CLINICAL_PATH]
-  observations: [typeof ObservationSchema, typeof KEK_CLINICAL_PATH]
-  diagnostic_history: [typeof DiagnosticHistorySchema, typeof KEK_CLINICAL_PATH]
-  emergency_contacts: [typeof EmergencyContactSchema, typeof KEK_CONTACT_PATH]
-  financials: [typeof FinancialTransactionSchema, typeof KEK_FINANCIAL_PATH]
-  emar: [typeof EmarRecordSchema, typeof KEK_CLINICAL_PATH]
+  emergency_contacts: {
+    converter: typeof getEmergencyContactsConverter
+    decryptor: typeof decryptEmergencyContact
+    type: z.infer<typeof EmergencyContactSchema>
+  }
+  financials: {
+    converter: typeof getFinancialsConverter
+    decryptor: typeof decryptFinancialTransaction
+    type: z.infer<typeof FinancialTransactionSchema>
+  }
+  prescriptions: {
+    /*...*/
+  }
+  observations: {
+    /*...*/
+  }
+  diagnostic_history: {
+    /*...*/
+  }
+  emar: {
+    /*...*/
+  }
 }
 
 export type SubCollectionArgs<K extends keyof SubCollectionMapType> =
@@ -140,69 +161,79 @@ const DosageInstructionSchema = z.object({
   doseAndRate: z.array(DoseAndRateSchema),
 })
 
-export const AllergySchema = z.object({
-  resident_id: z.string(),
-  recorder_id: z.string(),
-  clinicalStatus: AllergyClinicalStatusEnum,
-  verificationStatus: AllergyVerificationStatusEnum,
-  type: AllergyTypeEnum,
-  recordedDate: z.string(),
-  substance: SnomedConceptSchema,
-  reaction: z.object({
-    code: z.string(),
+export const AllergySchema = z
+  .object({
+    resident_id: z.string(),
+    recorder_id: z.string(),
+    clinicalStatus: AllergyClinicalStatusEnum,
+    verificationStatus: AllergyVerificationStatusEnum,
+    type: AllergyTypeEnum,
+    recordedDate: z.string(),
+    substance: SnomedConceptSchema,
+    reaction: z.object({
+      code: z.string(),
+      name: z.string(),
+      severity: z.string(),
+    }),
+  })
+  .optional()
+
+export const PrescriptionSchema = z
+  .object({
+    resident_id: z.string(),
+    recorder_id: z.string(),
+    effective_period_start: z.string(),
+    effective_period_end: z.string(),
+    status: PrescriptionStatusEnum,
+    adherence: PrescriptionAdherenceStatusEnum,
+    medication: MedicationSchema,
+    dosageInstruction: z.array(DosageInstructionSchema),
+  })
+  .optional()
+
+export const ObservationSchema = z
+  .object({
+    resident_id: z.string(),
+    recorder_id: z.string(),
+    status: ObservationStatusEnum,
+    effective_datetime: z.string(),
+    loinc_code: z.string(),
     name: z.string(),
-    severity: z.string(),
-  }),
-})
+    value: z.number(),
+    unit: z.string(),
+    body_site: SnomedConceptSchema,
+    method: SnomedConceptSchema,
+    device: z.object({ name: z.string(), udi_code: z.string() }),
+  })
+  .optional()
 
-export const PrescriptionSchema = z.object({
-  resident_id: z.string(),
-  recorder_id: z.string(),
-  effective_period_start: z.string(),
-  effective_period_end: z.string(),
-  status: PrescriptionStatusEnum,
-  adherence: PrescriptionAdherenceStatusEnum,
-  medication: MedicationSchema,
-  dosageInstruction: z.array(DosageInstructionSchema),
-})
+export const DiagnosticHistorySchema = z
+  .object({
+    resident_id: z.string(),
+    recorder_id: z.string(),
+    clinicalStatus: ConditionStatusEnum,
+    recordedDate: z.string(),
+    onsetDateTime: z.string(),
+    abatementDateTime: z.string().nullable(),
+    title: z.string(),
+    snomed_code: z.string(),
+  })
+  .optional()
 
-export const ObservationSchema = z.object({
-  resident_id: z.string(),
-  recorder_id: z.string(),
-  status: ObservationStatusEnum,
-  effective_datetime: z.string(),
-  loinc_code: z.string(),
-  name: z.string(),
-  value: z.number(),
-  unit: z.string(),
-  body_site: SnomedConceptSchema,
-  method: SnomedConceptSchema,
-  device: z.object({ name: z.string(), udi_code: z.string() }),
-})
-
-export const DiagnosticHistorySchema = z.object({
-  resident_id: z.string(),
-  recorder_id: z.string(),
-  clinicalStatus: ConditionStatusEnum,
-  recordedDate: z.string(),
-  onsetDateTime: z.string(),
-  abatementDateTime: z.string().nullable(),
-  title: z.string(),
-  snomed_code: z.string(),
-})
-
-export const EmarRecordSchema = z.object({
-  resident_id: z.string(),
-  prescription_id: z.string(),
-  medication: MedicationSchema,
-  recorder_id: z.string(),
-  status: AdministrationStatusEnum,
-  effective_datetime: z.string(),
-  dosage: z.object({
-    route: SnomedConceptSchema,
-    administeredDose: StrengthSchema,
-  }),
-})
+export const EmarRecordSchema = z
+  .object({
+    resident_id: z.string(),
+    prescription_id: z.string(),
+    medication: MedicationSchema,
+    recorder_id: z.string(),
+    status: AdministrationStatusEnum,
+    effective_datetime: z.string(),
+    dosage: z.object({
+      route: SnomedConceptSchema,
+      administeredDose: StrengthSchema,
+    }),
+  })
+  .optional()
 
 export const FinancialTransactionSchema = z.object({
   resident_id: z.string(),
@@ -228,10 +259,12 @@ export const EmergencyContactSchema = z
   .transform((data) => ({
     ...data,
     relationship: [
+      ...(data.relationship || []),
       ...(data.legal_relationships || []),
       ...(data.personal_relationships || []),
     ],
   }))
+  .optional()
 
 export const ResidentSchema = z.object({
   resident_name: z.string().nullable().optional(),
@@ -364,21 +397,8 @@ export const FacilitySchema = z.object({
 })
 export type Facility = z.infer<typeof FacilitySchema>
 
-export const LeanResidentDataSchema = ResidentSchema.extend({
-  id: z.string().optional(),
-  address: z.string(),
-})
-export type LeanResidentData = z.infer<typeof LeanResidentDataSchema>
-
 export const ResidentDataSchema = ResidentSchema.extend({
   id: z.string().optional(),
   address: z.string(),
-  allergies: z.array(AllergySchema),
-  prescriptions: z.array(PrescriptionSchema),
-  observations: z.array(ObservationSchema),
-  diagnostic_history: z.array(DiagnosticHistorySchema),
-  emergency_contacts: z.array(EmergencyContactSchema),
-  financials: z.array(FinancialTransactionSchema),
-  emar: z.array(EmarRecordSchema),
 })
 export type ResidentData = z.infer<typeof ResidentDataSchema>

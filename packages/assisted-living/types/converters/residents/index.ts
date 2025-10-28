@@ -9,49 +9,17 @@ import {
   KEK_CLINICAL_PATH,
   KEK_FINANCIAL_PATH,
 } from '@/lib/encryption'
-
 import {
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
-} from 'firebase/firestore'
-import {
-  Allergy,
-  EmergencyContactSchema,
-  EncryptedAllergySchema,
-  EncryptedEmergencyContactSchema,
-  EncryptedFinancialTransactionSchema,
-  EncryptedPrescriptionSchema,
-  EncryptedResident,
-  EncryptedResidentSchema,
-  EncryptedObservationSchema,
-  EncryptedDiagnosticHistorySchema,
-  Facility,
-  FacilitySchema,
-  FinancialTransaction,
-  LegalRelationshipEnum,
-  Prescription,
-  Observation,
-  DiagnosticHistory,
-  PersonalRelationshipEnum,
-  Resident,
-  ResidentSchema,
-  EncryptedEmarRecordSchema,
-} from '.'
-
-// --- Converters ---
-const facilityConverter: FirestoreDataConverter<Facility> = {
-  toFirestore(facility: Facility): DocumentData {
-    return FacilitySchema.parse(facility)
-  },
-  fromFirestore(snapshot: QueryDocumentSnapshot): Facility {
-    return FacilitySchema.parse(snapshot.data())
-  },
-}
+} from 'firebase-admin/firestore'
+import { EncryptedResidentSchema, Resident, ResidentSchema } from '@/types'
+import z from 'zod'
 
 export async function encryptResident(
   resident: Resident,
-): Promise<EncryptedResident> {
+): Promise<z.infer<typeof EncryptedResidentSchema>> {
   const dataToEncrypt: any = { ...resident }
   const encryptedData: any = {}
 
@@ -72,7 +40,6 @@ export async function encryptResident(
   encryptedData.encrypted_dek_financial =
     encryptedDekFinancial.toString('base64')
 
-  // Encrypt all fields
   if (dataToEncrypt.resident_name) {
     encryptedData.encrypted_resident_name = encryptData(
       dataToEncrypt.resident_name,
@@ -132,7 +99,7 @@ export async function encryptResident(
 }
 
 export async function decryptResidentData(
-  data: EncryptedResident,
+  data: z.infer<typeof EncryptedResidentSchema>,
   roles: string[],
 ): Promise<Resident> {
   const decryptedData: Partial<Resident> = {}
@@ -243,98 +210,14 @@ export async function decryptResidentData(
 }
 
 export const getResidentConverter = async (): Promise<
-  FirestoreDataConverter<EncryptedResident, Resident>
+  FirestoreDataConverter<z.infer<typeof EncryptedResidentSchema>>
 > => ({
-  toFirestore(resident: unknown): Resident {
-    return ResidentSchema.parse(resident)
-  },
-
-  fromFirestore(
-    snapshot: QueryDocumentSnapshot<DocumentData>,
-  ): EncryptedResident {
-    const data = snapshot.data()
-    return EncryptedResidentSchema.parse(data)
-  },
-})
-
-export const getFacilityConverter = async function () {
-  return facilityConverter
-}
-// --- Subcollection Converters ---
-
-// Generic encryption function for subcollection items
-async function encryptSubcollectionItem<
-  T extends { id?: string; [field: string]: any },
->(item: T, kekPath: string): Promise<any> {
-  const { plaintextDek, encryptedDek } = await generateDataKey(kekPath)
-  const encryptedData: any = { encrypted_dek: encryptedDek.toString('base64') }
-
-  for (const key in item) {
-    if (key !== 'id') {
-      // Don't encrypt the ID
-      encryptedData[`encrypted_${key}`] = encryptData(
-        String((item as any)[key]),
-        plaintextDek,
-      )
-    }
-  }
-  return encryptedData
-}
-
-// Generic decryption function for subcollection items
-export async function decryptSubcollectionItem<T>(
-  data: any,
-  kekPath: string,
-): Promise<T> {
-  const dek = await decryptDataKey(
-    Buffer.from(data.encrypted_dek, 'base64'),
-    kekPath,
-  )
-  const decryptedData: any = { id: data.id }
-
-  for (const key in data) {
-    if (key.startsWith('encrypted_') && key !== 'encrypted_dek') {
-      const newKey = key.replace('encrypted_', '')
-      decryptedData[newKey] = decryptData(data[key], dek)
-    }
-  }
-  return decryptedData as T
-}
-
-// Prescription Converter
-export const getPrescriptionConverter = async (): Promise<
-  FirestoreDataConverter<Prescription>
-> => ({
-  async toFirestore(prescription: Prescription): Promise<DocumentData> {
-    return encryptSubcollectionItem(prescription, KEK_CLINICAL_PATH)
-  },
-  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): Prescription {
-    return EncryptedPrescriptionSchema.parse(snapshot.data()) as any // Cast needed as it's encrypted
-  },
-})
-
-// Financial Transaction Converter
-export const getFinancialTransactionConverter = async (): Promise<
-  FirestoreDataConverter<FinancialTransaction>
-> => ({
-  async toFirestore(transaction: FinancialTransaction): Promise<DocumentData> {
-    return encryptSubcollectionItem(transaction, KEK_FINANCIAL_PATH)
+  toFirestore(resident: z.infer<typeof EncryptedResidentSchema>): DocumentData {
+    return EncryptedResidentSchema.parse(resident)
   },
   fromFirestore(
-    snapshot: QueryDocumentSnapshot<DocumentData>,
-  ): FinancialTransaction {
-    return EncryptedFinancialTransactionSchema.parse(snapshot.data()) as any
-  },
-})
-
-// EmarRecord (Prescription Administration) Converter
-export const getEmarRecordConverter = async (): Promise<
-  FirestoreDataConverter<any, DocumentData>
-> => ({
-  async toFirestore(adminRecord: any): Promise<DocumentData> {
-    return encryptSubcollectionItem(adminRecord, KEK_CLINICAL_PATH)
-  },
-  fromFirestore(snapshot: QueryDocumentSnapshot<DocumentData>): any {
-    return EncryptedEmarRecordSchema.parse(snapshot.data())
+    snapshot: QueryDocumentSnapshot,
+  ): z.infer<typeof EncryptedResidentSchema> {
+    return EncryptedResidentSchema.parse(snapshot.data())
   },
 })

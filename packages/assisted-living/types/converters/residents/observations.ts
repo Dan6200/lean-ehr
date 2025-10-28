@@ -1,0 +1,64 @@
+'use server'
+import {
+  KEK_CLINICAL_PATH,
+  decryptDataKey,
+  decryptData,
+} from '@/lib/encryption'
+import {
+  DocumentData,
+  FirestoreDataConverter,
+  QueryDocumentSnapshot,
+} from 'firebase-admin/firestore'
+import {
+  EncryptedObservationSchema,
+  Observation,
+  ObservationSchema,
+} from '@/types'
+import z from 'zod'
+
+export async function decryptObservation(
+  data: z.infer<typeof EncryptedObservationSchema>,
+): Promise<Observation> {
+  const dek = await decryptDataKey(
+    Buffer.from(data.encrypted_dek, 'base64'),
+    KEK_CLINICAL_PATH,
+  )
+  const decryptedData: any = {}
+
+  for (const key in data) {
+    if (key.startsWith('encrypted_') && key !== 'encrypted_dek') {
+      const newKey = key.replace('encrypted_', '')
+      decryptedData[newKey] = decryptData((data as any)[key], dek)
+    }
+  }
+
+  if (decryptedData.body_site) {
+    decryptedData.body_site = JSON.parse(decryptedData.body_site)
+  }
+  if (decryptedData.method) {
+    decryptedData.method = JSON.parse(decryptedData.method)
+  }
+  if (decryptedData.device) {
+    decryptedData.device = JSON.parse(decryptedData.device)
+  }
+  if (decryptedData.value) {
+    decryptedData.value = parseFloat(decryptedData.value)
+  }
+
+  return ObservationSchema.parse(decryptedData)
+}
+
+export const getObservationsConverter = async (): Promise<
+  FirestoreDataConverter<z.infer<typeof EncryptedObservationSchema>>
+> => ({
+  toFirestore(
+    observation: z.infer<typeof EncryptedObservationSchema>,
+  ): DocumentData {
+    return EncryptedObservationSchema.parse(observation)
+  },
+  fromFirestore(
+    snapshot: QueryDocumentSnapshot,
+  ): z.infer<typeof EncryptedObservationSchema> {
+    return EncryptedObservationSchema.parse(snapshot.data())
+  },
+})
