@@ -2,9 +2,25 @@
 import { getAllResidents, getNestedResidentData } from '@/actions/residents/get'
 import { FinancialTransaction } from '@/types'
 import { redirect } from 'next/navigation'
-// import { DashboardClient } from '@/components/dashboard/dashboard-client'
+import { DashboardClient } from '@/components/dashboard/dashboard-client'
 
-async function getChartData() {
+export type AggregatedChartData = {
+  [key: string]: {
+    date: string
+    charges: number
+    payments: number
+    adjustments: number
+  }
+}
+
+export type FormattedChartData = {
+  date: string
+  charges: number
+  payments: number
+  adjustments: number
+}[]
+
+async function getChartData(): Promise<FormattedChartData | null> {
   const { residents } =
     (await getAllResidents({}).catch(async (reason) => {
       if (reason.toString().match(/(cookies|session|authenticate)/i)) {
@@ -26,17 +42,7 @@ async function getChartData() {
 
   // Aggregate data by date
   const aggregatedData = allTransactions.reduce(
-    (
-      acc: {
-        [key: string]: {
-          date: string
-          charges: number
-          payments: number
-          adjustments: number
-        }
-      },
-      item: FinancialTransaction,
-    ) => {
+    (acc: AggregatedChartData, item: FinancialTransaction) => {
       const date = item.occurrence_datetime.split('T')[0] // Group by day
       if (!acc[date]) {
         acc[date] = { date, charges: 0, payments: 0, adjustments: 0 }
@@ -62,12 +68,6 @@ async function getChartData() {
 
 export default async function DashboardPage() {
   const chartData = await getChartData()
-  return (
-    <ul>
-      {chartData.map((data) => (
-        <li>{data?.payment}</li>
-      ))}
-    </ul>
-  )
-  // return <DashboardClient chartData={chartData} />
+  if (!chartData) return null
+  return <DashboardClient chartData={chartData} />
 }

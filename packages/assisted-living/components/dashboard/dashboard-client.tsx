@@ -1,14 +1,15 @@
-// 'use client'
+'use client'
 
 import * as React from 'react'
 import { ChartAreaInteractive } from '@/components/dashboard/chart-area-interactive'
 import { SectionCards } from '@/components/dashboard/section-cards'
+import { FormattedChartData } from '@/app/admin/dashboard/page'
 
-interface DashboardClientProps {
-  chartData: any[]
-}
-
-export function DashboardClient({ chartData }: DashboardClientProps) {
+export function DashboardClient({
+  chartData,
+}: {
+  chartData: FormattedChartData
+}) {
   const [timeRange, setTimeRange] = React.useState('90d')
 
   return (

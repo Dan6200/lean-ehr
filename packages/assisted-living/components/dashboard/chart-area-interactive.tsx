@@ -26,6 +26,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
+import { FormattedChartData } from '@/app/admin/dashboard/page'
 
 const chartConfig = {
   charges: {
@@ -43,12 +44,17 @@ const chartConfig = {
 } satisfies ChartConfig
 
 interface ChartAreaInteractiveProps {
-  chartData: any[]
+  chartData: FormattedChartData
+  timeRange: string
+  setTimeRange: React.Dispatch<React.SetStateAction<string>>
 }
 
-export function ChartAreaInteractive({ chartData }: ChartAreaInteractiveProps) {
+export function ChartAreaInteractive({
+  chartData,
+  timeRange,
+  setTimeRange,
+}: ChartAreaInteractiveProps) {
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState('90d')
 
   React.useEffect(() => {
     if (isMobile) {
