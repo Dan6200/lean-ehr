@@ -1,4 +1,5 @@
 import json
+import re
 import uuid
 import random
 from datetime import datetime, timedelta
@@ -15,6 +16,8 @@ SUBCOLLECTION_FILES = {
     'diagnostic_history': 'diagnostic_history/data-plain.json',
     'financials': 'financials/data-plain.json',
     'prescription_administration': 'prescription_administration/data-plain.json',
+    'episodes_of_care': 'episodes_of_care/data-plain.json', # <-- ADDED
+    'care_plans': 'care_plans/data-plain.json', # <-- ADDED
 }
 
 SNOMED_DISORDERS_FILE = 'demo-data/snomed-examples/disorders.txt'
@@ -32,6 +35,26 @@ PRESCRIPTION_ADHERENCE_STATUSES = ['taking', 'taking-as-directed', 'taking-not-a
 ADMINISTRATION_STATUSES = ['in-progress', 'not-done', 'on-hold', 'completed', 'entered-in-error', 'stopped', 'unknown']
 ADMINISTRATION_ROUTES = [{'name':'oral','snomed_code':'26643006'},{'name':'intravenous','snomed_code':'47625008'},{'name':'intramuscular','snomed_code':'78421000'}, {'name':'subcutaneous','snomed_code':'34206005'}, {'name':'topical','snomed_code':'6064005'}]
 FINANCIAL_TYPES = ['CHARGE', 'PAYMENT', 'ADJUSTMENT']
+EPISODE_STATUSES = ['active', 'finished', 'cancelled', 'waitlist'] # <-- ADDED
+
+# --- CarePlan Specific Configuration ---
+CARE_PLAN_STATUSES = ['draft', 'active', 'on-hold', 'completed', 'cancelled']
+CARE_PLAN_GOALS = [
+    'Maintain independence in bathing and dressing.', 
+    'Reduce risk of fall injuries (using mobility aids).', 
+    'Improve social engagement and decrease isolation.', 
+    'Maintain current nutritional status/weight.',
+    'Effective management of chronic pain.'
+]
+CARE_PLAN_ACTIVITIES = [
+    {'code': '5940000', 'name': 'Assist with bathing (daily, AM)'},
+    {'code': '5941000', 'name': 'Assist with dressing (daily, AM)'},
+    {'code': '5999000', 'name': 'Daily 15-minute ambulation/walk'},
+    {'code': '6000000', 'name': 'Medication reminder and setup (TID)'},
+    {'code': '6001000', 'name': 'Attend Thursday social group'},
+    {'code': '6002000', 'name': 'Ensure pureed diet and fluid intake'},
+    {'code': '6003000', 'name': 'Check skin integrity (daily)'},
+]
 
 VITAL_RANGES = {
     '8480-6': {'name': 'Systolic Blood Pressure', 'unit': 'mmHg', 'min': 100, 'max': 140, 'type': 'int', 'body_site':{'name':'upper arm', 'snomed_code':'40983000'},'method':{'snomed_code':'371911009', 'name':'Measurement of blood pressure using cuff method'},'device':{'name':'Aneroid manual sphygmomanometer', 'udi_code': '00616784710716'}},
@@ -67,7 +90,7 @@ def load_snomed_file(filepath):
             for line in f:
                 parts = line.strip().split('|')
                 if len(parts) >= 2:
-                    data.append({'code': parts[0].strip(), 'name': parts[1].strip()})
+                    data.append({'code': parts[0].strip(), 'name': (re.sub(r'\([^)]*\)','',parts[1])).strip()})
     return data
 
 def load_allergy_reactions(filepath):
@@ -77,7 +100,7 @@ def load_allergy_reactions(filepath):
             for line in f:
                 parts = line.strip().split('|')
                 if len(parts) >= 3:
-                    reactions.append({'code': parts[0].strip(), 'name': parts[1].strip(), 'severity': parts[2].strip()})
+                    reactions.append({'code': parts[0].strip(), 'name': (re.sub(r'\([^)]*\)','',parts[1])).strip(), 'severity': parts[2].strip()})
     return reactions
 
 def generate_loinc_examples():
@@ -106,6 +129,8 @@ if __name__ == '__main__':
     all_diagnostic_history = []
     all_financials = []
     all_prescription_administration = []
+    all_episodes_of_care = [] # <-- ADDED
+    all_care_plans = [] # <-- ADDED
 
     snomed_allergy_names = load_snomed_file(SNOMED_ALLERGY_NAMES_FILE)
     snomed_allergy_reactions = load_allergy_reactions(SNOMED_ALLERGY_REACTIONS_FILE)
@@ -132,6 +157,69 @@ if __name__ == '__main__':
         resident_id = resident['id']
         resident_prescriptions = []
 
+        # --- CARE PLANS (The HACC/CACP equivalent for service definition) ---
+        selected_goals = random.sample(CARE_PLAN_GOALS, random.randint(2, 3))
+        selected_activities = random.sample(CARE_PLAN_ACTIVITIES, random.randint(3, 5))
+        
+        care_plan_activities_list = [{
+            'id': generate_uuid(),
+            'code': act['code'],
+            'name': act['name'],
+            'status': 'scheduled',
+            'required_frequency': random.choice(['daily', 'twice-weekly', 'monthly']),
+            'staff_instructions': f"Ensure resident comfort during {act['name'].split('(')[0].strip().lower()}."
+        } for act in selected_activities]
+        
+        all_care_plans.append({
+            'id': generate_uuid(),
+            'data': {
+                'resident_id': resident_id,
+                'status': 'active',
+                'title': f"Personalized Care Plan - {datetime.now().year}",
+                'author_id': random.choice(STAFF_IDS),
+                'created_date': get_random_datetime(datetime(2024, 1, 1), END_DATE),
+                'goals': selected_goals,
+                'activities': care_plan_activities_list
+            }
+        })
+
+        # --- EPISODES OF CARE (Admission/Discharge History) ---
+        num_historical_episodes = random.randint(0, 1)
+        for i in range(num_historical_episodes):
+            start_year = random.randint(2018, 2022)
+            end_year = random.randint(start_year + 1, 2023)
+            episode_start = datetime(start_year, random.randint(1, 12), random.randint(1, 28))
+            episode_end = datetime(end_year, random.randint(1, 12), random.randint(1, 28))
+            
+            if episode_end <= episode_start:
+                episode_end = episode_start + timedelta(days=random.randint(30, 365))
+
+            all_episodes_of_care.append({
+                'id': generate_uuid(),
+                'data': {
+                    'resident_id': resident_id,
+                    'status': random.choice(['finished', 'cancelled']),
+                    'type': random.choice(['Respite Stay', 'Long Term Care']),
+                    'period_start': get_random_datetime(episode_start, episode_start + timedelta(days=7)),
+                    'period_end': get_random_datetime(episode_end, episode_end + timedelta(days=7)),
+                    'managing_organization': 'Golden Years Residential Homes'
+                }
+            })
+
+        current_start_date = datetime(2023, random.randint(1, 6), random.randint(1, 28))
+        all_episodes_of_care.append({
+            'id': generate_uuid(),
+            'data': {
+                'resident_id': resident_id,
+                'status': 'active',
+                'type': 'Long Term Care',
+                'period_start': get_random_datetime(current_start_date, current_start_date + timedelta(days=30)),
+                'period_end': None, # No end date for active episode
+                'managing_organization': 'Willow Creek Assisted Living'
+            }
+        })
+
+        # --- ALLERGIES ---
         num_allergies = random.randint(0, 2)
         for i in range(num_allergies):
             if snomed_allergy_names and snomed_allergy_reactions and snomed_allergy_substances:
@@ -153,6 +241,7 @@ if __name__ == '__main__':
                     }
                 })
         
+        # --- PRESCRIPTIONS ---
         num_prescriptions = random.randint(1, 3)
         for _ in range(num_prescriptions):
             if prescriptions_templates:
@@ -187,6 +276,7 @@ if __name__ == '__main__':
                 all_prescriptions.append(rx_record)
                 resident_prescriptions.append(rx_record)
 
+        # --- PRESCRIPTION ADMINISTRATION ---
         for rx_record in resident_prescriptions:
             timing = rx_record['data']['dosageInstruction'][0]['timing']
             doses_per_day = {'qd': 1, 'bid': 2, 'tid': 3, 'qid': 4, 'qam': 1, 'qpm': 1}.get(timing, 1)
@@ -222,6 +312,7 @@ if __name__ == '__main__':
                     })
                 current_date += timedelta(days=1)
 
+        # --- OBSERVATIONS ---
         num_observations = random.randint(3, 8)
         for _ in range(num_observations):
             if loinc_vitals:
@@ -246,6 +337,7 @@ if __name__ == '__main__':
                 }
                 all_observations.append(observation)
 
+        # --- DIAGNOSTIC HISTORY ---
         num_disorders = random.randint(1, 3)
         for _ in range(num_disorders):
             if snomed_disorders:
@@ -266,6 +358,7 @@ if __name__ == '__main__':
                     }
                 })
 
+        # --- FINANCIALS ---
         num_financials = random.randint(0, 5)
         for _ in range(num_financials):
             all_financials.append({
@@ -279,18 +372,24 @@ if __name__ == '__main__':
                 }
             })
 
+    # --- Write Sub-Collection Files (Corrected Pathing) ---
     for sub_dir, sub_file in SUBCOLLECTION_FILES.items():
-        os.makedirs(os.path.join(SUBCOLLECTIONS_DIR, sub_dir), exist_ok=True)
+        # Ensure the directory exists (e.g., 'demo-data/allergies')
+        os.makedirs(os.path.join(SUBCOLLECTIONS_DIR, os.path.dirname(sub_file)), exist_ok=True)
         data_map = {
             'allergies': all_allergies,
             'prescriptions': all_prescriptions,
             'observations': all_observations,
             'diagnostic_history': all_diagnostic_history,
             'financials': all_financials,
-            'prescription_administration': all_prescription_administration
+            'prescription_administration': all_prescription_administration,
+            'episodes_of_care': all_episodes_of_care, # <-- ADDED
+            'care_plans': all_care_plans # <-- ADDED
         }
         if sub_dir in data_map:
+            # Write to the full path (e.g., 'demo-data/allergies/data-plain.json')
             with open(os.path.join(SUBCOLLECTIONS_DIR, sub_file), 'w') as f:
                 json.dump(data_map[sub_dir], f, indent=2)
 
     print("FHIR-Aligned Demo data generation complete.")
+
