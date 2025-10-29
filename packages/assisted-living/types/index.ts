@@ -442,6 +442,7 @@ export const EncryptedEpisodesOfCareSchema = z.object({
 })
 
 export const EncryptedEmergencyContactSchema = z.object({
+  resident_id: z.string(),
   encrypted_dek: z.string(),
   encrypted_contact_name: EncryptedFieldSchema.nullable().optional(),
   encrypted_cell_phone: EncryptedFieldSchema,
