@@ -9,21 +9,32 @@ import {
 } from 'firebase-admin/firestore'
 import { adminConfig } from './config'
 
-// Initialize the Firebase Admin SDK, but only if it hasn't been initialized already.
-if (!getApps().length) {
-  admin.initializeApp({
-    ...adminConfig,
-    credential: admin.credential.applicationDefault(), // ADC handles local vs. cloud
-  })
+// A private function to ensure the admin app is initialized on-demand.
+async function initializeAdminApp() {
+  if (!getApps().length) {
+    admin.initializeApp({
+      ...adminConfig,
+      credential: admin.credential.applicationDefault(), // ADC handles local vs. cloud
+    })
+  }
 }
 
-// Export the admin services for use in server-side files.
-export const adminDb = admin.firestore()
-export const adminAuth = admin.auth()
+// Async getter for the Firestore admin instance
+export async function getAdminDb() {
+  await initializeAdminApp()
+  return admin.firestore()
+}
+
+// Async getter for the Auth admin instance
+export async function getAdminAuth() {
+  await initializeAdminApp()
+  return admin.auth()
+}
 
 // --- Refactored Wrappers to use Admin SDK ---
 
 export async function collectionWrapper<T = DocumentData>(path: string) {
+  const adminDb = await getAdminDb()
   try {
     return adminDb.collection(path) as CollectionReference<T>
   } catch (e) {
