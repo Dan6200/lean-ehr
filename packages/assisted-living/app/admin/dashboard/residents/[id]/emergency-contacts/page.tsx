@@ -13,7 +13,7 @@ export default async function EmergencyContactsPage({
   const residentData = await getResidentData(id, 'emergency_contacts').catch(
     (e) => {
       if (e.message.match(/not_found/i)) notFound()
-      if (e.message.match(/(insufficient permissions|invalid session)/))
+      if (e.message.match(/(insufficient permissions|invalid session)/i))
         redirect('/admin/sign-in')
       throw new Error(
         `Unable to fetch resident data for contacts page -- Tag:EC1.\n\t${e.message}`,
