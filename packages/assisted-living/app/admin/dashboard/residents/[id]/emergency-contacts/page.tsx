@@ -1,4 +1,4 @@
-import { getNestedResidentData, getResidentData } from '@/actions/residents/get'
+import { getResidentData } from '@/actions/residents/get'
 import EmergencyContacts from '@/components/emergency-contacts'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -10,23 +10,16 @@ export default async function EmergencyContactsPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = await params
-  const residentData = await getResidentData(id)
-    .then(async (residentData) => {
-      const emergency_contacts = await getNestedResidentData(
-        id,
-        'emergency_contacts',
-      )
-      console.log('emergency contacts', emergency_contacts)
-      return { ...residentData, emergency_contacts }
-    })
-    .catch((e) => {
+  const residentData = await getResidentData(id, 'emergency_contacts').catch(
+    (e) => {
       if (e.message.match(/not_found/i)) notFound()
-      if (e.message.match(/insufficient permissions/))
+      if (e.message.match(/(insufficient permissions|invalid session)/))
         redirect('/admin/sign-in')
       throw new Error(
         `Unable to fetch resident data for contacts page -- Tag:EC1.\n\t${e.message}`,
       )
-    })
+    },
+  )
 
   return (
     <div className="space-y-8">

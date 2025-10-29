@@ -5,9 +5,10 @@ import { notFound } from 'next/navigation'
 export default async function ResidentEditPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const residentData = await getResidentData(params.id).catch((e) => {
+  const { id } = await params
+  const residentData = await getResidentData(id).catch((e) => {
     if (e.message.match(/not_found/i)) notFound()
     throw new Error(`Unable to fetch resident data for edit page: ${e.message}`)
   })

@@ -1,4 +1,3 @@
-'use client'
 import { getResidentData } from '@/actions/residents/get'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,16 +15,18 @@ import { notFound } from 'next/navigation'
 export default async function AllergiesPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const residentData = await getResidentData(params.id).catch((e) => {
+  const { id } = await params
+  const residentData = await getResidentData(id, 'allergies').catch((e) => {
     if (e.message.match(/not_found/i)) notFound()
     throw new Error(
       `Unable to fetch resident data for allergies page: ${e.message}`,
     )
   })
 
-  const { allergies, id } = residentData
+  const { allergies } = residentData
+  console.log(allergies)
 
   return (
     <div className="space-y-8">
@@ -43,17 +44,20 @@ export default async function AllergiesPage({
             <TableRow>
               <TableHead>Allergy</TableHead>
               <TableHead>Reaction</TableHead>
-              <TableHead>SNOMED Code</TableHead>
+              <TableHead>Reaction Severity</TableHead>
+              <TableHead>Allergen</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {allergies.map((allergy: Allergy, index: number) => (
-              <TableRow key={index}>
-                <TableCell>{allergy.name}</TableCell>
-                <TableCell>{allergy.reaction || 'N/A'}</TableCell>
-                <TableCell>{allergy.snomed_code || 'N/A'}</TableCell>
-              </TableRow>
-            ))}
+            {allergies.map((allergy: Allergy) =>
+              allergy ? (
+                <TableRow key={allergy.id}>
+                  <TableCell>{allergy.name ?? 'N/A'}</TableCell>
+                  <TableCell>{allergy.reaction.name ?? 'N/A'}</TableCell>
+                  <TableCell>{allergy.substance.name ?? 'N/A'}</TableCell>
+                </TableRow>
+              ) : null,
+            )}
           </TableBody>
         </Table>
       ) : (
