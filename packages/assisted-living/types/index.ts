@@ -134,7 +134,7 @@ const CodingSchema = z.object({
 })
 
 const CodeableConceptSchema = z.object({
-  coding: z.array(CodingSchema),
+  coding: z.array(CodingSchema).or(CodingSchema),
   text: z.string().optional(),
 })
 
