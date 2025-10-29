@@ -1111,17 +1111,19 @@ if __name__ == "__main__":
         care_plan_activities_list = [
             {
                 "id": generate_uuid(),
-                "code": {
-                    "coding": {
-                        "system": "http://snomed.info/sct",
-                        "code": act["code"],
-                        "display": act["display"],
+                "data": {
+                    "code": {
+                        "coding": {
+                            "system": "http://snomed.info/sct",
+                            "code": act["code"],
+                            "display": act["display"],
+                        },
+                        "text": act["display"],
                     },
-                    "text": act["display"],
+                    "status": "scheduled",
+                    "timing": act["timing"],
+                    "staff_instructions": f"Ensure resident comfort during {act['display'].split('(')[0].strip().lower()}.",
                 },
-                "status": "scheduled",
-                "timing": act["timing"],
-                "staff_instructions": f"Ensure resident comfort during {act['display'].split('(')[0].strip().lower()}.",
             }
             for act in selected_activities
         ]
@@ -1251,11 +1253,13 @@ if __name__ == "__main__":
                             },
                             "reaction": {
                                 "code": {
-                                    "coding": {
-                                        "system": "http://snomed.info/sct",
-                                        "code": reaction["code"],
-                                        "display": reaction["display"],
-                                    },
+                                    "coding": [
+                                        {
+                                            "system": "http://snomed.info/sct",
+                                            "code": reaction["code"],
+                                            "display": reaction["display"],
+                                        }
+                                    ],
                                     "text": reaction["display"],
                                 },
                                 "severity": reaction["severity"],
