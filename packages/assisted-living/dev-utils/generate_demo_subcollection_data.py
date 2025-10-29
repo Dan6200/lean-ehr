@@ -1111,7 +1111,14 @@ if __name__ == "__main__":
         care_plan_activities_list = [
             {
                 "id": generate_uuid(),
-                "snomed": {"code": act["code"], "display": act["display"]},
+                "code": {
+                    "coding": {
+                        "system": "http://snomed.info/sct",
+                        "code": act["code"],
+                        "display": act["display"],
+                    },
+                    "text": act["display"],
+                },
                 "status": "scheduled",
                 "timing": act["timing"],
                 "staff_instructions": f"Ensure resident comfort during {act['display'].split('(')[0].strip().lower()}.",
