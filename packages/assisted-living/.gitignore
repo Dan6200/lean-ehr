@@ -1,4 +1,4 @@
-demo-data/residents/data.json
+demo-data/
 demo-data/upload.log
 demo-data/tmp_split
 demo-data/allergies/
@@ -8,6 +8,8 @@ demo-data/financials/
 demo-data/observations/
 demo-data/prescription_administration/
 demo-data/prescriptions/
+demo-data/care_plans/
+demo-data/episodes_of_care/
 demo-data/firestore-encrypted-payload.json*
 
 public/auth-service-worker.js*
