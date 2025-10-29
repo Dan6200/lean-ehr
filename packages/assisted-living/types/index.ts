@@ -107,11 +107,35 @@ export const FinancialTransactionTypeEnum = z.enum([
   'ADJUSTMENT',
 ])
 
+export const EpisodeStatusTypeEnum = z.enum([
+  'active',
+  'finished',
+  'cancelled',
+  'waitlist',
+])
+
+export const CarePlanStatusTypeEnum = z.enum([
+  'draft',
+  'active',
+  'on-hold',
+  'completed',
+  'revoked',
+  'entered-in-error',
+  'ended',
+  'unknown',
+])
+
 // --- Plaintext Schemas (for Application Use) ---
 
-const SnomedConceptSchema = z.object({
-  name: z.string(),
-  snomed_code: z.string(),
+const CodingSchema = z.object({
+  system: z.string().url(), // or regex for known systems
+  code: z.string(),
+  display: z.string().optional(),
+})
+
+const CodeableConceptSchema = z.object({
+  coding: z.array(CodingSchema),
+  text: z.string().optional(),
 })
 
 const StrengthSchema = z.object({
@@ -120,36 +144,69 @@ const StrengthSchema = z.object({
 })
 
 const MedicationSchema = z.object({
-  rxnorm_code: z.string(),
-  snomed_code: z.string(),
-  name: z.string(),
+  code: CodeableConceptSchema,
   strength: StrengthSchema,
 })
 
 const DoseAndRateSchema = z.object({
-  doseQuantity: StrengthSchema,
+  dose_quantity: StrengthSchema,
+})
+
+const ValueQuantitySchema = z.object({
+  value: z.number(),
+  unit: z.string(),
+  system: z.string().url(),
+  code: z.string(),
+})
+
+const RepeatSchema = z.object({
+  frequency: z.number(),
+  period: z.number(),
+  period_unit: z.string(),
+  time_of_day: z.array(z.string()),
+})
+
+const TimingSchema = z.object({
+  code: CodeableConceptSchema,
+  repeat: RepeatSchema,
 })
 
 const DosageInstructionSchema = z.object({
-  timing: z.string(),
-  site: SnomedConceptSchema,
-  route: SnomedConceptSchema,
-  method: SnomedConceptSchema,
-  doseAndRate: z.array(DoseAndRateSchema),
+  timing: TimingSchema,
+  site: CodeableConceptSchema,
+  route: CodeableConceptSchema,
+  method: CodeableConceptSchema,
+  dose_and_rate: z.array(DoseAndRateSchema),
+})
+
+const CarePlanGoalSchema = z.object({
+  lifecycle_status: z.string(), // TODO: create enum
+  category: z.string(), // TODO: create fhir category type
+  priority: z.string(),
+  description: CodeableConceptSchema,
+})
+
+const CarePlanActivitySchema = z.object({
+  id: z.string(),
+  code: CodeableConceptSchema,
+  status: z.string(),
+  timing: TimingSchema,
+  staff_instructions: z.string(),
 })
 
 export const AllergySchema = z
   .object({
+    id: z.string(),
     resident_id: z.string(),
     recorder_id: z.string(),
-    clinicalStatus: AllergyClinicalStatusEnum,
-    verificationStatus: AllergyVerificationStatusEnum,
+    clinical_status: AllergyClinicalStatusEnum,
+    verification_status: AllergyVerificationStatusEnum,
     type: AllergyTypeEnum,
-    recordedDate: z.string(),
-    substance: SnomedConceptSchema,
+    name: CodeableConceptSchema,
+    recorded_date: z.string(),
+    substance: CodeableConceptSchema,
     reaction: z.object({
-      code: z.string(),
-      name: z.string(),
+      code: CodeableConceptSchema,
       severity: z.string(),
     }),
   })
@@ -157,6 +214,7 @@ export const AllergySchema = z
 
 export const PrescriptionSchema = z
   .object({
+    id: z.string(),
     resident_id: z.string(),
     recorder_id: z.string(),
     effective_period_start: z.string(),
@@ -164,41 +222,43 @@ export const PrescriptionSchema = z
     status: PrescriptionStatusEnum,
     adherence: PrescriptionAdherenceStatusEnum,
     medication: MedicationSchema,
-    dosageInstruction: z.array(DosageInstructionSchema),
+    dosage_instruction: z.array(DosageInstructionSchema),
   })
   .optional()
 
 export const ObservationSchema = z
   .object({
+    id: z.string(),
     resident_id: z.string(),
     recorder_id: z.string(),
     status: ObservationStatusEnum,
+    category: z.array(CodeableConceptSchema),
+    code: CodeableConceptSchema,
     effective_datetime: z.string(),
-    loinc_code: z.string(),
-    name: z.string(),
-    value: z.number(),
-    unit: z.string(),
-    body_site: SnomedConceptSchema,
-    method: SnomedConceptSchema,
-    device: z.object({ name: z.string(), udi_code: z.string() }),
+    value_quantity: ValueQuantitySchema,
+    body_site: CodeableConceptSchema,
+    method: CodeableConceptSchema,
+    device: CodeableConceptSchema,
   })
   .optional()
 
 export const DiagnosticHistorySchema = z
   .object({
+    id: z.string(),
     resident_id: z.string(),
     recorder_id: z.string(),
-    clinicalStatus: ConditionStatusEnum,
-    recordedDate: z.string(),
-    onsetDateTime: z.string(),
-    abatementDateTime: z.string().nullable(),
+    clinical_status: ConditionStatusEnum,
+    recorded_date: z.string(),
+    onset_datetime: z.string(),
+    abatement_datetime: z.string().nullable(),
     title: z.string(),
-    snomed_code: z.string(),
+    coding: CodeableConceptSchema,
   })
   .optional()
 
 export const EmarRecordSchema = z
   .object({
+    id: z.string(),
     resident_id: z.string(),
     prescription_id: z.string(),
     medication: MedicationSchema,
@@ -206,13 +266,14 @@ export const EmarRecordSchema = z
     status: AdministrationStatusEnum,
     effective_datetime: z.string(),
     dosage: z.object({
-      route: SnomedConceptSchema,
-      administeredDose: StrengthSchema,
+      route: CodeableConceptSchema,
+      administered_dose: StrengthSchema,
     }),
   })
   .optional()
 
 export const FinancialTransactionSchema = z.object({
+  id: z.string(),
   resident_id: z.string(),
   amount: z.number(),
   occurrence_datetime: z.string(),
@@ -220,8 +281,31 @@ export const FinancialTransactionSchema = z.object({
   description: z.string(),
 })
 
+export const EpisodesOfCareSchema = z.object({
+  id: z.string(),
+  resident_id: z.string(),
+  status: EpisodeStatusTypeEnum,
+  type: CodeableConceptSchema,
+  effective_period_start: z.string(),
+  effective_period_end: z.string(),
+  managing_organization: z.string(),
+})
+
+export const CarePlanSchema = z.object({
+  id: z.string(),
+  resident_id: z.string(),
+  status: CarePlanStatusTypeEnum,
+  title: z.string(),
+  author_id: z.string(),
+  created_date: z.string(),
+  goals: z.array(CarePlanGoalSchema),
+  activites: z.array(CarePlanActivitySchema),
+})
+
 export const EmergencyContactSchema = z
   .object({
+    id: z.string(),
+    resident_id: z.string(),
     contact_name: z.string().nullable().optional(),
     cell_phone: z.string(),
     work_phone: z.string().nullable().optional(),
@@ -266,49 +350,60 @@ export const EncryptedFieldSchema = z.object({
 // --- Encrypted Schemas (for Firestore Storage) ---
 
 export const EncryptedAllergySchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
   encrypted_dek: z.string(),
-  encrypted_clinicalStatus: EncryptedFieldSchema,
-  encrypted_verificationStatus: EncryptedFieldSchema,
+  encrypted_name: EncryptedFieldSchema,
+  encrypted_clinical_status: EncryptedFieldSchema,
+  encrypted_verification_status: EncryptedFieldSchema,
   encrypted_type: EncryptedFieldSchema,
-  encrypted_recordedDate: EncryptedFieldSchema,
+  encrypted_recorded_date: EncryptedFieldSchema,
   encrypted_substance: EncryptedFieldSchema,
   encrypted_reaction: EncryptedFieldSchema,
 })
 
 export const EncryptedPrescriptionSchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
   encrypted_dek: z.string(),
   encrypted_effective_period_start: EncryptedFieldSchema,
   encrypted_effective_period_end: EncryptedFieldSchema,
   encrypted_status: EncryptedFieldSchema,
   encrypted_adherence: EncryptedFieldSchema,
   encrypted_medication: EncryptedFieldSchema,
-  encrypted_dosageInstruction: EncryptedFieldSchema,
+  encrypted_dosage_instruction: EncryptedFieldSchema,
 })
 
 export const EncryptedObservationSchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
   encrypted_dek: z.string(),
   encrypted_status: EncryptedFieldSchema,
+  encrypted_category: EncryptedFieldSchema,
+  encrypted_code: EncryptedFieldSchema,
+  encrypted_value_quantity: EncryptedFieldSchema,
   encrypted_effective_datetime: EncryptedFieldSchema,
-  encrypted_loinc_code: EncryptedFieldSchema,
-  encrypted_name: EncryptedFieldSchema,
-  encrypted_value: EncryptedFieldSchema,
-  encrypted_unit: EncryptedFieldSchema,
   encrypted_body_site: EncryptedFieldSchema,
   encrypted_method: EncryptedFieldSchema,
   encrypted_device: EncryptedFieldSchema,
 })
 
 export const EncryptedDiagnosticHistorySchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
   encrypted_dek: z.string(),
-  encrypted_clinicalStatus: EncryptedFieldSchema,
-  encrypted_recordedDate: EncryptedFieldSchema,
-  encrypted_onsetDateTime: EncryptedFieldSchema,
-  encrypted_abatementDateTime: EncryptedFieldSchema.nullable(),
+  encrypted_clinical_status: EncryptedFieldSchema,
+  encrypted_recorded_date: EncryptedFieldSchema,
+  encrypted_onset_datetime: EncryptedFieldSchema,
+  encrypted_abatement_datetime: EncryptedFieldSchema.nullable(),
   encrypted_title: EncryptedFieldSchema,
-  encrypted_snomed_code: EncryptedFieldSchema,
+  encrypted_coding: EncryptedFieldSchema,
 })
 
 export const EncryptedEmarRecordSchema = z.object({
+  resident_id: z.string(),
+  recorder_id: z.string(),
+  prescription_id: z.string(),
   encrypted_dek: z.string(),
   encrypted_medication: EncryptedFieldSchema,
   encrypted_status: EncryptedFieldSchema,
@@ -323,6 +418,27 @@ export const EncryptedFinancialTransactionSchema = z.object({
   encrypted_occurrence_datetime: EncryptedFieldSchema,
   encrypted_type: EncryptedFieldSchema,
   encrypted_description: EncryptedFieldSchema,
+})
+
+export const EncryptedCarePlanSchema = z.object({
+  resident_id: z.string(),
+  encrypted_dek: z.string(),
+  encrypted_status: EncryptedFieldSchema,
+  encrypted_title: EncryptedFieldSchema,
+  encrypted_author_id: EncryptedFieldSchema,
+  encrypted_created_date: EncryptedFieldSchema,
+  encrypted_goals: EncryptedFieldSchema,
+  encrypted_activites: EncryptedFieldSchema,
+})
+
+export const EncryptedEpisodesOfCareSchema = z.object({
+  resident_id: z.string(),
+  encrypted_dek: z.string(),
+  encrypted_status: EncryptedFieldSchema,
+  encrypted_type: EncryptedFieldSchema,
+  encrypted_effective_period_start: EncryptedFieldSchema,
+  encrypted_effective_period_end: EncryptedFieldSchema,
+  encrypted_managing_organization: EncryptedFieldSchema,
 })
 
 export const EncryptedEmergencyContactSchema = z.object({
