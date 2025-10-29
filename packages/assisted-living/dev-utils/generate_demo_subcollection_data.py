@@ -589,11 +589,13 @@ def load_snomed_file(filepath):
                 parts = line.strip().split("|")
                 if len(parts) >= 2:
                     data.append(
-                        [{
-                            "system": "http://snomed.info/sct",
-                            "code": parts[0].strip(),
-                            "display": (re.sub(r"\([^)]*\)", "", parts[1])).strip(),
-                        }]
+                        [
+                            {
+                                "system": "http://snomed.info/sct",
+                                "code": parts[0].strip(),
+                                "display": (re.sub(r"\([^)]*\)", "", parts[1])).strip(),
+                            }
+                        ]
                     )
     return data
 
@@ -1230,17 +1232,25 @@ if __name__ == "__main__":
                             "verification_status": random.choice(
                                 ALLERGY_STATUSES["verification"]
                             ),
-                            "name": {"coding": allergy_name, "text": allergy_name[0]['display']},
+                            "name": {
+                                "coding": allergy_name,
+                                "text": allergy_name[0]["display"],
+                            },
                             "type": random.choice(ALLERGY_TYPES),
                             "recorded_date": get_random_datetime(START_DATE, END_DATE),
-                            "substance": {"coding": substance, "text": substance[0]['display']},
+                            "substance": {
+                                "coding": substance,
+                                "text": substance[0]["display"],
+                            },
                             "reaction": {
-                                "coding": {
-                                    "system": "http://snomed.info/sct",
-                                    "code": reaction["code"],
-                                    "display": reaction["display"],
+                                "code": {
+                                    "coding": {
+                                        "system": "http://snomed.info/sct",
+                                        "code": reaction["code"],
+                                        "display": reaction["display"],
+                                    },
+                                    "text": reaction["display"],
                                 },
-                                "text": reaction["display"],
                                 "severity": reaction["severity"],
                             },
                         },
@@ -1350,7 +1360,11 @@ if __name__ == "__main__":
         num_observations = random.randint(3, 8)
         for _ in range(num_observations):
             if loinc_codes:
-                all_observations.append(make_observation(random.choice(loinc_codes), resident_id=resident_id))
+                all_observations.append(
+                    make_observation(
+                        random.choice(loinc_codes), resident_id=resident_id
+                    )
+                )
 
         # --- DIAGNOSTIC HISTORY ---
         num_disorders = random.randint(1, 3)
