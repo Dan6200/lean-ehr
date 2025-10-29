@@ -15,7 +15,7 @@ if [ "$1" == "--prod" ]; then
 fi
 
 # --- Arguments Setup for firestore-cli ---
-ARGS="--rate-limit 500"
+ARGS="--rate-limit 250"
 if [ "$ENVIRONMENT" == "prod" ]; then
   KEY_PATH="secret-key/assisted-living-app-key.json"
   if [ ! -f "$KEY_PATH" ]; then
@@ -38,7 +38,7 @@ export NODE_ENV=development
 node ./dev-utils/encrypt-resident-data.ts
 unset NODE_ENV
 
-echo "--- Step 2: Starting Firestore upload... "
+echo "--- Step 2: Starting Firestore upload... --- "
 
 if [ ! -f "$ENCRYPTED_PAYLOAD_FILE" ]; then
   echo "Error: Encrypted payload file not found at $ENCRYPTED_PAYLOAD_FILE" >&2
@@ -58,3 +58,7 @@ echo "Uploading residents and subcollections..."
 firestore-cli set "providers/$PROVIDER_ID" -b -f $ENCRYPTED_PAYLOAD_FILE --jsonl $ARGS
 
 echo "\n--- Upload Complete! ---"
+
+echo "--- Step 4: Setting Up Rules and Indexes ---"
+
+firebase deploy --only firestore
