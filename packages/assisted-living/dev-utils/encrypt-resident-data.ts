@@ -6,9 +6,12 @@ import {
   KEK_CONTACT_PATH,
   KEK_CLINICAL_PATH,
   KEK_FINANCIAL_PATH,
+  // @ts-ignore ... using node to run directly so ts ext is fine
 } from '../lib/encryption.ts'
 import * as fs from 'fs'
 import * as path from 'path'
+// @ts-ignore ... can't find type def, not making a .d.ts either
+import JSONStream from 'minipass-json-stream'
 
 // --- Configuration ---
 const PLAINTEXT_INPUT_DIR = 'demo-data'
@@ -21,6 +24,8 @@ const SUBCOLLECTIONS = [
   { name: 'diagnostic_history', kekPath: KEK_CLINICAL_PATH },
   { name: 'financials', kekPath: KEK_FINANCIAL_PATH },
   { name: 'prescription_administration', kekPath: KEK_CLINICAL_PATH },
+  { name: 'care_plans', kekPath: KEK_CLINICAL_PATH },
+  { name: 'episodes_of_care', kekPath: KEK_CLINICAL_PATH },
 ]
 
 // --- Helper Functions ---
@@ -30,18 +35,49 @@ function encryptField(value: any, dek: Buffer): any {
   return encryptData(String(value), dek)
 }
 
-function loadPlaintextData(collectionName: string) {
+const MAX_IN_MEMORY_SIZE = 1_000_000 // 1MB
+
+/**
+ * Loads plaintext data from a JSON file, streaming individual records for large files.
+ * @param collectionName The name of the Firestore collection.
+ * @yields {Object} Each individual JSON object/record from the file.
+ */
+async function* loadPlaintextData(collectionName: string) {
   const rawDataPath = path.join(
     process.cwd(),
     `${PLAINTEXT_INPUT_DIR}/${collectionName}/data-plain.json`,
   )
+
   if (!fs.existsSync(rawDataPath)) {
     console.warn(
       `Warning: Plaintext data file not found for ${collectionName}. Skipping.`,
     )
-    return []
+    return // Generators should use return without a value, or just end
   }
-  return JSON.parse(fs.readFileSync(rawDataPath, 'utf-8'))
+
+  const fileSize = fs.statSync(rawDataPath).size
+
+  if (fileSize > MAX_IN_MEMORY_SIZE) {
+    console.log(`Streaming large file: ${collectionName}`)
+
+    const readStream = fs.createReadStream(rawDataPath)
+    const jsonStream = JSONStream.parse('*')
+    readStream.pipe(jsonStream)
+
+    let chunk = []
+    for await (const doc of jsonStream) {
+      chunk.push(doc)
+      if (chunk.length > 99_999) {
+        yield chunk
+        chunk = []
+      }
+    }
+  } else {
+    console.log(`Reading small file: ${collectionName} into memory.`)
+    const rawContent = fs.readFileSync(rawDataPath, 'utf-8')
+    const data = JSON.parse(rawContent)
+    yield data
+  }
 }
 
 // --- Main Encryption Logic ---
@@ -50,11 +86,16 @@ async function main() {
     '--- Starting Bulk Data Encryption to Single Streaming Payload ---',
   )
 
-  const residents = loadPlaintextData('residents')
+  const residents = (await loadPlaintextData('residents').next()).value
   const subcollectionData: { [key: string]: any[] } = {}
-  SUBCOLLECTIONS.forEach((sc) => {
-    subcollectionData[sc.name] = loadPlaintextData(sc.name)
-  })
+  for (const sc of SUBCOLLECTIONS) {
+    for await (const data of loadPlaintextData(sc.name)) {
+      if (subcollectionData[sc.name]) {
+        const oldData = [...subcollectionData[sc.name]]
+        subcollectionData[sc.name] = oldData.concat(data)
+      } else subcollectionData[sc.name] = data
+    }
+  }
 
   console.log('Step 1: Pre-generating all DEKs for all residents...')
   const dekMap = new Map()
@@ -84,7 +125,7 @@ async function main() {
 
   console.log('Step 2: Encrypting and streaming residents...')
   writeNewline()
-  residents.forEach((resident, index) => {
+  residents.forEach((resident: any, index: any) => {
     const deks = dekMap.get(resident.id)
     const encryptedData: any = {
       facility_id: resident.data.facility_id,

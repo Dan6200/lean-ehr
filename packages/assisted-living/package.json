@@ -115,6 +115,7 @@
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "lint-staged": "^16.2.3",
+    "minipass-json-stream": "^1.0.2",
     "postcss": "^8",
     "prettier": "^3.6.2",
     "puppeteer": "^23.5.1",
