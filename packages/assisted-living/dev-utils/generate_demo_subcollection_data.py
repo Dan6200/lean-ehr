@@ -784,8 +784,8 @@ if __name__ == "__main__":
                     "count": 20,
                     "frequency": 1,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(9, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(9, 0)],
                 },
             },
             {
@@ -802,8 +802,8 @@ if __name__ == "__main__":
                     "count": 100,
                     "frequency": 2,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(9, 0), time(21, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(9, 0), time(21, 0)],
                 },
             },
             {
@@ -819,8 +819,8 @@ if __name__ == "__main__":
                 "repeat": {
                     "frequency": 3,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(8, 0), time(14, 0), time(20, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(8, 0), time(14, 0), time(20, 0)],
                 },
             },
             {
@@ -836,8 +836,8 @@ if __name__ == "__main__":
                 "repeat": {
                     "frequency": 4,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(6, 0), time(12, 0), time(18, 0), time(22, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(6, 0), time(12, 0), time(18, 0), time(22, 0)],
                 },
             },
             {
@@ -853,8 +853,8 @@ if __name__ == "__main__":
                 "repeat": {
                     "frequency": 1,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(8, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(8, 0)],
                 },
             },
             {
@@ -870,8 +870,8 @@ if __name__ == "__main__":
                 "repeat": {
                     "frequency": 1,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(20, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(20, 0)],
                 },
             },
             {
@@ -887,8 +887,8 @@ if __name__ == "__main__":
                 "repeat": {
                     "frequency": 1,
                     "period": 2,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(9, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(9, 0)],
                 },
             },
             {
@@ -901,7 +901,7 @@ if __name__ == "__main__":
                         }
                     ]
                 },
-                "repeat": {"frequency": 1, "period": 1, "periodUnit": "h"},
+                "repeat": {"frequency": 1, "period": 1, "period_unit": "h"},
             },
             {
                 "code": {
@@ -913,7 +913,7 @@ if __name__ == "__main__":
                         }
                     ]
                 },
-                "repeat": {"frequency": 1, "period": 2, "periodUnit": "h"},
+                "repeat": {"frequency": 1, "period": 2, "period_unit": "h"},
             },
             {
                 "code": {
@@ -925,7 +925,7 @@ if __name__ == "__main__":
                         }
                     ]
                 },
-                "repeat": {"frequency": 1, "period": 3, "periodUnit": "h"},
+                "repeat": {"frequency": 1, "period": 3, "period_unit": "h"},
             },
             {
                 "code": {
@@ -937,7 +937,7 @@ if __name__ == "__main__":
                         }
                     ]
                 },
-                "repeat": {"frequency": 1, "period": 4, "periodUnit": "h"},
+                "repeat": {"frequency": 1, "period": 4, "period_unit": "h"},
             },
             {
                 "code": {
@@ -949,7 +949,7 @@ if __name__ == "__main__":
                         }
                     ]
                 },
-                "repeat": {"frequency": 1, "period": 6, "periodUnit": "h"},
+                "repeat": {"frequency": 1, "period": 6, "period_unit": "h"},
             },
             {
                 "code": {
@@ -961,7 +961,7 @@ if __name__ == "__main__":
                         }
                     ]
                 },
-                "repeat": {"frequency": 1, "period": 8, "periodUnit": "h"},
+                "repeat": {"frequency": 1, "period": 8, "period_unit": "h"},
             },
             {
                 "code": {
@@ -976,8 +976,8 @@ if __name__ == "__main__":
                 "repeat": {
                     "frequency": 1,
                     "period": 1,
-                    "periodUnit": "d",
-                    "timeOfDay": [time(22, 0)],
+                    "period_unit": "d",
+                    "time_of_day": [time(22, 0)],
                 },
             },
         ],
