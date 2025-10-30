@@ -3,7 +3,7 @@ import { PulsingDiv } from '@/components/ui/pulsing-div'
 
 export function SectionCardsSkeleton() {
   return (
-    <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="grid grid-cols-1 gap-4 px-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-3 @7xl/main:grid-cols-4">
       {Array.from({ length: 4 }).map((_, i) => (
         <Card key={i} className="@container/card">
           <CardHeader>
