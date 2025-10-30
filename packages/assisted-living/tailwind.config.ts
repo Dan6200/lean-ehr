@@ -78,6 +78,9 @@ const config = {
         serif: ['var(--font-serif)'],
         mono: ['var(--font-mono)'],
       },
+      boxShadow: {
+        'inner-md': 'inset 2px 2px 3px rgba(0, 0, 0, 0.05)',
+      },
       keyframes: {
         'accordion-down': {
           from: {
