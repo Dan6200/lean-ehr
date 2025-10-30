@@ -3,7 +3,7 @@ import { Toaster } from '@/components/ui/toaster'
 // Replacing with Google Analytics...
 // import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
-// import Providers from './providers'
+import { ThemeProvider } from '@/components/theme-provider'
 
 import { Inter } from 'next/font/google'
 
@@ -20,11 +20,17 @@ export default async function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        {children}
-        <Toaster />
-        {/*<Analytics />*/}
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   )
