@@ -31,7 +31,7 @@ export default function Resident({
   }, [setUser])
 
   return (
-    <div className="p-2 md:p-4 w-full lg:w-2/3">
+    <div className="p-4 md:p-8 w-full lg:w-2/3">
       <div className="flex flex-col md:flex-row items-center self-center gap-4 md:gap-8">
         {avatar_url ? (
           <CldImage
