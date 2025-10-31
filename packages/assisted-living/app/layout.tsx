@@ -4,6 +4,7 @@ import { Toaster } from '@/components/ui/toaster'
 // import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { AuthProvider } from '@/auth/client/auth-context'
 
 import { Inter } from 'next/font/google'
 
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
   description: 'An EHR software solution for assisted living facilities',
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode
@@ -22,15 +23,17 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-          <Toaster />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
