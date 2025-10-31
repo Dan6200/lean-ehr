@@ -2,10 +2,7 @@
 import { CldImage } from 'next-cloudinary'
 import Image from 'next/image'
 import type { ResidentData } from '@/types'
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { onAuthStateChanged, User } from 'firebase/auth'
-import { auth } from '@/auth/client/config'
+import { useAuth } from '@/auth/client/auth-context'
 
 const CLOUDINARY_FOLDER = 'lean-ehr/assisted-living/'
 
@@ -16,19 +13,9 @@ export default function Resident({
   id: string
   residentData: ResidentData
 }) {
-  const [, setUser] = useState<User | null>(null)
-  const router = useRouter()
+  const { user } = useAuth()
 
   const { resident_name, avatar_url } = residentData
-
-  useEffect(() => {
-    if (auth) {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-        setUser(currentUser)
-      })
-      return () => unsubscribe()
-    }
-  }, [setUser])
 
   return (
     <div className="p-4 md:p-8 w-full lg:w-2/3">
