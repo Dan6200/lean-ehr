@@ -23,7 +23,7 @@ export const GoBackLink: FC<GoBackLinkProps> = ({
   return (
     <a
       className={cn(
-        'cursor-pointer flex w-full gap-5 text-primary-foreground sm:gap-5 items-center',
+        'cursor-pointer flex w-full gap-5 text-primary-foreground dark:text-accent dark:hover:text-primary-foreground sm:gap-5 items-center',
         className,
       )}
       href="#"
