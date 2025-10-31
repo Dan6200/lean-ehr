@@ -9,9 +9,11 @@ import { ResidentLayoutSkeleton } from './loading-skeleton'
 async function ResidentDataContainer({
   id,
   children,
+  className,
 }: {
   id: string
   children: ReactNode
+  className: string
 }) {
   const residentData = await getResidentData(id).catch((e) => {
     if (e.message.match(/not_found/i)) throw notFound()
@@ -23,10 +25,10 @@ async function ResidentDataContainer({
   })
 
   return (
-    <div className="">
+    <div className={className}>
       <Resident residentData={residentData} id={id} />
       <ResidentNav residentId={id} />
-      <div className="w-full py-16 px-8 mx-auto bg-card shadow-inner-md rounded-b-md border-b border-x">
+      <div className="w-full py-8 px-4 lg:py-16 lg:px-8 mx-auto bg-card shadow-inner-md rounded-b-md border-b border-x">
         {children}
       </div>
     </div>
@@ -42,13 +44,20 @@ export default async function ResidentLayout({
 }) {
   const { id } = await params
   return (
-    <main className="bg-background flex items-start justify-between container w-full lg:w-4/5 p-4 text-center h-fit">
-      <GoBackLink className="cursor-pointer flex w-full gap-2 sm:gap-5">
+    <main className="bg-background flex flex-col md:flex-row items-start justify-between container w-full p-4 lg:p-8 text-center h-fit">
+      <GoBackLink className="cursor-pointer flex md:w-1/6 gap-2 sm:gap-5">
         Go Back
       </GoBackLink>
-      <Suspense fallback={<ResidentLayoutSkeleton />}>
-        <ResidentDataContainer id={id}>{children}</ResidentDataContainer>
-      </Suspense>
+      <div className="w-full">
+        <Suspense fallback={<ResidentLayoutSkeleton />}>
+          <ResidentDataContainer
+            id={id}
+            className="w-full md:w-fit md:flex-grow md:px-16"
+          >
+            {children}
+          </ResidentDataContainer>
+        </Suspense>
+      </div>
     </main>
   )
 }
