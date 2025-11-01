@@ -134,7 +134,7 @@ const CodingSchema = z.object({
 })
 
 const CodeableConceptSchema = z.object({
-  coding: z.array(CodingSchema).or(CodingSchema),
+  coding: z.array(CodingSchema),
   text: z.string().optional(),
 })
 
@@ -250,9 +250,9 @@ export const DiagnosticHistorySchema = z
     clinical_status: ConditionStatusEnum,
     recorded_date: z.string(),
     onset_datetime: z.string(),
-    abatement_datetime: z.string().nullable(),
+    abatement_datetime: z.string().nullable().optional(),
     title: z.string(),
-    coding: CodeableConceptSchema,
+    code: CodeableConceptSchema,
   })
   .optional()
 

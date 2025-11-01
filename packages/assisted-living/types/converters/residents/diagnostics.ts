@@ -36,6 +36,9 @@ export async function decryptDiagnosticHistory(
       decryptedData[newKey] = decryptData((data as any)[key], dek)
     }
   }
+  if (decryptedData.coding) {
+    decryptedData.coding = JSON.parse(decryptedData.coding)
+  }
 
   return DiagnosticHistorySchema.parse(decryptedData)
 }
