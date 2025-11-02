@@ -12,5 +12,4 @@ export const adminConfig = {
   projectId: process.env.NEXT_PUBLIC_FB_PROJECT_ID,
   // In a GCP environment (like Cloud Run), the service account is auto-discovered.
   // For local development, you must set the GOOGLE_APPLICATION_CREDENTIALS env var.
-  // credential: admin.credential.applicationDefault()
 }
