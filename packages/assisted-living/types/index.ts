@@ -29,11 +29,13 @@ export const ObservationStatusEnum = z.enum([
   'entered-in-error',
   'unknown',
 ])
+
 export const AllergyClinicalStatusEnum = z.enum([
   'active',
   'inactive',
   'resolved',
 ])
+
 export const AllergyVerificationStatusEnum = z.enum([
   'unconfirmed',
   'presumed',
@@ -41,6 +43,7 @@ export const AllergyVerificationStatusEnum = z.enum([
   'refuted',
   'entered-in-error',
 ])
+
 export const AllergyTypeEnum = z.enum(['allergy', 'intolerance'])
 export const ConditionStatusEnum = z.enum([
   'active',
@@ -48,11 +51,25 @@ export const ConditionStatusEnum = z.enum([
   'remission',
   'resolved',
 ])
+
+export const CarePlanGoalStatusEnum = z.enum([
+  'proposed',
+  'planned',
+  'accepted',
+  'active',
+  'on-hold',
+  'completed',
+  'cancelled',
+  'entered-in-error',
+  'rejected',
+])
+
 export const PrescriptionStatusEnum = z.enum([
   'recorded',
   'entered-in-error',
   'draft',
 ])
+
 export const PrescriptionAdherenceStatusEnum = z.enum([
   'taking',
   'taking-as-directed',
@@ -66,6 +83,7 @@ export const PrescriptionAdherenceStatusEnum = z.enum([
   'stopped-not-as-directed',
   'unknown',
 ])
+
 export const AdministrationStatusEnum = z.enum([
   'in-progress',
   'not-done',
@@ -76,6 +94,10 @@ export const AdministrationStatusEnum = z.enum([
   'unknown',
 ])
 
+export const ClaimStatusEnum = z
+  .enum(['draft', 'submitted', 'adjudicated', 'paid'])
+  .default('draft')
+
 export const LegalRelationshipEnum = z.enum([
   'HCP_AGENT_DURABLE',
   'POA_FINANCIAL',
@@ -83,6 +105,10 @@ export const LegalRelationshipEnum = z.enum([
   'GUARDIAN_OF_ESTATE',
   'TRUSTEE',
 ])
+
+export const CoverageStatusEnum = z
+  .enum(['active', 'cancelled', 'draft', 'entered-in-error'])
+  .default('active')
 
 export const PersonalRelationshipEnum = z.enum([
   'SPOUSE',
@@ -101,11 +127,12 @@ export const RelationshipEnum = z.union([
   PersonalRelationshipEnum,
 ])
 
-export const FinancialTransactionTypeEnum = z.enum([
-  'CHARGE',
-  'PAYMENT',
-  'ADJUSTMENT',
-])
+// Deprecated...
+// export const FinancialTransactionTypeEnum = z.enum([
+//   'CHARGE',
+//   'PAYMENT',
+//   'ADJUSTMENT',
+// ])
 
 export const EpisodeStatusTypeEnum = z.enum([
   'active',
@@ -125,8 +152,7 @@ export const CarePlanStatusTypeEnum = z.enum([
   'unknown',
 ])
 
-// --- Plaintext Schemas (for Application Use) ---
-
+// -- Codeable Concepts --
 const CodingSchema = z.object({
   system: z.string().url(), // or regex for known systems
   code: z.string(),
@@ -138,13 +164,63 @@ const CodeableConceptSchema = z.object({
   text: z.string().optional(),
 })
 
+const SnomedSystem = z.literal('http://snomed.info/sct')
+const RxNormSystem = z.literal('http://snomed.info/sct')
+
+const SnomedCodingSchema = z.object({
+  system: SnomedSystem,
+  code: z.string(),
+  display: z.string().optional(),
+})
+
+const SnomedConceptSchema = z.object({
+  coding: z.array(SnomedCodingSchema),
+  text: z.string().optional(),
+})
+
+const MedicationCodingSchema = z.object({
+  system: z.union([SnomedSystem, RxNormSystem]),
+  code: z.string(),
+  display: z.string().optional(),
+})
+
+const MedicationConceptSchema = z.object({
+  coding: z.array(MedicationCodingSchema),
+  text: z.string().optional(),
+})
+
+const CarePlanGoalSystem = z.literal(
+  'http://terminology.hl7.org/5.1.0/CodeSystem-goal-category.html',
+)
+
+const CarePlanGoalCodes = z.enum([
+  'dietary',
+  'safety',
+  'behavioral',
+  'nursing',
+  'physiotherapy',
+])
+
+const CarePlanGoalCodingSchema = z.object({
+  system: CarePlanGoalSystem,
+  code: CarePlanGoalCodes,
+  display: z.string().optional(),
+})
+
+const CarePlanGoalConceptSchema = z.object({
+  coding: z.array(CarePlanGoalCodingSchema),
+  text: z.string().optional(),
+})
+
+// --- Plaintext Schemas (for Application Use) ---
+
 const StrengthSchema = z.object({
   value: z.number(),
   unit: z.string(),
 })
 
 const MedicationSchema = z.object({
-  code: CodeableConceptSchema,
+  code: MedicationConceptSchema,
   strength: StrengthSchema,
 })
 
@@ -171,6 +247,11 @@ const TimingSchema = z.object({
   repeat: RepeatSchema,
 })
 
+const PeriodSchema = z.object({
+  start: z.string(),
+  end: z.string(),
+})
+
 const DosageInstructionSchema = z.object({
   timing: TimingSchema,
   site: CodeableConceptSchema,
@@ -180,10 +261,12 @@ const DosageInstructionSchema = z.object({
 })
 
 const CarePlanGoalSchema = z.object({
-  lifecycle_status: z.string(), // TODO: create enum
+  lifecycle_status: CarePlanGoalStatusEnum,
   category: z.string(), // TODO: create fhir category type
   priority: z.string(),
-  description: CodeableConceptSchema,
+  description: z.object({
+    code: CarePlanGoalConceptSchema,
+  }),
 })
 
 const CarePlanActivitySchema = z.object({
@@ -217,8 +300,7 @@ export const PrescriptionSchema = z
     id: z.string(),
     resident_id: z.string(),
     recorder_id: z.string(),
-    effective_period_start: z.string(),
-    effective_period_end: z.string(),
+    period: PeriodSchema,
     status: PrescriptionStatusEnum,
     adherence: PrescriptionAdherenceStatusEnum,
     medication: MedicationSchema,
@@ -273,13 +355,102 @@ export const EmarRecordSchema = z
   })
   .optional()
 
-export const FinancialTransactionSchema = z.object({
+// Deprecated, leave here for reference...
+// export const FinancialTransactionSchema = z.object({
+//   id: z.string(),
+//   resident_id: z.string(),
+//   amount: z.number(),
+//   occurrence_datetime: z.string(),
+//   type: FinancialTransactionTypeEnum,
+//   description: z.string(),
+// })
+
+export const ChargeSchema = z.object({
   id: z.string(),
-  resident_id: z.string(),
-  amount: z.number(),
+  service: z.string(),
+  code: z.string().nullable().optional(),
+  quantity: z.number().default(1),
+  unit_price: z.number(),
+  currency: z.string().default('NGN'),
   occurrence_datetime: z.string(),
-  type: FinancialTransactionTypeEnum,
-  description: z.string(),
+  description: z.string().optional(),
+})
+
+export const ClaimSchema = z.object({
+  id: z.string(),
+  created: z.string(),
+  status: ClaimStatusEnum,
+  coverage_id: z.string().nullable().optional(),
+  charges: z.array(z.string()).default([]), // IDs of charges
+  total: z.number(),
+  currency: z.string().default('NGN'),
+  description: z.string().optional(),
+})
+
+export const CoverageSchema = z.object({
+  id: z.string(),
+  status: CoverageStatusEnum,
+  type: z.string().optional(), // e.g. "NHIS", "Private Insurance", "Self-pay"
+  beneficiary_id: z.string(), // resident_id
+  // The organization or individual responsible for paying
+  payor: z.object({
+    id: z.string(),
+    organization: z.string().nullable(), // Null if id is resident_id
+  }),
+  // Coverage period
+  period: z
+    .object({
+      start: z.string().optional(), // ISO date
+      end: z.string().optional(),
+    })
+    .optional(),
+
+  // Optional policy identifiers
+  policy_number: z.string().nullable().optional(),
+  plan_name: z.string().nullable().optional(),
+
+  // Relationships or classifications (e.g. dependent, spouse, worker)
+  relationship: z.string().optional(), // "self" | "dependent" | "child" | etc.
+
+  // Coverage level (optional)
+  class: z
+    .array(
+      z.object({
+        type: z.string().optional(), // e.g. "plan" | "group"
+        value: z.string(),
+        name: z.string().optional(),
+      }),
+    )
+    .optional(),
+
+  // Financial details (optional)
+  network: z.string().optional(),
+  cost_to_beneficiary: z.number().nullable().optional(),
+
+  // Metadata
+  created_at: z.string(),
+  updated_at: z.string().optional(),
+})
+
+export const AdjustmentSchema = z.object({
+  id: z.string(),
+  claim_id: z.string(),
+  reason: z.string(),
+  approved_amount: z.number(),
+  coverage_id: z.string().nullable().optional(),
+  created_at: z.string(),
+  updated_at: z.string().optional(),
+})
+
+export const PaymentSchema = z.object({
+  id: z.string(),
+  claim_id: z.string().nullable().optional(),
+  coverage_id: z.string().nullable().optional(),
+  amount: z.number(),
+  currency: z.string().default('NGN'),
+  payor: z.string(), // could reference org or program
+  occurrence_datetime: z.string(),
+  method: z.string().optional(), // e.g. "EFT", "cash", "check"
 })
 
 export const EpisodesOfCareSchema = z.object({
@@ -287,8 +458,7 @@ export const EpisodesOfCareSchema = z.object({
   resident_id: z.string(),
   status: EpisodeStatusTypeEnum,
   type: CodeableConceptSchema,
-  effective_period_start: z.string(),
-  effective_period_end: z.string(),
+  period: PeriodSchema,
   managing_organization: z.string(),
 })
 
@@ -329,8 +499,7 @@ export const EmergencyContactSchema = z
 
 // Resident base record
 export const ResidentSchema = z.object({
-  id: z.string(), // your UUID
-  resident_code: z.string().optional(), // human-friendly ID, e.g. "R-00123"
+  resident_code: z.string().optional(),
   resident_name: z.string().nullable().optional(),
   gender: z.string().optional(),
   address_1: z.string(),
@@ -344,6 +513,14 @@ export const ResidentSchema = z.object({
   cell_phone: z.string().nullable().optional(),
   work_phone: z.string().nullable().optional(),
   home_phone: z.string().nullable().optional(),
+})
+
+export const IdentifierSchema = z.object({
+  id: z.string(),
+  system: z.string(),
+  value: z.string(),
+  type: z.string().optional(),
+  issued: z.string().optional(),
 })
 
 // --- Encrypted Field Schema ---
@@ -372,8 +549,7 @@ export const EncryptedPrescriptionSchema = z.object({
   resident_id: z.string(),
   recorder_id: z.string(),
   encrypted_dek: z.string(),
-  encrypted_effective_period_start: EncryptedFieldSchema,
-  encrypted_effective_period_end: EncryptedFieldSchema,
+  encrypted_period: EncryptedFieldSchema,
   encrypted_status: EncryptedFieldSchema,
   encrypted_adherence: EncryptedFieldSchema,
   encrypted_medication: EncryptedFieldSchema,
@@ -442,8 +618,7 @@ export const EncryptedEpisodesOfCareSchema = z.object({
   encrypted_dek: z.string(),
   encrypted_status: EncryptedFieldSchema,
   encrypted_type: EncryptedFieldSchema,
-  encrypted_effective_period_start: EncryptedFieldSchema,
-  encrypted_effective_period_end: EncryptedFieldSchema,
+  encrypted_period_start: EncryptedFieldSchema,
   encrypted_managing_organization: EncryptedFieldSchema,
 })
 
@@ -485,7 +660,7 @@ export type Observation = z.infer<typeof ObservationSchema>
 export type DiagnosticHistory = z.infer<typeof DiagnosticHistorySchema>
 export type Allergy = z.infer<typeof AllergySchema>
 export type Prescription = z.infer<typeof PrescriptionSchema>
-export type FinancialTransaction = z.infer<typeof FinancialTransactionSchema>
+// export type FinancialTransaction = z.infer<typeof FinancialTransactionSchema>
 export type EmergencyContact = z.infer<typeof EmergencyContactSchema>
 export type Resident = z.infer<typeof ResidentSchema>
 export type EmarRecord = z.infer<typeof EmarRecordSchema>
@@ -500,7 +675,7 @@ export type Facility = z.infer<typeof FacilitySchema>
 export const ResidentDataSchema = ResidentSchema.extend({
   id: z.string().optional(),
   address: z.string(),
-  financials: FinancialTransactionSchema.array().optional(),
+  // financials: FinancialTransactionSchema.array().optional(),
   emergency_contacts: EmergencyContactSchema.array().optional(),
   allergies: AllergySchema.array().optional(),
   prescriptions: PrescriptionSchema.array().optional(),
@@ -522,7 +697,7 @@ export type SubCollectionMapType = {
     converter: typeof getFinancialsConverter
     decryptor: typeof decryptFinancialTransaction
     encrypted_schema: typeof EncryptedFinancialTransactionSchema
-    schema: typeof FinancialTransactionSchema
+    // schema: typeof FinancialTransactionSchema
   }
   allergies: {
     converter: typeof getAllergiesConverter
@@ -590,7 +765,7 @@ export const subCollectionMap: SubCollectionMapType = {
   financials: {
     converter: getFinancialsConverter,
     decryptor: decryptFinancialTransaction,
-    schema: FinancialTransactionSchema,
+    // schema: FinancialTransactionSchema,
     encrypted_schema: EncryptedFinancialTransactionSchema,
   },
   emar: {
