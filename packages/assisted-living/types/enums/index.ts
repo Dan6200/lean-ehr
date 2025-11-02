@@ -184,13 +184,3 @@ export const CarePlanStatusTypeEnum = z.enum([
   'ended',
   'unknown',
 ])
-
-export const AccountBillingStatusEnum = z.enum([
-  'open',
-  'carecomplete-notbilled',
-  'billing',
-  'closed-baddebt',
-  'closed-voided',
-  'closed-completed',
-  'closed-combined',
-])
