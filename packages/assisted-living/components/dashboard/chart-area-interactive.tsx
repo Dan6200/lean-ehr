@@ -74,6 +74,8 @@ export function ChartAreaInteractive({
       daysToSubtract = 90
     } else if (timeRange === '30d') {
       daysToSubtract = 30
+    } else if (timeRange === '365d') {
+      daysToSubtract = 365
     }
     const startDate = new Date(now)
     startDate.setDate(startDate.getDate() - daysToSubtract)
@@ -98,6 +100,7 @@ export function ChartAreaInteractive({
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
           >
+            <ToggleGroupItem value="365d">Year-To-Date</ToggleGroupItem>
             <ToggleGroupItem value="180d">Last 6 months</ToggleGroupItem>
             <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
             <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
@@ -111,6 +114,9 @@ export function ChartAreaInteractive({
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
+              <SelectItem value="365d" className="rounded-lg">
+                Last year
+              </SelectItem>
               <SelectItem value="180d" className="rounded-lg">
                 Last 6 months
               </SelectItem>
@@ -125,120 +131,128 @@ export function ChartAreaInteractive({
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">
-        <ChartContainer
-          config={chartConfig}
-          className="aspect-auto h-[400px] w-full"
-        >
-          <AreaChart data={filteredData}>
-            <defs>
-              <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-total)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-total)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillCharges" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-charges)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-charges)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillPayments" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-payments)"
-                  stopOpacity={0.8}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-payments)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillAdjustments" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-adjustments)"
-                  stopOpacity={0.6}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-adjustments)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-            </defs>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              minTickGap={32}
-              tickFormatter={(value) => {
-                const date = new Date(value)
-                return date.toLocaleDateString('en-US', {
-                  month: 'short',
-                  day: 'numeric',
-                })
-              }}
-            />
-            <ChartTooltip
-              cursor={false}
-              content={
-                <ChartTooltipContent
-                  labelFormatter={(value) => {
-                    return new Date(value).toLocaleDateString('en-US', {
-                      month: 'short',
-                      day: 'numeric',
-                    })
-                  }}
-                  indicator="dot"
-                />
-              }
-            />
-            <Area
-              dataKey="total"
-              type="natural"
-              fill="url(#fillTotal)"
-              stroke="var(--color-total)"
-              stackId="a"
-            />
-            <Area
-              dataKey="payments"
-              type="natural"
-              fill="url(#fillPayments)"
-              stroke="var(--color-payments)"
-              stackId="a"
-            />
-            <Area
-              dataKey="charges"
-              type="natural"
-              fill="url(#fillCharges)"
-              stroke="var(--color-charges)"
-              stackId="a"
-            />
-            <Area
-              dataKey="adjustments"
-              type="natural"
-              fill="url(#fillAdjustments)"
-              stroke="var(--color-adjustments)"
-              stackId="a"
-            />
-          </AreaChart>
-        </ChartContainer>
+        <div className="overflow-x-auto scrollbar-hide">
+          <ChartContainer
+            config={chartConfig}
+            className="aspect-auto h-[400px] w-full min-w-[600px]"
+          >
+            <AreaChart data={filteredData}>
+              <defs>
+                <linearGradient id="fillTotal" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-total)"
+                    stopOpacity={1.0}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-total)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+                <linearGradient id="fillCharges" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-charges)"
+                    stopOpacity={1.0}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-charges)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+                <linearGradient id="fillPayments" x1="0" y1="0" x2="0" y2="1">
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-payments)"
+                    stopOpacity={0.8}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-payments)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+                <linearGradient
+                  id="fillAdjustments"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
+                >
+                  <stop
+                    offset="5%"
+                    stopColor="var(--color-adjustments)"
+                    stopOpacity={0.6}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor="var(--color-adjustments)"
+                    stopOpacity={0.1}
+                  />
+                </linearGradient>
+              </defs>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="date"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                minTickGap={32}
+                tickFormatter={(value) => {
+                  const date = new Date(value)
+                  return date.toLocaleDateString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                  })
+                }}
+              />
+              <ChartTooltip
+                cursor={false}
+                content={
+                  <ChartTooltipContent
+                    labelFormatter={(value) => {
+                      return new Date(value).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                      })
+                    }}
+                    indicator="dot"
+                  />
+                }
+              />
+              <Area
+                dataKey="total"
+                type="natural"
+                fill="url(#fillTotal)"
+                stroke="var(--color-total)"
+                stackId="a"
+              />
+              <Area
+                dataKey="payments"
+                type="natural"
+                fill="url(#fillPayments)"
+                stroke="var(--color-payments)"
+                stackId="a"
+              />
+              <Area
+                dataKey="charges"
+                type="natural"
+                fill="url(#fillCharges)"
+                stroke="var(--color-charges)"
+                stackId="a"
+              />
+              <Area
+                dataKey="adjustments"
+                type="natural"
+                fill="url(#fillAdjustments)"
+                stroke="var(--color-adjustments)"
+                stackId="a"
+              />
+            </AreaChart>
+          </ChartContainer>
+        </div>
       </CardContent>
     </Card>
   )
