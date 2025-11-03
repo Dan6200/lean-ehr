@@ -49,6 +49,19 @@ ADMINISTRATION_STATUSES = [
 FINANCIAL_TYPES = ["CHARGE", "PAYMENT", "ADJUSTMENT"]
 EPISODE_STATUSES = ["active", "finished", "cancelled", "waitlist"]
 
+TASK_STATUSES = ["draft", "requested", "accepted", "in-progress", "completed", "cancelled", "failed"]
+TASK_PRIORITIES = ["routine", "urgent", "asap", "stat"]
+
+PROCEDURE_STATUSES = ["preparation", "in-progress", "completed", "stopped", "entered-in-error"]
+
+SNOMED_PROCEDURES = [
+    {"code": "390838001", "display": "Wound dressing"},
+    {"code": "182965009", "display": "Administration of vaccine"},
+    {"code": "304039004", "display": "Blood glucose monitoring"},
+    {"code": "225324008", "display": "Physical therapy assessment"},
+    {"code": "443431002", "display": "Measurement of vital signs"}
+]
+
 # --- CarePlan Specific Configuration ---
 CARE_PLAN_STATUSES = [
     "draft",

@@ -3,40 +3,62 @@ from datetime import datetime
 from .utils import generate_uuid, get_random_datetime
 from .config import CARE_PLAN_GOALS, CARE_PLAN_ACTIVITIES
 
-def generate_care_plans_for_resident(resident_id: str, staff_ids: list, end_date: datetime) -> list:
-    selected_goals = random.sample(CARE_PLAN_GOALS, random.randint(2, 3))
-    selected_activities = random.sample(CARE_PLAN_ACTIVITIES, random.randint(3, 5))
+def generate_care_plans_for_resident(resident_id: str, staff_ids: list, end_date: datetime) -> dict:
+    """Generates a denormalized set of care plan data for a resident."""
+    care_plans = []
+    care_plan_goals = []
+    care_plan_activities = []
 
-    care_plan_activities_list = [
-        {
-            "id": generate_uuid(),
-            "data": {
-                "code": {
-                    "coding": {
-                        "system": "http://snomed.info/sct",
-                        "code": act["code"],
-                        "display": act["display"],
-                    },
-                    "text": act["display"],
-                },
-                "status": "scheduled",
-                "timing": act["timing"],
-                "staff_instructions": f"Ensure resident comfort during {act['display'].split('(')[0].strip().lower()}.",
-            },
-        }
-        for act in selected_activities
-    ]
-
+    # 1. Create the main Care Plan
+    care_plan_id = generate_uuid()
     care_plan = {
-        "id": generate_uuid(),
+        "id": care_plan_id,
         "data": {
             "resident_id": resident_id,
             "status": "active",
             "title": f"Personalized Care Plan - {datetime.now().year}",
             "author_id": random.choice(staff_ids),
             "created_date": get_random_datetime(datetime(2024, 1, 1), end_date),
-            "goals": selected_goals,
-            "activities": care_plan_activities_list,
         },
     }
-    return [care_plan]
+    care_plans.append(care_plan)
+
+    # 2. Generate Goals linked to the Care Plan
+    selected_goals = random.sample(CARE_PLAN_GOALS, random.randint(2, 3))
+    for goal_template in selected_goals:
+        goal = {
+            "id": generate_uuid(),
+            "data": {
+                **goal_template,
+                "careplan_id": care_plan_id,
+            }
+        }
+        care_plan_goals.append(goal)
+
+    # 3. Generate Activities linked to the Care Plan
+    selected_activities = random.sample(CARE_PLAN_ACTIVITIES, random.randint(3, 5))
+    for act_template in selected_activities:
+        activity = {
+            "id": generate_uuid(),
+            "data": {
+                "careplan_id": care_plan_id,
+                "code": {
+                    "coding": {
+                        "system": "http://snomed.info/sct",
+                        "code": act_template["coding"]["code"],
+                        "display": act_template["coding"]["display"],
+                    },
+                    "text": act_template["coding"]["display"],
+                },
+                "status": "scheduled",
+                "timing": act_template["timing"],
+                "staff_instructions": f"Ensure resident comfort during {act_template['coding']['display'].split('(')[0].strip().lower()}.",
+            },
+        }
+        care_plan_activities.append(activity)
+
+    return {
+        "care_plans": care_plans,
+        "care_plan_goals": care_plan_goals,
+        "care_plan_activities": care_plan_activities,
+    }
