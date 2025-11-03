@@ -160,6 +160,9 @@ export async function getAllResidents({
       residentsSnapshot.docs.map(async (doc) => ({
         id: doc.id,
         ...(await decryptResidentData(doc.data() as any, userRoles)),
+        created_at: doc.createTime,
+        updated_at: doc.updateTime,
+        viewed_at: doc.readTime,
       })),
     )
 
