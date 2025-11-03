@@ -46,8 +46,17 @@ ADMINISTRATION_STATUSES = [
     "stopped",
     "unknown",
 ]
-FINANCIAL_TYPES = ["CHARGE", "PAYMENT", "ADJUSTMENT"]
 EPISODE_STATUSES = ["active", "finished", "cancelled", "waitlist"]
+
+# --- From enums/index.ts ---
+CARE_PLAN_ACTIVITY_STATUSES = ["not-started", "scheduled", "in-progress", "on-hold", "completed", "cancelled", "stopped", "unknown", "entered-in-error"]
+ENCOUNTER_STATUSES = ["planned", "arrived", "in-progress", "onleave", "finished", "cancelled"]
+INTENT_ENUM = ["unknown", "proposal", "plan", "order", "original-order", "reflex-order", "filler-order", "instance-order", "option"]
+PRIORITY_ENUM = ["routine", "urgent", "asap", "stat"]
+
+# --- From schemas/codeable-concept.ts ---
+ENCOUNTER_BUSINESS_STATUSES = ["intake", "assessment", "care-planning", "package-active", "service-delivery", "review", "paused", "respite", "discharge-planning", "closed", "terminated"]
+
 
 TASK_STATUSES = ["draft", "requested", "accepted", "in-progress", "completed", "cancelled", "failed"]
 TASK_PRIORITIES = ["routine", "urgent", "asap", "stat"]
@@ -61,6 +70,461 @@ SNOMED_PROCEDURES = [
     {"code": "225324008", "display": "Physical therapy assessment"},
     {"code": "443431002", "display": "Measurement of vital signs"}
 ]
+
+ENCOUNTER_STATUSES = ["planned", "arrived", "in-progress", "onleave", "finished", "cancelled"]
+
+ENCOUNTER_TYPES = [
+    {"code": "AMB", "display": "Ambulatory", "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"},
+    {"code": "IMP", "display": "Inpatient Encounter", "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"},
+    {"code": "VR", "display": "Virtual", "system": "http://terminology.hl7.org/CodeSystem/v3-ActCode"}
+]
+
+PRESCRIPTION_TEMPLATES = [
+    {
+        "code": {
+            "coding": [
+                {
+                    "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                    "code": "316151",
+                    "display": "Lisinopril 10 MG",
+                },
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "318859000",
+                    "display": "Lisinopril",
+                },
+            ],
+            "text": "Lisinopril 10mg tablet",
+        },
+        "strength": {
+            "value": 10,
+            "unit": "mg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg",
+        },
+    },
+    {
+        "code": {
+            "coding": [
+                {
+                    "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                    "code": "860974",
+                    "display": "Metformin hydrochloride 500 MG",
+                },
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "325278007",
+                    "display": "Metformin hydrochloride",
+                },
+            ],
+            "text": "Metformin 500mg tablet",
+        },
+        "strength": {
+            "value": 500,
+            "unit": "mg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg",
+        },
+    },
+    {
+        "code": {
+            "coding": [
+                {
+                    "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                    "code": "597966",
+                    "display": "Atorvastatin 20 MG",
+                },
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "1145420004",
+                    "display": "Atorvastatin",
+                },
+            ],
+            "text": "Atorvastatin 20mg tablet",
+        },
+        "strength": {
+            "value": 20,
+            "unit": "mg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg",
+        },
+    },
+    {
+        "code": {
+            "coding": [
+                {
+                    "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                    "code": "315369",
+                    "display": "Amoxicillin 250 MG",
+                },
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "323509004",
+                    "display": "Amoxicillin",
+                },
+            ],
+            "text": "Amoxicillin 250mg capsule",
+        },
+        "strength": {
+            "value": 250,
+            "unit": "mg",
+            "system": "http://unitsofmeasure.org",
+            "code": "mg",
+        },
+    },
+    {
+        "code": {
+            "coding": [
+                {
+                    "system": "http://www.nlm.nih.gov/research/umls/rxnorm",
+                    "code": "343226",
+                    "display": "Insulin glargine 100 UNT/ML",
+                },
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "789679003",
+                    "display": "Insulin glargine",
+                },
+            ],
+            "text": "Insulin glargine 100 units/mL solution",
+        },
+        "strength": {
+            "value": 100,
+            "unit": "U/mL",
+            "system": "http://unitsofmeasure.org",
+            "code": "U/mL",
+        },
+    },
+]
+
+DOSAGE_INSTRUCTIONS = {
+    "timing": [
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "QD",
+                        "display": "once daily",
+                    }
+                ]
+            },
+            "repeat": {
+                "count": 20,
+                "frequency": 1,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(9, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "BID",
+                        "display": "twice daily",
+                    }
+                ]
+            },
+            "repeat": {
+                "count": 100,
+                "frequency": 2,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(9, 0), time(21, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "TID",
+                        "display": "three times daily",
+                    }
+                ]
+            },
+            "repeat": {
+                "frequency": 3,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(8, 0), time(14, 0), time(20, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "QID",
+                        "display": "four times daily",
+                    }
+                ]
+            },
+            "repeat": {
+                "frequency": 4,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(6, 0), time(12, 0), time(18, 0), time(22, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "AM",
+                        "display": "every morning",
+                    }
+                ]
+            },
+            "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(8, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "PM",
+                        "display": "every evening",
+                    }
+                ]
+            },
+            "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(20, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "QOD",
+                        "display": "every other day",
+                    }
+                ]
+            },
+            "repeat": {
+                "frequency": 1,
+                "period": 2,
+                "period_unit": "d",
+                "time_of_day": [time(9, 0)],
+            },
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "Q1H",
+                        "display": "every 1 hour",
+                    }
+                ]
+            },
+            "repeat": {"frequency": 1, "period": 1, "period_unit": "h"},
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "Q2H",
+                        "display": "every 2 hours",
+                    }
+                ]
+            },
+            "repeat": {"frequency": 1, "period": 2, "period_unit": "h"},
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "Q3H",
+                        "display": "every 3 hours",
+                    }
+                ]
+            },
+            "repeat": {"frequency": 1, "period": 3, "period_unit": "h"},
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "Q4H",
+                        "display": "every 4 hours",
+                    }
+                ]
+            },
+            "repeat": {"frequency": 1, "period": 4, "period_unit": "h"},
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "Q6H",
+                        "display": "every 6 hours",
+                    }
+                ]
+            },
+            "repeat": {"frequency": 1, "period": 6, "period_unit": "h"},
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "Q8H",
+                        "display": "every 8 hours",
+                    }
+                ]
+            },
+            "repeat": {"frequency": 1, "period": 8, "period_unit": "h"},
+        },
+        {
+            "code": {
+                "coding": [
+                    {
+                        "system": "http://terminology.hl7.org/CodeSystem/v3-GTSAbbreviation",
+                        "code": "BED",
+                        "display": "at bedtime",
+                    }
+                ]
+            },
+            "repeat": {
+                "frequency": 1,
+                "period": 1,
+                "period_unit": "d",
+                "time_of_day": [time(22, 0)],
+            },
+        },
+    ],
+    "site": [
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "123851003",
+                    "display": "Mouth",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "20699002",
+                    "display": "Cephalic vein",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "102291007",
+                    "display": "Gluteal muscle",
+                }
+            ]
+        },
+    ],
+    "route": [
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "26643006",
+                    "display": "Oral route",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "47625008",
+                    "display": "Intravenous route",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "78421000",
+                    "display": "Intramuscular route",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "34206005",
+                    "display": "Subcutaneous route",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "6064005",
+                    "display": "Topical route",
+                }
+            ]
+        },
+    ],
+    "method": [
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "738991002",
+                    "display": "Apply",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "740685003",
+                    "display": "Inject",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "738995006",
+                    "display": "Swallow",
+                }
+            ]
+        },
+        {
+            "coding": [
+                {
+                    "system": "http://snomed.info/sct",
+                    "code": "738992009",
+                    "display": "Chew",
+                }
+            ]
+        },
+    ],
+}
 
 # --- CarePlan Specific Configuration ---
 CARE_PLAN_STATUSES = [

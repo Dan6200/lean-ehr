@@ -57,7 +57,7 @@ def generate_financial_data_for_resident(
     # --- 3. Generate Charges ---
     total_charges = 0
     for _ in range(random.randint(2, 10)):
-        unit_price = round(random.uniform(50, 2000), 2)
+        unit_price = round(random.uniform(5000, 2000000), 2)
         quantity = random.randint(1, 3)
         charge_total = unit_price * quantity
         total_charges += charge_total

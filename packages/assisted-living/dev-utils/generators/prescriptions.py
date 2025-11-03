@@ -1,8 +1,18 @@
 import random
+from datetime import datetime
 from .utils import generate_uuid, get_random_datetime
 from .config import PRESCRIPTION_STATUSES, PRESCRIPTION_ADHERENCE_STATUSES
 
-def generate_prescriptions_for_resident(resident_id: str, staff_ids: list, start_date: datetime, intermediary_date: datetime, end_date: datetime, prescriptions_templates: list, dosage_instructions: dict) -> list:
+
+def generate_prescriptions_for_resident(
+    resident_id: str,
+    staff_ids: list,
+    start_date: datetime,
+    intermediary_date: datetime,
+    end_date: datetime,
+    prescriptions_templates: list,
+    dosage_instructions: dict,
+) -> list:
     num_prescriptions = random.randint(1, 3)
     prescriptions = []
     for _ in range(num_prescriptions):

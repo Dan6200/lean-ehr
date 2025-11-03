@@ -1,8 +1,16 @@
 import random
+from datetime import datetime
 from .utils import generate_uuid, get_random_datetime
 from .config import CONDITION_STATUSES
 
-def generate_diagnostic_history_for_resident(resident_id: str, staff_ids: list, start_date: datetime, end_date: datetime, snomed_disorders: list) -> list:
+
+def generate_diagnostic_history_for_resident(
+    resident_id: str,
+    staff_ids: list,
+    start_date: datetime,
+    end_date: datetime,
+    snomed_disorders: list,
+) -> list:
     num_disorders = random.randint(1, 3)
     diagnostic_history = []
     for _ in range(num_disorders):

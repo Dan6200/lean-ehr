@@ -1,9 +1,10 @@
 import uuid
 import random
-from datetime import datetime, timedelta, time
+from datetime import timedelta, time
 import pytz
 import os
 import re
+
 
 def convert_times(obj):
     if isinstance(obj, dict):
@@ -15,8 +16,10 @@ def convert_times(obj):
     else:
         return obj
 
+
 def generate_uuid():
     return str(uuid.uuid4())
+
 
 def get_random_datetime(start_date, end_date):
     time_between_dates = end_date - start_date
@@ -24,6 +27,7 @@ def get_random_datetime(start_date, end_date):
     random_number_of_seconds = random.randrange(seconds_between_dates)
     random_datetime = start_date + timedelta(seconds=random_number_of_seconds)
     return pytz.utc.localize(random_datetime).isoformat().replace("+00:00", "Z")
+
 
 def load_snomed_file(filepath):
     data = []
@@ -43,6 +47,7 @@ def load_snomed_file(filepath):
                     )
     return data
 
+
 def load_allergy_reactions(filepath):
     reactions = []
     if os.path.exists(filepath):
@@ -58,6 +63,7 @@ def load_allergy_reactions(filepath):
                         }
                     )
     return reactions
+
 
 def get_loinc_codes(vital_ranges):
     return [k for k, _ in vital_ranges.items()]

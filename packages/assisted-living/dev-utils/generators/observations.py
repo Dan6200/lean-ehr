@@ -1,8 +1,16 @@
 import random
+from datetime import datetime
 from .utils import generate_uuid, get_random_datetime
 from .config import OBSERVATION_STATUSES, VITAL_RANGES
 
-def make_observation(code: str, resident_id: str, staff_ids: list, start_date: datetime, end_date: datetime) -> dict:
+
+def make_observation(
+    code: str,
+    resident_id: str,
+    staff_ids: list,
+    start_date: datetime,
+    end_date: datetime,
+) -> dict:
     """Generate a FHIR Observation resource for a given vital sign code."""
     vital = VITAL_RANGES.get(code)
     if not vital:
@@ -48,14 +56,25 @@ def make_observation(code: str, resident_id: str, staff_ids: list, start_date: d
 
     return observation
 
-def generate_observations_for_resident(resident_id: str, staff_ids: list, start_date: datetime, end_date: datetime, loinc_codes: list) -> list:
+
+def generate_observations_for_resident(
+    resident_id: str,
+    staff_ids: list,
+    start_date: datetime,
+    end_date: datetime,
+    loinc_codes: list,
+) -> list:
     num_observations = random.randint(3, 8)
     observations = []
     for _ in range(num_observations):
         if loinc_codes:
             observations.append(
                 make_observation(
-                    random.choice(loinc_codes), resident_id=resident_id, staff_ids=staff_ids, start_date=start_date, end_date=end_date
+                    random.choice(loinc_codes),
+                    resident_id=resident_id,
+                    staff_ids=staff_ids,
+                    start_date=start_date,
+                    end_date=end_date,
                 )
             )
     return observations

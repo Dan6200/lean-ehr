@@ -9,7 +9,19 @@ def generate_care_plans_for_resident(resident_id: str, staff_ids: list, end_date
     care_plan_goals = []
     care_plan_activities = []
 
-    # 1. Create the main Care Plan
+    # 1. Generate Goals as standalone documents
+    selected_goals = random.sample(CARE_PLAN_GOALS, random.randint(2, 3))
+    goal_ids = []
+    for goal_template in selected_goals:
+        goal_id = generate_uuid()
+        goal_ids.append(goal_id)
+        goal = {
+            "id": goal_id,
+            "data": goal_template
+        }
+        care_plan_goals.append(goal)
+
+    # 2. Create the main Care Plan and link to Goal IDs
     care_plan_id = generate_uuid()
     care_plan = {
         "id": care_plan_id,
@@ -19,21 +31,10 @@ def generate_care_plans_for_resident(resident_id: str, staff_ids: list, end_date
             "title": f"Personalized Care Plan - {datetime.now().year}",
             "author_id": random.choice(staff_ids),
             "created_date": get_random_datetime(datetime(2024, 1, 1), end_date),
+            "goal_ids": goal_ids, # Add the array of goal IDs
         },
     }
     care_plans.append(care_plan)
-
-    # 2. Generate Goals linked to the Care Plan
-    selected_goals = random.sample(CARE_PLAN_GOALS, random.randint(2, 3))
-    for goal_template in selected_goals:
-        goal = {
-            "id": generate_uuid(),
-            "data": {
-                **goal_template,
-                "careplan_id": care_plan_id,
-            }
-        }
-        care_plan_goals.append(goal)
 
     # 3. Generate Activities linked to the Care Plan
     selected_activities = random.sample(CARE_PLAN_ACTIVITIES, random.randint(3, 5))
