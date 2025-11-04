@@ -88,11 +88,12 @@ if __name__ == "__main__":
     all_claims = []
     all_accounts = []
     all_charges = []
+    all_payments = []
+    all_adjustments = []
     all_coverages = []
     all_prescription_administration = []
     all_episodes_of_care = []
     all_care_plans = []
-    all_care_plan_goals = []
     all_care_plan_activities = []
     all_identifiers = []
     all_tasks = []
@@ -157,7 +158,6 @@ if __name__ == "__main__":
             resident_id, STAFF_IDS, END_DATE, all_goal_ids
         )
         all_care_plans.extend(care_plan_data["care_plans"])
-        all_care_plan_goals.extend(care_plan_data["care_plan_goals"])
         all_care_plan_activities.extend(care_plan_data["care_plan_activities"])
         resident["address"] = generate_address_for_resident(resident_id)["data"]
         all_identifiers.extend(
@@ -200,7 +200,6 @@ if __name__ == "__main__":
             "prescription_administration": all_prescription_administration,
             "episodes_of_care": all_episodes_of_care,
             "care_plans": all_care_plans,
-            "care_plan_goals": all_care_plan_goals,
             "care_plan_activities": all_care_plan_activities,
             "identifiers": all_identifiers,
             "accounts": all_accounts,
