@@ -22,10 +22,22 @@ const SUBCOLLECTIONS = [
   { name: 'prescriptions', kekPath: KEK_CLINICAL_PATH },
   { name: 'observations', kekPath: KEK_CLINICAL_PATH },
   { name: 'diagnostic_history', kekPath: KEK_CLINICAL_PATH },
-  { name: 'financials', kekPath: KEK_FINANCIAL_PATH },
+  { name: 'accounts', kekPath: KEK_FINANCIAL_PATH },
+  { name: 'charges', kekPath: KEK_FINANCIAL_PATH },
+  { name: 'claims', kekPath: KEK_FINANCIAL_PATH },
+  { name: 'coverages', kekPath: KEK_FINANCIAL_PATH },
+  { name: 'payments', kekPath: KEK_FINANCIAL_PATH },
+  { name: 'adjustments', kekPath: KEK_FINANCIAL_PATH },
   { name: 'prescription_administration', kekPath: KEK_CLINICAL_PATH },
   { name: 'care_plans', kekPath: KEK_CLINICAL_PATH },
+  { name: 'care_plan_activities', kekPath: KEK_CLINICAL_PATH },
   { name: 'episodes_of_care', kekPath: KEK_CLINICAL_PATH },
+  { name: 'tasks', kekPath: KEK_CLINICAL_PATH },
+  { name: 'procedures', kekPath: KEK_CLINICAL_PATH },
+  { name: 'encounters', kekPath: KEK_CLINICAL_PATH },
+  { name: 'goals', kekPath: KEK_CLINICAL_PATH },
+  { name: 'identifiers', kekPath: KEK_GENERAL_PATH },
+  { name: 'addresses', kekPath: KEK_CONTACT_PATH },
 ]
 
 // --- Helper Functions ---
