@@ -39,17 +39,16 @@ SUBCOLLECTION_FILES = {
     "prescriptions": "prescriptions/data-plain.json",
     "observations": "observations/data-plain.json",
     "diagnostic_history": "diagnostic_history/data-plain.json",
-    "accounts": "financials/accounts/data-plain.json",
-    "charges": "financials/charges/data-plain.json",
-    "claims": "financials/claims/data-plain.json",
-    "coverages": "financials/coverages/data-plain.json",
-    "payments": "financials/payments/data-plain.json",
-    "adjustments": "financials/adjustments/data-plain.json",
+    "accounts": "accounts/data-plain.json",
+    "charges": "charges/data-plain.json",
+    "claims": "claims/data-plain.json",
+    "coverages": "coverages/data-plain.json",
+    "payments": "payments/data-plain.json",
+    "adjustments": "adjustments/data-plain.json",
     "prescription_administration": "prescription_administration/data-plain.json",
     "episodes_of_care": "episodes_of_care/data-plain.json",
     "care_plans": "care_plans/data-plain.json",
-    "care_plan_goals": "care_plans/goals/data-plain.json",
-    "care_plan_activities": "care_plans/activities/data-plain.json",
+    "care_plan_activities": "care_plans_activities/data-plain.json",
     "addresses": "addresses/data-plain.json",
     "identifiers": "identifiers/data-plain.json",
     "tasks": "tasks/data-plain.json",
@@ -99,6 +98,8 @@ if __name__ == "__main__":
     all_tasks = []
     all_procedures = []
     all_encounters = []
+    all_goals = []
+    all_goal_ids = []
 
     snomed_allergy_names = load_snomed_file(SNOMED_ALLERGY_NAMES_FILE)
     snomed_allergy_reactions = load_allergy_reactions(SNOMED_ALLERGY_REACTIONS_FILE)
@@ -106,16 +107,12 @@ if __name__ == "__main__":
     snomed_disorders = load_snomed_file(SNOMED_DISORDERS_FILE)
     loinc_codes = get_loinc_codes(VITAL_RANGES)
 
-    # Generate a top-level pool of goals
-    goal_data = generate_goals()
-    all_goals = goal_data["goals"]
-    all_goal_ids = goal_data["goal_ids"]
-
     for i, resident in enumerate(residents_data):
         resident_id = resident["id"]
         resident["resident_code"] = f"MRN-{i+1:05d}"  # Add resident_code
 
         # Generate data for each subcollection
+        goal_data = generate_goals(resident_id)
         all_allergies.extend(
             generate_allergies_for_resident(
                 resident_id,
@@ -154,6 +151,8 @@ if __name__ == "__main__":
             )
         )
         all_episodes_of_care.extend(generate_episodes_of_care_for_resident(resident_id))
+        all_goals.extend(goal_data["goals"])
+        all_goal_ids.extend(goal_data["goal_ids"])
         care_plan_data = generate_care_plans_for_resident(
             resident_id, STAFF_IDS, END_DATE, all_goal_ids
         )
@@ -172,6 +171,7 @@ if __name__ == "__main__":
         all_coverages.extend(financial_data["coverages"])
         all_payments.extend(financial_data["payments"])
         all_adjustments.extend(financial_data["adjustments"])
+
         all_tasks.extend(
             generate_tasks_for_resident(resident_id, STAFF_IDS, START_DATE, END_DATE)
         )
