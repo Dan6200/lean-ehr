@@ -15,15 +15,20 @@ if [ "$1" == "--prod" ]; then
 fi
 
 # --- Arguments Setup for firestore-cli ---
+# In the 'prod' (Cloud Run) environment, authentication is handled automatically
+# by the service account attached to the job (Application Default Credentials).
+# In the 'dev' environment, we use the local service account key.
 ARGS="--rate-limit 500 --database-id staging"
 if [ "$ENVIRONMENT" == "prod" ]; then
+  echo "Running in production mode. Using Application Default Credentials."
+else
+  echo "Running in development mode. Using local service account key."
   KEY_PATH="secret-key/assisted-living-app-key.json"
   if [ ! -f "$KEY_PATH" ]; then
-    echo "Error: Production key file not found at $KEY_PATH" >&2
+    echo "Error: Development key file not found at $KEY_PATH" >&2
     exit 1
   fi
   ARGS="-k $KEY_PATH $ARGS"
-  echo "Using production key: $KEY_PATH"
 fi
 
 # --- Step 0: Create Admin User ---
