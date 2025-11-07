@@ -11,6 +11,7 @@ RUN npm install -g minipass-json-stream firebase-tools firestore-cli && pip3 ins
 
 COPY dev-utils ./dev-utils/
 COPY dev-utils/generate-encrypted-payload ./dev-utils/
+COPY dev-utils/generate-encrypted-payload/package.json ./dev-utils/generate-encrypted-payload/
 COPY demo-data ./demo-data/
 COPY lib ./lib/
 
