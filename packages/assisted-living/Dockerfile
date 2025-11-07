@@ -11,6 +11,7 @@ RUN npm install -g firebase-tools firestore-cli && pip3 install pytz --break-sys
 
 COPY dev-utils ./dev-utils/
 COPY demo-data ./demo-data/
+COPY lib ./lib/
 
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
