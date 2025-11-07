@@ -59,12 +59,9 @@ web-scraping/screenshots/*
 web-scraping/data/*
 
 # dev utilities
-dev-utils/*.json
 dev-utils/**/.venv
-dev-utils/**/*.json
 dev-utils/**/*.xlsx*
 dev-utils/**/.*.xlsx*
-data/*.json
 secret-key/*
 
 # redis config
