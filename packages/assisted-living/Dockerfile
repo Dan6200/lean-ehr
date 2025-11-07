@@ -16,6 +16,8 @@ COPY lib ./lib/
 
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
+RUN ls ./dev-utils/generate-encrypted-payload
+
 # Make the upload script executable
 RUN chmod +x ./demo-data/seed-database.sh
 
