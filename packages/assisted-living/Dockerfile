@@ -1,4 +1,4 @@
-FROM node:20-slim
+FROM node:24-slim
 
 WORKDIR /app
 
@@ -13,8 +13,6 @@ COPY dev-utils ./dev-utils/
 COPY demo-data ./demo-data/
 
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
-
-RUN ls ./dev-utils/generators
 
 # Make the upload script executable
 RUN chmod +x ./demo-data/seed-database.sh
