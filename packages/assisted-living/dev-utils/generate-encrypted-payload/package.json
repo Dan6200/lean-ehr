@@ -1,0 +1,13 @@
+{
+  "name": "generate-encrypted-payload",
+  "version": "1.0.0",
+  "description": "Utility for generating encrypted demo data for the Lean EHR.",
+  "type": "module",
+  "main": "main.ts",
+  "scripts": {
+    "start": "NODE_ENV=development node main.ts"
+  },
+  "dependencies": {
+    "minipass-json-stream": "^1.0.2"
+  }
+}
