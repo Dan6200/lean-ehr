@@ -31,9 +31,9 @@ else
   ARGS="-k $KEY_PATH $ARGS"
 fi
 
-# --- Step 0: Create Admin User ---
-echo "--- Step 0: Creating Admin User... ---"
-node dev-utils/create-admin-user.ts dev@mail.com Developer ADMIN,CLINICIAN,CAREGIVER,VIEWER
+# # --- Step 0: Create Admin User ---
+# echo "--- Step 0: Creating Admin User... ---"
+# node dev-utils/create-admin-user.ts dev@mail.com Developer ADMIN,CLINICIAN,CAREGIVER,VIEWER
 
 # --- Step 1: Generate Plaintext Demo Data ---
 echo "--- Step 1: Generating all plaintext demo data... ---"
