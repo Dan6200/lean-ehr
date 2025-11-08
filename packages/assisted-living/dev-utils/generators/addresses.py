@@ -12,7 +12,7 @@ CITIES = ["Lagos", "Abuja", "Kano", "Ibadan", "Port Harcourt"]
 STATES = ["Lagos", "FCT", "Kano", "Oyo", "Rivers"]
 
 
-def generate_address_for_resident(resident_id: str) -> dict:
+def generate_address_for_resident(resident_id: str) -> list:
     """Generates a single, structured address for a resident."""
     street_number = random.randint(1, 200)
     street_name = random.choice(STREET_NAMES)
@@ -32,4 +32,4 @@ def generate_address_for_resident(resident_id: str) -> dict:
             "country": "NGN",
         },
     }
-    return address
+    return [address]
