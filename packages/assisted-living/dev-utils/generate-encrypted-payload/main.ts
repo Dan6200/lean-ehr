@@ -279,9 +279,10 @@ async function main() {
 main()
   .catch((err) => {
     console.error('An error occurred during the encryption process:', err)
+    process.exit(1)
   })
   .finally(async () => {
     // Skip to debug
-    // console.log('--- Closing KMS client connection. ---')
-    // await kmsClient.close()
+    console.log('--- Closing KMS client connection. ---')
+    await kmsClient.close()
   })
