@@ -20,7 +20,6 @@ def generate_financial_data_for_resident(
         {
             "id": account_id,
             "data": {
-                "resident_id": resident_id,  # Only for the encrypt resident data script to run successfully
                 "subject": {"id": resident_id, "name": resident_name},
                 "balance": {"value": 0, "currency": "NGN"},  # Updated
                 "created_at": get_random_datetime(start_date, end_date),
@@ -67,6 +66,7 @@ def generate_financial_data_for_resident(
         charge = {
             "id": generate_uuid(),
             "data": {
+                "resident_id": resident_id,
                 "service": random.choice(
                     [
                         "Monthly Rent",
@@ -98,6 +98,7 @@ def generate_financial_data_for_resident(
             {
                 "id": claim_id,
                 "data": {
+                    "resident_id": resident_id,
                     "created": get_random_datetime(start_date, end_date),
                     "status": "adjudicated",  # Changed to adjudicated to justify payment
                     "coverage_id": coverage_id,
@@ -115,6 +116,7 @@ def generate_financial_data_for_resident(
             {
                 "id": generate_uuid(),
                 "data": {
+                    "resident_id": resident_id,
                     "claim_id": claim_id,
                     "coverage_id": coverage_id,
                     "amount": {"value": paid_amount, "currency": "NGN"},
@@ -131,6 +133,7 @@ def generate_financial_data_for_resident(
             {
                 "id": generate_uuid(),
                 "data": {
+                    "resident_id": resident_id,
                     "claim_id": claim_id,
                     "reason": "Contractual Adjustment",
                     "approved_amount": {"value": adjustment_amount, "currency": "NGN"},

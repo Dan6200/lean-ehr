@@ -5,7 +5,11 @@ from .config import PROCEDURE_STATUSES, SNOMED_PROCEDURES
 
 
 def generate_procedures_for_resident(
-    resident_id: str, staff_ids: list, start_date: datetime, end_date: datetime
+    resident_id: str,
+    resident_name: str,
+    staff_ids: list,
+    start_date: datetime,
+    end_date: datetime,
 ) -> list:
     """Generates a list of procedures for a resident that conforms to the ProcedureSchema."""
     num_procedures = random.randint(0, 3)
@@ -19,7 +23,7 @@ def generate_procedures_for_resident(
         procedure = {
             "id": generate_uuid(),
             "data": {
-                "subject_id": resident_id,
+                "subject": {"id": resident_id, "name": resident_name},
                 "focus": f"Procedure for {resident_id}",
                 "code": {
                     "coding": [

@@ -110,7 +110,7 @@ if __name__ == "__main__":
 
     for i, resident in enumerate(residents_data):
         resident_id = resident["id"]
-        resident["resident_code"] = f"MRN-{i+1:05d}"  # Add resident_code
+        resident["resident_code"] = f"{i+1:05d}"  # Add resident_code
 
         # Generate data for each subcollection
         goal_data = generate_goals(resident_id)
@@ -178,7 +178,11 @@ if __name__ == "__main__":
         )
         all_procedures.extend(
             generate_procedures_for_resident(
-                resident_id, STAFF_IDS, START_DATE, END_DATE
+                resident_id,
+                resident["data"]["resident_name"],
+                STAFF_IDS,
+                START_DATE,
+                END_DATE,
             )
         )
         all_encounters.extend(
