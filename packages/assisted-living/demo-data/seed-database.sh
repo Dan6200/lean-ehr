@@ -44,7 +44,6 @@ echo "--- Step 2: Encrypting all data to a single payload... ---"
 cd dev-utils/generate-encrypted-payload/ 
 ls 
 npm install 
-ls node_modules
 npm start
 cd /app
 
