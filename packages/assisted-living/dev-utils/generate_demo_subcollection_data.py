@@ -100,6 +100,7 @@ if __name__ == "__main__":
     all_encounters = []
     all_goals = []
     all_goal_ids = []
+    all_addresses = []
 
     snomed_allergy_names = load_snomed_file(SNOMED_ALLERGY_NAMES_FILE)
     snomed_allergy_reactions = load_allergy_reactions(SNOMED_ALLERGY_REACTIONS_FILE)
@@ -158,7 +159,7 @@ if __name__ == "__main__":
         )
         all_care_plans.extend(care_plan_data["care_plans"])
         all_care_plan_activities.extend(care_plan_data["care_plan_activities"])
-        resident["address"] = generate_address_for_resident(resident_id)["data"]
+        all_addresses.extend(generate_address_for_resident(resident_id)["data"])
         all_identifiers.extend(
             generate_identifiers_for_resident(resident_id, resident["resident_code"])
         )
@@ -212,6 +213,7 @@ if __name__ == "__main__":
             "procedures": all_procedures,
             "encounters": all_encounters,
             "goals": all_goals,
+            "addresses": all_addresses,
         }
         if sub_dir in data_map:
             # Write to the full path (e.g., 'demo-data/allergies/data-plain.json')

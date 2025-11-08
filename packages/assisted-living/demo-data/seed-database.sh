@@ -43,7 +43,6 @@ python3 dev-utils/generate_demo_subcollection_data.py
 echo "--- Step 2: Encrypting all data to a single payload... ---"
 cd dev-utils/generate-encrypted-payload/ 
 npm install 
-sleep 10 # Fix race condition with cloud kms
 npm start
 cd /app
 

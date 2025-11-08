@@ -282,6 +282,7 @@ main()
     process.exit(1)
   })
   .finally(async () => {
-    console.log('--- Closing KMS client connection. ---')
-    await kmsClient.close()
+    // Skip to debug
+    // console.log('--- Closing KMS client connection. ---')
+    // await kmsClient.close()
   })
