@@ -12,6 +12,29 @@ import * as fs from 'fs'
 // @ts-ignore ... can't find type def, not making a .d.ts either
 import JSONStream from 'minipass-json-stream'
 
+import {
+  EncryptedResidentSchema,
+  EncryptedEmergencyContactSchema,
+  EncryptedAllergySchema,
+  EncryptedPrescriptionSchema,
+  EncryptedObservationSchema,
+  EncryptedDiagnosticHistorySchema,
+  EncryptedEmarRecordSchema,
+  EncryptedCarePlanSchema,
+  EncryptedGoalSchema,
+  EncryptedEpisodesOfCareSchema,
+  EncryptedAccountSchema,
+  EncryptedChargeSchema,
+  EncryptedClaimSchema,
+  EncryptedPaymentSchema,
+  EncryptedAdjustmentSchema,
+  EncryptedIdentifierSchema,
+  EncryptedAddressSchema,
+  EncryptedTaskSchema,
+  EncryptedProcedureSchema,
+  EncryptedEncounterSchema,
+} from '../../types/encrypted-schemas'
+
 // --- Configuration ---
 const PLAINTEXT_INPUT_DIR = '/app/demo-data' // /app directory for the container
 const ENCRYPTED_OUTPUT_FILE = '/app/demo-data/firestore-encrypted-payload.jsonl'
@@ -38,6 +61,29 @@ const SUBCOLLECTIONS = [
   { name: 'identifiers', kekPath: KEK_GENERAL_PATH },
   { name: 'addresses', kekPath: KEK_CONTACT_PATH },
 ]
+
+const SCHEMA_MAP: { [key: string]: any } = {
+  residents: EncryptedResidentSchema,
+  emergency_contacts: EncryptedEmergencyContactSchema,
+  allergies: EncryptedAllergySchema,
+  prescriptions: EncryptedPrescriptionSchema,
+  observations: EncryptedObservationSchema,
+  diagnostic_history: EncryptedDiagnosticHistorySchema,
+  emar_records: EncryptedEmarRecordSchema,
+  care_plans: EncryptedCarePlanSchema,
+  goals: EncryptedGoalSchema,
+  episodes_of_care: EncryptedEpisodesOfCareSchema,
+  accounts: EncryptedAccountSchema,
+  charges: EncryptedChargeSchema,
+  claims: EncryptedClaimSchema,
+  payments: EncryptedPaymentSchema,
+  adjustments: EncryptedAdjustmentSchema,
+  identifiers: EncryptedIdentifierSchema,
+  addresses: EncryptedAddressSchema,
+  tasks: EncryptedTaskSchema,
+  procedures: EncryptedProcedureSchema,
+  encounters: EncryptedEncounterSchema,
+}
 
 // --- Helper Functions ---
 function encryptField(value: any, dek: Buffer): any {
@@ -193,6 +239,16 @@ async function main() {
         deks.clinical.plaintextDek,
       )
 
+    // Validate against schema
+    const validationResult = EncryptedResidentSchema.safeParse(encryptedData)
+    if (!validationResult.success) {
+      console.error(
+        `Resident schema validation failed for ${resident.id}:`,
+        validationResult.error,
+      )
+      process.exit(1)
+    }
+
     const outputItem = { path: 'residents/' + resident.id, data: encryptedData }
     outputStream.write(JSON.stringify(outputItem))
     if (index < residents.length - 1) {
@@ -230,7 +286,7 @@ async function main() {
       if (!items || items.length === 0 || !scConfig) continue
 
       const collectionPath = `residents/${residentId}/${scName}`
-      console.log(`\tStreaming ${items.length} items from ${collectionPath}`)
+      console.log(`	Streaming ${items.length} items from ${collectionPath}`)
 
       writeNewline()
 
@@ -252,15 +308,43 @@ async function main() {
       items.forEach((item, index) => {
         const encryptedData: any = { encrypted_dek }
         for (const field in item.data) {
+          // Special handling for care_plans goal_ids which are plaintext
+          if (scName === 'care_plans' && field === 'goal_ids') {
+            encryptedData[field] = item.data[field]
+            continue
+          }
+          // Special handling for charge_ids in claims which are plaintext
+          if (scName === 'claims' && field === 'charge_ids') {
+            encryptedData[field] = item.data[field]
+            continue
+          }
+          // All other _id fields are handled by the initial check
           if (field.endsWith('_id')) {
             encryptedData[field] = item.data[field]
             continue
           }
+
           encryptedData[`encrypted_${field}`] = encryptField(
             item.data[field],
             dek,
           )
         }
+
+        // Validate against schema
+        const schema = SCHEMA_MAP[scName]
+        if (schema) {
+          const validationResult = schema.safeParse(encryptedData)
+          if (!validationResult.success) {
+            console.error(
+              `Schema validation failed for ${scName}/${item.id}:`,
+              validationResult.error,
+            )
+            process.exit(1)
+          }
+        } else {
+          console.warn(`No schema found for collection: ${scName}`)
+        }
+
         const outputItem = {
           path: collectionPath + '/' + item.id,
           data: encryptedData,
