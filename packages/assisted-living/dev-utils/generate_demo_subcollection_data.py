@@ -187,7 +187,11 @@ if __name__ == "__main__":
         )
         all_encounters.extend(
             generate_encounters_for_resident(
-                resident_id, STAFF_IDS, START_DATE, END_DATE
+                resident_id,
+                resident["data"]["resident_name"],
+                STAFF_IDS,
+                START_DATE,
+                END_DATE,
             )
         )
 

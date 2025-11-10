@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { PeriodSchema } from './period'
 import {
-  CodeableConceptSchema,
   EncounterDiagnosisUseCode,
   EncounterReasonUseCode,
 } from '../codeable-concept'
@@ -9,15 +8,16 @@ import { EncounterStatusEnum } from '@/types/enums'
 
 export const EncounterSchema = z.object({
   id: z.string(),
-  resident_id: z.string(),
+  subject: z.object({
+    id: z.string(), // resident_id
+    name: z.string(),
+  }),
   type: z.string().optional(),
   status: EncounterStatusEnum,
-  business_status: EncounterBusinessStatusInpatient.optional(),
-
   period: PeriodSchema.optional(),
 
   reason: EncounterReasonUseCode.optional(),
-  diagnosis: EncounterDiagnosisUseCode.option(),
+  diagnosis: EncounterDiagnosisUseCode.optional(),
 
   location: z.string().optional(),
   participant_id: z.string().optional(),

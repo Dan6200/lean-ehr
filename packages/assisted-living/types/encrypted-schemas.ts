@@ -97,8 +97,15 @@ export const EncryptedEpisodesOfCareSchema = z.object({
   encrypted_dek: z.string(),
   encrypted_status: EncryptedFieldSchema,
   encrypted_type: EncryptedFieldSchema,
-  encrypted_period_start: EncryptedFieldSchema,
+  encrypted_period: EncryptedFieldSchema,
+  encrypted_diagnosis: EncryptedFieldSchema,
+  encrypted_reason: EncryptedFieldSchema,
   encrypted_managing_organization: EncryptedFieldSchema,
+  care_manager_id: z.string().optional(),
+  team_ids: z.array(z.string()).optional(),
+  account_id: z.string().optional(),
+  encrypted_created_at: z.string(),
+  encrypted_updated_at: z.string().optional(),
 })
 
 export const EncryptedEmergencyContactSchema = z.object({

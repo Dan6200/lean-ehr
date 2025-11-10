@@ -68,7 +68,7 @@ const SCHEMA_MAP: { [key: string]: any } = {
   prescriptions: EncryptedPrescriptionSchema,
   observations: EncryptedObservationSchema,
   diagnostic_history: EncryptedDiagnosticHistorySchema,
-  emar_records: EncryptedEmarRecordSchema,
+  prescription_administration: EncryptedEmarRecordSchema,
   care_plans: EncryptedCarePlanSchema,
   goals: EncryptedGoalSchema,
   episodes_of_care: EncryptedEpisodesOfCareSchema,
@@ -330,15 +330,7 @@ async function main() {
             }
             continue
           }
-          if (scName === 'care_plans' && field === 'goal_ids') {
-            encryptedData[field] = item.data[field]
-            continue
-          }
-          if (scName === 'claims' && field === 'charge_ids') {
-            encryptedData[field] = item.data[field]
-            continue
-          }
-          if (field.endsWith('_id')) {
+          if (field.endsWith('_id') || field.endsWith('_ids')) {
             encryptedData[field] = item.data[field]
             continue
           }

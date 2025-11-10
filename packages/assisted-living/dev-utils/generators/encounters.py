@@ -5,7 +5,11 @@ from .config import ENCOUNTER_STATUSES, ENCOUNTER_TYPES
 
 
 def generate_encounters_for_resident(
-    resident_id: str, staff_ids: list, start_date: datetime, end_date: datetime
+    resident_id: str,
+    resident_name: str,
+    staff_ids: list,
+    start_date: datetime,
+    end_date: datetime,
 ) -> list:
     """Generates a list of encounters for a resident."""
     num_encounters = random.randint(1, 5)
@@ -22,7 +26,7 @@ def generate_encounters_for_resident(
         encounter = {
             "id": generate_uuid(),
             "data": {
-                "resident_id": resident_id,
+                "subject": {"id": resident_id, "name": resident_name},
                 "status": random.choice(ENCOUNTER_STATUSES),
                 "type": {"coding": [encounter_type], "text": encounter_type["display"]},
                 "period": {"start": encounter_start, "end": encounter_end},
