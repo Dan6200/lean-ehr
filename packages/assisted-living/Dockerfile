@@ -16,7 +16,7 @@ COPY demo-data ./demo-data/
 COPY types ./types
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
-cd dev-utils/generate-encrypted-payload && npm install
+RUN cd dev-utils/generate-encrypted-payload && npm install
 
 RUN chmod +x ./demo-data/seed-database.sh
 
