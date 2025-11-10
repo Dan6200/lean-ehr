@@ -9,13 +9,15 @@ RUN apt-get update && \
 
 RUN npm install -g minipass-json-stream firebase-tools firestore-cli && pip3 install pytz --break-system-packages
 
+# Copy only the necessary package.json files and install dependencies
+# This leverages Docker layer caching
 COPY dev-utils ./dev-utils/
 COPY demo-data ./demo-data/
-
+COPY types ./types
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
-# Make the upload script executable
+cd dev-utils/generate-encrypted-payload && npm install
+
 RUN chmod +x ./demo-data/seed-database.sh
 
-# Set the entrypoint to the upload script
 ENTRYPOINT ["./demo-data/seed-database.sh", "--prod"]
