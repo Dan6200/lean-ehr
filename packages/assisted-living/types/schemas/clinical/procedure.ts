@@ -6,7 +6,10 @@ import { OccurrenceSchema } from './occurrence'
 
 export const ProcedureSchema = z.object({
   id: z.string(),
-  subject_id: z.string(),
+  subject: z.object({
+    id: z.string(), // resident_id
+    name: z.string(),
+  }),
   focus: z.string(),
   careplan_id: z.string().optional(),
   encounter_id: z.string().optional(),
