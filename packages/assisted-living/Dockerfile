@@ -9,13 +9,13 @@ RUN apt-get update && \
 
 RUN npm install -g minipass-json-stream firebase-tools firestore-cli && pip3 install pytz --break-system-packages
 
-# Copy only the necessary package.json files and install dependencies
-# This leverages Docker layer caching
 COPY dev-utils ./dev-utils/
 COPY demo-data ./demo-data/
-COPY types ./types
+COPY types ./dev-utils/generate-encrypted-payload/types
+COPY lib ./dev-utils/generate-encrypted-payload/lib
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
+# This leverages Docker layer caching
 RUN cd dev-utils/generate-encrypted-payload && npm install
 
 RUN chmod +x ./demo-data/seed-database.sh

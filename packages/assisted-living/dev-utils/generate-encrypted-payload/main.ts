@@ -32,7 +32,7 @@ import {
   EncryptedTaskSchema,
   EncryptedProcedureSchema,
   EncryptedEncounterSchema,
-} from '../../types/encrypted-schemas.ts'
+} from './types/encrypted-schemas.ts'
 
 // --- Configuration ---
 const PLAINTEXT_INPUT_DIR = '/app/demo-data' // /app directory for the container
