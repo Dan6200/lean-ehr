@@ -264,7 +264,10 @@ export const EncryptedTaskSchema = z.object({
 })
 
 export const EncryptedProcedureSchema = z.object({
-  subject_id: z.string(),
+  subject: z.object({
+    id: z.string(), // Plaintext for querying
+    encrypted_name: EncryptedFieldSchema,
+  }),
   careplan_id: z.string().nullable().optional(),
   encounter_id: z.string().nullable().optional(),
   encrypted_dek: z.string(),
@@ -285,7 +288,10 @@ export const EncryptedProcedureSchema = z.object({
 })
 
 export const EncryptedEncounterSchema = z.object({
-  subject_id: z.string(),
+  subject: z.object({
+    id: z.string(), // Plaintext for querying
+    encrypted_name: EncryptedFieldSchema,
+  }),
   episodes_of_care_id: z.string(),
   encrypted_dek: z.string(),
   encrypted_type: EncryptedFieldSchema,
