@@ -1,6 +1,7 @@
 import json
 import os
 from datetime import datetime
+from random import choice
 
 from generators.utils import (
     convert_times,
@@ -151,7 +152,8 @@ if __name__ == "__main__":
                 resident_id, STAFF_IDS, START_DATE, END_DATE, snomed_disorders
             )
         )
-        all_episodes_of_care.extend(generate_episodes_of_care_for_resident(resident_id))
+        episodes_of_care_data = generate_episodes_of_care_for_resident(resident_id)
+        all_episodes_of_care.extend(episodes_of_care_data)
         all_goals.extend(goal_data["goals"])
         all_goal_ids.extend(goal_data["goal_ids"])
         care_plan_data = generate_care_plans_for_resident(
@@ -192,6 +194,7 @@ if __name__ == "__main__":
                 STAFF_IDS,
                 START_DATE,
                 END_DATE,
+                choice(episodes_of_care_data)["id"]
             )
         )
 

@@ -15,6 +15,7 @@ export const EncounterSchema = z.object({
   type: z.string().optional(),
   status: EncounterStatusEnum,
   period: PeriodSchema.optional(),
+  episodes_of_care_id: z.string(),
 
   // business_status: EncounterBusinessStatusEnum // Add these later
   reason: EncounterReasonUseCode.optional(),

@@ -10,6 +10,7 @@ def generate_encounters_for_resident(
     staff_ids: list,
     start_date: datetime,
     end_date: datetime,
+    episodes_of_care_id: str,
 ) -> list:
     """Generates a list of encounters for a resident."""
     num_encounters = random.randint(1, 5)
@@ -30,6 +31,7 @@ def generate_encounters_for_resident(
                 "status": random.choice(ENCOUNTER_STATUSES),
                 "type": {"coding": [encounter_type], "text": encounter_type["display"]},
                 "period": {"start": encounter_start, "end": encounter_end},
+                "episodes_of_care_id": episodes_of_care_id,
                 "participant_id": random.choice(staff_ids),
                 "recorded_at": encounter_start,
             },
