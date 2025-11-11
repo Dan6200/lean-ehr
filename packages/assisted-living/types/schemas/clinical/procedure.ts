@@ -18,8 +18,8 @@ export const ProcedureSchema = z.object({
   status: ProcedureStatusEnum,
   occurrence: OccurrenceSchema,
 
-  category: SnomedConceptSchema,
-  body_site: SnomedConceptSchema,
+  category: SnomedConceptSchema.optional(),
+  body_site: SnomedConceptSchema.optional(),
 
   performer: z.object({
     id: z.string(),

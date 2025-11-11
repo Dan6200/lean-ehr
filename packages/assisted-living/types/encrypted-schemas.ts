@@ -275,8 +275,8 @@ export const EncryptedProcedureSchema = z.object({
   encrypted_code: EncryptedFieldSchema,
   encrypted_status: EncryptedFieldSchema,
   encrypted_occurrence: EncryptedFieldSchema,
-  encrypted_category: EncryptedFieldSchema,
-  encrypted_body_site: EncryptedFieldSchema,
+  encrypted_category: EncryptedFieldSchema.optional(),
+  encrypted_body_site: EncryptedFieldSchema.optional(),
   performer: z.object({
     id: z.string().optional(), // Plaintext for querying
     encrypted_name: EncryptedFieldSchema.optional(),
