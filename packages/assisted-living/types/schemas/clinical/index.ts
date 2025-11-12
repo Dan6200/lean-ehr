@@ -1,3 +1,6 @@
+export * from './encounter'
+export * from './procedure'
+export * from './task'
 export * from './allergy'
 export * from './care-plan'
 export * from './care-plan-activity'
