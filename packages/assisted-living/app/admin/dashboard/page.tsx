@@ -1,31 +1,11 @@
 'use server'
-import { getAllResidents, getNestedResidentData } from '@/actions/residents/get'
-import {
-  ChargeSchema,
-  PaymentSchema,
-  AdjustmentSchema,
-  ClaimSchema,
-} from '@/types/schemas'
 import { redirect } from 'next/navigation'
 import { DashboardClient } from '@/components/dashboard/dashboard-client'
-import { z } from 'zod'
+import bigqueryClient from '@/lib/bigquery'
+import { getFinancialSummaryQuery } from '@/lib/bigquery/queries'
+import { Resident } from '@/types'
 
-type Charge = z.infer<typeof ChargeSchema>
-type Claim = z.infer<typeof ClaimSchema>
-type Payment = z.infer<typeof PaymentSchema>
-type Adjustment = z.infer<typeof AdjustmentSchema>
-
-export type AggregatedChartData = {
-  [key: string]: {
-    date: string
-    currency: string
-    charges: number
-    claims: number
-    payments: number
-    adjustments: number
-  }
-}
-
+// The data types remain the same for the frontend components
 export type FormattedChartData = {
   date: string
   currency: string
@@ -35,123 +15,53 @@ export type FormattedChartData = {
   adjustments: number
 }[]
 
-type UnifiedTransaction = {
-  date: string
-  type: 'charges' | 'claims' | 'payments' | 'adjustments'
-  amount: number
-  currency: string
-}
+async function getChartData(): Promise<{
+  chartData: FormattedChartData
+  residents: Resident[]
+} | null> {
+  try {
+    const options = {
+      query: getFinancialSummaryQuery,
+      // Location must match that of the dataset(s) referenced in the query.
+      location: 'US', // Or your BigQuery dataset location
+    }
 
-async function getChartData(): Promise<FormattedChartData | null> {
-  const { residents } = (await getAllResidents({})) || {}
+    // Run the query
+    const [rows] = await bigqueryClient.query(options)
 
-  if (!residents) return null
-
-  const allDataPromises = residents.map((resident) =>
-    Promise.all([
-      getNestedResidentData(resident.id, 'charges'),
-      getNestedResidentData(resident.id, 'claims'),
-      getNestedResidentData(resident.id, 'payments'),
-      getNestedResidentData(resident.id, 'adjustments'),
-    ]),
-  )
-
-  const allResidentData = await Promise.all(allDataPromises).catch(
-    async (reason: any) => {
-      if (reason.toString().match(/(cookies|session|authenticate)/i)) {
-        const url =
-          process.env.HOST + ':' + process.env.PORT + '/api/auth/logout'
-        await fetch(url, {
-          method: 'post',
-        }).finally(async () => {
-          redirect('/sign-in')
-        })
-      }
-      throw new Error(`Failed to fetch all residents data: ${reason.message}`)
-    },
-  )
-
-  const allTransactions: UnifiedTransaction[] = []
-
-  for (const residentData of allResidentData) {
-    const [charges, claims, payments, adjustments] = residentData as [
-      Charge[],
-      Claim[],
-      Payment[],
-      Adjustment[],
+    // TODO: We will need to process the rows from the real query here.
+    // For now, we will return mock data in the correct shape.
+    const mockChartData: FormattedChartData = [
+      {
+        date: new Date().toISOString().split('T')[0],
+        currency: 'NGN',
+        charges: 1000,
+        claims: 800,
+        payments: 700,
+        adjustments: 100,
+      },
     ]
 
-    if (charges) {
-      allTransactions.push(
-        ...charges.map((c) => ({
-          date: c.occurrence_datetime.split('T')[0],
-          type: 'charges' as const,
-          amount: c.unit_price.value * c.quantity,
-          currency: c.unit_price.currency,
-        })),
-      )
+    // TODO: We will also need to fetch resident growth data from BigQuery.
+    const mockResidents: Resident[] = []
+
+    return {
+      chartData: mockChartData,
+      residents: mockResidents,
     }
-    if (claims) {
-      allTransactions.push(
-        ...claims.map((c) => ({
-          date: c.authored_on.split('T')[0],
-          type: 'claims' as const,
-          amount: c.total.value,
-          currency: c.total.currency,
-        })),
-      )
+  } catch (error) {
+    console.error('BigQuery query failed:', error)
+    // Handle authentication errors if necessary
+    if (error instanceof Error && error.message.match(/(denied|invalid)/i)) {
+      redirect('/sign-in')
     }
-    if (payments) {
-      allTransactions.push(
-        ...payments.map((p) => ({
-          date: p.occurrence_datetime.split('T')[0],
-          type: 'payments' as const,
-          amount: p.amount.value,
-          currency: p.amount.currency,
-        })),
-      )
-    }
-    if (adjustments) {
-      allTransactions.push(
-        ...adjustments.map((a) => ({
-          date: a.authored_on.split('T')[0],
-          type: 'adjustments' as const,
-          amount: a.approved_amount.value,
-          currency: a.approved_amount.currency,
-        })),
-      )
-    }
+    return null
   }
-
-  const aggregatedData = allTransactions.reduce(
-    (acc: AggregatedChartData, transaction) => {
-      const { date, type, amount, currency } = transaction
-      if (!acc[date]) {
-        acc[date] = {
-          date,
-          currency: currency,
-          charges: 0,
-          claims: 0,
-          payments: 0,
-          adjustments: 0,
-        }
-      }
-      acc[date][type] += amount
-      return acc
-    },
-    {},
-  )
-
-  const formattedData = Object.values(aggregatedData).sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime(),
-  )
-
-  return { chartData: formattedData, residents }
 }
 
 export default async function DashboardPage() {
   const data = await getChartData()
-  if (!data) return <div>Error loading chart data.</div>
+  if (!data) return <div>Error loading chart data from BigQuery.</div>
   return (
     <DashboardClient chartData={data.chartData} residents={data.residents} />
   )
