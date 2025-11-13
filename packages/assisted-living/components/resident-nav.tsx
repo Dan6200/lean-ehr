@@ -23,6 +23,7 @@ const navLinks = [
   { name: 'Diagnostic History', href: '/diagnostic-history' },
   { name: 'Labs & Vitals', href: '/observations' },
   { name: 'Billing', href: '/billing' },
+  { name: 'Care Plan', href: '/care-plan' },
   { name: 'eMAR', href: '/emar' },
 ]
 
