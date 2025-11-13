@@ -1,15 +1,9 @@
 import { getAuth, Auth } from 'firebase/auth'
 import { getApp, getApps, initializeApp } from 'firebase/app'
-import { getFirestore, Firestore } from 'firebase/firestore'
 import { getAnalytics, isSupported } from 'firebase/analytics'
 
 const appName = 'lean-ehr-assisted-living-client'
 import { firebaseConfig } from '@/firebase/config'
-
-let databaseId: string | undefined = undefined
-if (process.env.VERCEL_ENV === 'preview') {
-  databaseId = 'staging'
-}
 
 // Initialize Firebase client app only in the browser environment
 let clientApp = getApps().find((app) => app?.name === appName)
@@ -23,14 +17,10 @@ export const analytics = (async () => {
   return null
 })()
 
-export let auth: Auth | null = null,
-  db: Firestore | null = null
+export let auth: Auth | null = null
 
 if (typeof window !== 'undefined') {
   auth = getAuth(getApp(appName))
-  db = databaseId
-    ? getFirestore(getApp(appName), databaseId)
-    : getFirestore(getApp(appName))
 }
 
 // Connect to Firestore Emulator in development
@@ -47,13 +37,13 @@ if (typeof window !== 'undefined') {
 // }
 
 // Register the service workers
-if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-  navigator.serviceWorker
-    .register('/auth-service-worker.js', { scope: '/' })
-    .then((registration) => {
-      console.log('Service Worker registered with scope:', registration.scope)
-    })
-    .catch((error) => {
-      console.error('Service Worker registration failed:', error)
-    })
-}
+// if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+//   navigator.serviceWorker
+//     .register('/auth-service-worker.js', { scope: '/' })
+//     .then((registration) => {
+//       console.log('Service Worker registered with scope:', registration.scope)
+//     })
+//     .catch((error) => {
+//       console.error('Service Worker registration failed:', error)
+//     })
+// }
