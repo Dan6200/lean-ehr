@@ -1,3 +1,6 @@
 import { BigQuery } from '@google-cloud/bigquery'
 
-export const bigqueryClient = new BigQuery()
+// Create a new BigQuery client
+const bigqueryClient = new BigQuery()
+
+export default bigqueryClient
