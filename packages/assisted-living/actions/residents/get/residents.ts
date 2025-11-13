@@ -113,7 +113,7 @@ export async function getResidents(): Promise<Resident[]> {
 }
 
 export async function getAllResidents({
-  limit = 100,
+  limit,
   nextCursorId,
   prevCursorId,
 }: {
@@ -151,12 +151,14 @@ export async function getAllResidents({
         await docWrapper(residentsCollection, prevCursorId),
       )
       if (cursorDoc.exists) {
-        query = query.endBefore(cursorDoc).limitToLast(limit + 1)
+        query = limit
+          ? query.endBefore(cursorDoc).limitToLast(limit + 1)
+          : query.endBefore(cursorDoc)
       }
     }
 
     if (!isPrev) {
-      query = query.limit(limit + 1)
+      query = limit ? query.limit(limit + 1) : query
     }
 
     const residentsSnapshot = await getDocsWrapper(query)
