@@ -9,6 +9,7 @@ from generators.utils import (
     load_allergy_reactions,
     get_loinc_codes,
     generate_uuid,
+    get_random_datetime,
 )
 from generators.config import (
     VITAL_RANGES,
@@ -111,7 +112,9 @@ if __name__ == "__main__":
 
     for i, resident in enumerate(residents_data):
         resident_id = resident["id"]
-        resident["resident_code"] = f"{i+1:05d}"  # Add resident_code
+        resident["data"]["resident_code"] = f"{i+1:05d}"  # Add resident_code
+        resident["data"]["created_at"] = get_random_datetime(START_DATE, END_DATE)
+        resident["data"]["deactivated_at"] = None
 
         # Generate data for each subcollection
         goal_data = generate_goals(resident_id)
@@ -163,7 +166,9 @@ if __name__ == "__main__":
         all_care_plan_activities.extend(care_plan_data["care_plan_activities"])
         all_addresses.extend(generate_address_for_resident(resident_id))
         all_identifiers.extend(
-            generate_identifiers_for_resident(resident_id, resident["resident_code"])
+            generate_identifiers_for_resident(
+                resident_id, resident["data"]["resident_code"]
+            )
         )
         financial_data = generate_financial_data_for_resident(
             resident_id, resident["data"]["resident_name"], START_DATE, END_DATE
@@ -194,7 +199,7 @@ if __name__ == "__main__":
                 STAFF_IDS,
                 START_DATE,
                 END_DATE,
-                choice(episodes_of_care_data)["id"]
+                choice(episodes_of_care_data)["id"],
             )
         )
 
