@@ -1,8 +1,8 @@
 import json
 import os
 from datetime import datetime
-from random import choice,random
-import pytz # Added for timezone handling
+from random import choice, random
+import pytz  # Added for timezone handling
 from dateutil import parser
 from generators.utils import (
     convert_times,
@@ -120,10 +120,9 @@ if __name__ == "__main__":
         if random() < 0.2:
             # Ensure deactivation date is after creation date
             # Parse the ISO string back to a datetime object for arithmetic
-            deactivation_start_date = parser.parse(resident["data"]["created_at"])
+            deactivation_start_date = resident["data"]["created_at"]
             resident["data"]["deactivated_at"] = get_random_datetime(
-                deactivation_start_date,
-                END_DATE
+                deactivation_start_date, END_DATE
             )
         else:
             resident["data"]["deactivated_at"] = None
