@@ -5,7 +5,11 @@ from .config import CARE_PLAN_ACTIVITIES
 
 
 def generate_care_plans_for_resident(
-    resident_id: str, staff_ids: list, end_date: datetime, all_goal_ids: list
+    resident_id: str,
+    staff_ids: list,
+    start_date: datetime,
+    end_date: datetime,
+    all_goal_ids: list,
 ) -> dict:
     """Generates a denormalized set of care plan data for a resident."""
     care_plans = []
@@ -24,9 +28,9 @@ def generate_care_plans_for_resident(
         "data": {
             "resident_id": resident_id,
             "status": "active",
-            "title": f"Personalized Care Plan - {datetime.now().year}",
+            "title": f"Personalized Care Plan - {start_date.now().year}",
             "author_id": random.choice(staff_ids),
-            "created_date": get_random_datetime(datetime(2024, 1, 1), end_date),
+            "created_date": get_random_datetime(start_date, end_date),
             "goal_ids": selected_goal_ids,  # Reference top-level goals
         },
     }
@@ -61,3 +65,4 @@ def generate_care_plans_for_resident(
         "care_plans": care_plans,
         "care_plan_activities": care_plan_activities,
     }
+
