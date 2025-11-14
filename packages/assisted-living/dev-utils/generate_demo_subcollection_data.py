@@ -1,5 +1,6 @@
 import json
 import os
+from dateutil import parser # Added for parsing ISO strings
 from datetime import datetime
 from random import choice,random
 
@@ -118,9 +119,11 @@ if __name__ == "__main__":
         # Decide whether to deactivate the resident (e.g., 20% chance)
         if random() < 0.2:
             # Ensure deactivation date is after creation date
-            deactivation_start_date = resident["data"]["created_at"]
+            # Parse the ISO string back to a datetime object for arithmetic
+            deactivation_start_date = parser.parse(resident["data"]["created_at"])
             resident["data"]["deactivated_at"] = get_random_datetime(
-                deactivation_start_date, END_DATE
+                deactivation_start_date,
+                END_DATE
             )
         else:
             resident["data"]["deactivated_at"] = None
