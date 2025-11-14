@@ -1,7 +1,6 @@
 import uuid
 import random
 from datetime import timedelta, time
-import pytz
 import os
 import re
 
@@ -25,8 +24,7 @@ def get_random_datetime(start_date, end_date):
     time_between_dates = end_date - start_date
     seconds_between_dates = int(time_between_dates.total_seconds())
     random_number_of_seconds = random.randrange(seconds_between_dates)
-    random_datetime = start_date + timedelta(seconds=random_number_of_seconds)
-    return pytz.utc.localize(random_datetime).isoformat().replace("+00:00", "Z")
+    return start_date + timedelta(seconds=random_number_of_seconds)
 
 
 def load_snomed_file(filepath):
