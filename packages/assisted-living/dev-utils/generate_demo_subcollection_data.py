@@ -114,7 +114,16 @@ if __name__ == "__main__":
         resident_id = resident["id"]
         resident["data"]["resident_code"] = f"{i+1:05d}"  # Add resident_code
         resident["data"]["created_at"] = get_random_datetime(START_DATE, END_DATE)
-        resident["data"]["deactivated_at"] = None
+
+        # Decide whether to deactivate the resident (e.g., 20% chance)
+        if random.random() < 0.2:
+            # Ensure deactivation date is after creation date
+            deactivation_start_date = resident["data"]["created_at"]
+            resident["data"]["deactivated_at"] = get_random_datetime(
+                deactivation_start_date, END_DATE
+            )
+        else:
+            resident["data"]["deactivated_at"] = None
 
         # Generate data for each subcollection
         goal_data = generate_goals(resident_id)
