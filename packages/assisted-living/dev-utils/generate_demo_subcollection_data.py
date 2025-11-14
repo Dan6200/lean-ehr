@@ -3,7 +3,6 @@ import os
 from datetime import datetime
 from random import choice, random
 import pytz  # Added for timezone handling
-from dateutil import parser
 from generators.utils import (
     convert_times,
     load_snomed_file,
