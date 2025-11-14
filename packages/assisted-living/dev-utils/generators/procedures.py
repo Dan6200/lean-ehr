@@ -38,32 +38,18 @@ def generate_procedures_for_resident(
                 "status": random.choice(PROCEDURE_STATUSES),
                 "occurrence": {
                     "start": performed_time,
-                    "end": (
-                        datetime.fromisoformat(performed_time.replace("Z", "+00:00"))
-                        + timedelta(minutes=random.randint(15, 60))
-                    ).isoformat()
-                    + "Z",
+                    "end": performed_time + timedelta(minutes=random.randint(15, 60)),
                 },
                 "performer": {
                     "id": performer_id,
                     "name": f"Staff Member {staff_ids.index(performer_id) + 1}",
                     "period": {
                         "start": performed_time,
-                        "end": (
-                            datetime.fromisoformat(
-                                performed_time.replace("Z", "+00:00")
-                            )
-                            + timedelta(minutes=random.randint(10, 60))
-                        ).isoformat()
-                        + "Z",
+                        "end": performed_time + timedelta(minutes=random.randint(10, 60)),
                     },
                 },
                 "outcome": "successful",
-                "recorded_at": (
-                    datetime.fromisoformat(performed_time.replace("Z", "+00:00"))
-                    + timedelta(minutes=random.randint(5, 30))
-                ).isoformat()
-                + "Z",
+                "recorded_at": performed_time + timedelta(minutes=random.randint(5, 30)),
             },
         }
         procedures.append(procedure)

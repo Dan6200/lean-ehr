@@ -13,10 +13,7 @@ def generate_prescription_administration_for_resident(resident_id: str, resident
             continue
 
         start_date_str = rx_record["data"]["period"]["start"]
-        start_dt = datetime.fromisoformat(
-            start_date_str.replace("Z", "+00:00")
-        ).replace(tzinfo=None)
-        current_date = start_dt.date()
+        current_date = start_date_str
         time_of_day = timing["repeat"].get("time_of_day", [time(9, 0)])
         while current_date <= end_date.date():
             for i, dose_num in enumerate(range(doses_per_day)):

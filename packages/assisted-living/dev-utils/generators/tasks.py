@@ -34,11 +34,7 @@ def generate_tasks_for_resident(
                 "priority": random.choice(TASK_PRIORITIES),
                 "requested_period": {
                     "start": created_time,
-                    "end": (
-                        datetime.fromisoformat(created_time.replace("Z", "+00:00"))
-                        + timedelta(days=random.randint(1, 7))
-                    ).isoformat()
-                    + "Z",
+                    "end": created_time + timedelta(days=random.randint(1, 7)),
                 },
                 "execution_period": {
                     "start": created_time,  # Can be updated later
@@ -49,11 +45,7 @@ def generate_tasks_for_resident(
                     "name": f"Staff Member {staff_ids.index(performer_id) + 1}",
                     "period": {
                         "start": created_time,
-                        "end": (
-                            datetime.fromisoformat(created_time.replace("Z", "+00:00"))
-                            + timedelta(minutes=random.randint(10, 60))
-                        ).isoformat()
-                        + "Z",
+                        "end": created_time + timedelta(minutes=random.randint(10, 60)),
                     },
                 },
                 "notes": description,

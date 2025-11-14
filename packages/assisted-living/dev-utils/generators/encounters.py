@@ -19,10 +19,7 @@ def generate_encounters_for_resident(
     for _ in range(num_encounters):
         encounter_type = random.choice(ENCOUNTER_TYPES)
         encounter_start = get_random_datetime(start_date, end_date)
-        encounter_end = (
-            datetime.fromisoformat(encounter_start.replace("Z", "+00:00"))
-            + timedelta(hours=random.randint(1, 4))
-        ).isoformat() + "Z"
+        encounter_end = encounter_start + timedelta(hours=random.randint(1, 4))
 
         encounter = {
             "id": generate_uuid(),

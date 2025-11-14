@@ -1,19 +1,16 @@
 import uuid
 import random
-from datetime import timedelta, time
-import os
-import re
-
+from datetime import timedelta, time, datetime
 
 def convert_times(obj):
     if isinstance(obj, dict):
         return {k: convert_times(v) for k, v in obj.items()}
     elif isinstance(obj, list):
         return [convert_times(v) for v in obj]
+    elif isinstance(obj, datetime):
+        return obj.isoformat().replace("+00:00", "Z")
     elif isinstance(obj, time):
         return obj.isoformat()
-    else:
-        return obj
 
 
 def generate_uuid():
