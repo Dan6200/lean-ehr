@@ -24,14 +24,17 @@ def generate_prescription_administration_for_resident(
                 minute = time_of_day[i].minute
                 hour_offset = random.randint(-2, 2)
                 minute_offset = random.randint(-30, 30)
-                admin_time = datetime(
-                    current_date.year,
-                    current_date.month,
-                    current_date.day,
-                    hour,
-                    minute,
-                    0,
-                ) + timedelta(hours=hour_offset, minutes=minute_offset)
+                admin_time = pytz.utc.localize(
+                    datetime(
+                        current_date.year,
+                        current_date.month,
+                        current_date.day,
+                        hour,
+                        minute,
+                        0,
+                    )
+                    + timedelta(hours=hour_offset, minutes=minute_offset)
+                )
 
                 if admin_time > end_date:
                     continue
@@ -55,7 +58,8 @@ def generate_prescription_administration_for_resident(
                                     "route"
                                 ],
                                 "administered_dose": administered_dosage,
-                                "dose_number": dose_num + 1,  # Add the dose number (1-based)
+                                "dose_number": dose_num
+                                + 1,  # Add the dose number (1-based)
                             },
                         },
                     }
