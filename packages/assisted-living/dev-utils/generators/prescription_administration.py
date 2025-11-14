@@ -4,7 +4,10 @@ import pytz
 from .utils import generate_uuid
 from .config import ADMINISTRATION_STATUSES
 
-def generate_prescription_administration_for_resident(resident_id: str, resident_prescriptions: list, staff_ids: list, end_date: datetime) -> list:
+
+def generate_prescription_administration_for_resident(
+    resident_id: str, resident_prescriptions: list, staff_ids: list, end_date: datetime
+) -> list:
     prescription_administration = []
     for rx_record in resident_prescriptions:
         timing = rx_record["data"]["dosage_instruction"][0]["timing"]
@@ -15,7 +18,7 @@ def generate_prescription_administration_for_resident(resident_id: str, resident
         start_date_str = rx_record["data"]["period"]["start"]
         current_date = start_date_str
         time_of_day = timing["repeat"].get("time_of_day", [time(9, 0)])
-        while current_date <= end_date.date():
+        while current_date <= end_date:
             for i, dose_num in enumerate(range(doses_per_day)):
                 hour = time_of_day[i].hour
                 minute = time_of_day[i].minute
@@ -26,7 +29,7 @@ def generate_prescription_administration_for_resident(resident_id: str, resident
                     current_date.month,
                     current_date.day,
                     hour,
-                    30,
+                    minute,
                     0,
                 ) + timedelta(hours=hour_offset, minutes=minute_offset)
 
@@ -46,14 +49,13 @@ def generate_prescription_administration_for_resident(resident_id: str, resident
                             "medication": rx_record["data"]["medication"],
                             "recorder_id": random.choice(staff_ids),
                             "status": random.choice(ADMINISTRATION_STATUSES),
-                            "effective_datetime": pytz.utc.localize(admin_time)
-                            .isoformat()
-                            .replace("+00:00", "Z"),
+                            "effective_datetime": admin_time,
                             "dosage": {
                                 "route": rx_record["data"]["dosage_instruction"][0][
                                     "route"
                                 ],
                                 "administered_dose": administered_dosage,
+                                "dose_number": dose_num + 1,  # Add the dose number (1-based)
                             },
                         },
                     }

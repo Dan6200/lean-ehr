@@ -15,6 +15,7 @@ export const EmarRecordSchema = z
     dosage: z.object({
       route: CodeableConceptSchema,
       administered_dose: StrengthSchema,
+      dose_number: z.number(),
     }),
   })
   .optional()
