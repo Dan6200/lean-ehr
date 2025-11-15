@@ -4,6 +4,7 @@ import {
   QueryDocumentSnapshot,
 } from 'firebase-functions/v2/firestore'
 import bigqueryClient from '../lib/bigquery'
+import { decryptData } from '../lib/encryption'
 
 const DATASET_ID = 'firestore_export'
 
@@ -30,30 +31,29 @@ export async function streamToBigQuery(
     return null
   }
 
-  const data = after.data()
-  if (!data) {
+  const encryptedData = after.data()
+  if (!encryptedData) {
     console.log(
       `No data found for document ${documentId} in ${collectionName}.`,
     )
     return null
   }
 
-  const rows = [
-    {
-      document_id: documentId,
-      data: JSON.stringify(data),
-      timestamp: event.time,
-    },
-  ]
-
   try {
-    await bigqueryClient.dataset(DATASET_ID).table(tableId).insert(rows)
+    const decryptedData = await decryptData(encryptedData)
+
+    const row = {
+      document_id: documentId,
+      ...decryptedData,
+    }
+
+    await bigqueryClient.dataset(DATASET_ID).table(tableId).insert([row])
     console.log(
-      `Successfully streamed document ${documentId} from ${collectionName} to BigQuery.`,
+      `Successfully decrypted and streamed document ${documentId} from ${collectionName} to BigQuery.`,
     )
   } catch (error) {
     console.error(
-      `Failed to stream document ${documentId} from ${collectionName} to BigQuery:`,
+      `Failed to decrypt and stream document ${documentId} from ${collectionName} to BigQuery:`,
       error,
     )
   }
