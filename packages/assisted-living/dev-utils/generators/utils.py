@@ -23,6 +23,10 @@ def generate_uuid():
 def get_random_datetime(start_date, end_date):
     time_between_dates = end_date - start_date
     seconds_between_dates = int(time_between_dates.total_seconds())
+    
+    if seconds_between_dates <= 0:
+        return start_date
+        
     random_number_of_seconds = random.randrange(seconds_between_dates)
     return start_date + timedelta(seconds=random_number_of_seconds)
 
