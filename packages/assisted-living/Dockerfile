@@ -12,9 +12,9 @@ RUN npm install -g minipass-json-stream firebase-tools firestore-cli && pip3 ins
 COPY dev-utils ./dev-utils/
 COPY demo-data ./demo-data/
 COPY types ./dev-utils/generate-encrypted-payload/types
-COPY lib ./dev-utils/generate-encrypted-payload/lib
+COPY lib/encryption.ts ./dev-utils/generate-encrypted-payload/lib/
 COPY functions ./functions
-COPY lib ./functions/src/lib
+COPY lib/encryption.ts ./functions/src/lib/
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
 # This leverages Docker layer caching
