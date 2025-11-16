@@ -115,8 +115,8 @@ if __name__ == "__main__":
         resident["data"]["resident_code"] = f"{i+1:05d}"  # Add resident_code
         resident["data"]["created_at"] = get_random_datetime(START_DATE, END_DATE)
 
-        # Decide whether to deactivate the resident (e.g., 5% chance)
-        if random() < 0.05:
+        # Decide whether to deactivate the resident (e.g., 20% chance)
+        if random() < 0.2:
             # Ensure deactivation date is after creation date
             deactivation_start_date = resident["data"]["created_at"]
             resident["data"]["deactivated_at"] = get_random_datetime(
