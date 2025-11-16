@@ -11,9 +11,10 @@ if (!kmsConfig) {
   )
 }
 
-const KMS_PROJECT_ID = kmsConfig.project_id
-const KMS_LOCATION = kmsConfig.location
-const KMS_KEY_RING = kmsConfig.key_ring
+// Not needed as it's already included in the kek paths
+// const KMS_PROJECT_ID = kmsConfig.project_id
+// const KMS_LOCATION = kmsConfig.location
+// const KMS_KEY_RING = kmsConfig.key_ring
 
 export const KEK_GENERAL_PATH = kmsConfig.kek_general_path
 export const KEK_CONTACT_PATH = kmsConfig.kek_contact_path
