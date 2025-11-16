@@ -14,6 +14,8 @@ def convert_times(obj):
         return obj.isoformat().replace("+00:00", "Z")
     elif isinstance(obj, time):
         return obj.isoformat()
+    else:
+        return obj
 
 
 def generate_uuid():

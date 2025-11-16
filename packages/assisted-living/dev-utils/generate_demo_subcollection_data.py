@@ -250,8 +250,7 @@ if __name__ == "__main__":
         if sub_dir in data_map:
             # Write to the full path (e.g., 'demo-data/allergies/data-plain.json')
             with open(os.path.join(SUBCOLLECTIONS_DIR, sub_file), "w") as f:
-                # data = convert_times(data_map[sub_dir])
-                data = data_map[sub_dir]
+                data = convert_times(data_map[sub_dir])
                 json.dump(data, f, indent=2)
 
     print("FHIR-Aligned Demo data generation complete.")
