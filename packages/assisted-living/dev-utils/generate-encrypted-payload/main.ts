@@ -269,11 +269,11 @@ async function main() {
   for (const sc of SUBCOLLECTIONS) {
     const items = subcollectionData[sc.name] || []
     for (const item of items) {
-      if (!item.data) console.log(sc, item)
       const residentId =
         item.data.resident_id ??
         item.data.beneficiary_id ??
         item.data.subject?.id
+      console.log(sc.name, residentId)
       if (!groupedSubcollectionData[residentId])
         groupedSubcollectionData[residentId] = {}
       if (!groupedSubcollectionData[residentId][sc.name])
