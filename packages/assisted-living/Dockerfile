@@ -14,7 +14,6 @@ COPY demo-data ./demo-data/
 COPY types ./dev-utils/generate-encrypted-payload/types
 COPY lib/encryption.ts ./dev-utils/generate-encrypted-payload/lib/
 COPY functions ./functions
-COPY lib/encryption.ts ./functions/src/lib/
 COPY firebase.json .firebaserc firestore.indexes.json firestore.rules ./
 
 # This leverages Docker layer caching

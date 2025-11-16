@@ -186,6 +186,9 @@ async function main() {
     const deks = dekMap.get(resident.id)
     const encryptedData: any = {
       facility_id: resident.data.facility_id,
+      created_at: resident.data.created_at,
+      updated_at: resident.data.updated_at,
+      viewed_at: resident.data.viewed_at,
       encrypted_dek_general: deks.general.encryptedDek.toString('base64'),
       encrypted_dek_contact: deks.contact.encryptedDek.toString('base64'),
       encrypted_dek_clinical: deks.clinical.encryptedDek.toString('base64'),
@@ -287,7 +290,10 @@ async function main() {
     for (const scName of Object.keys(residentSubcollections)) {
       const items = residentSubcollections[scName]
       const scConfig = SUBCOLLECTIONS.find((sc) => sc.name === scName)
-      if (!items || items.length === 0 || !scConfig) continue
+      if (!items || items.length === 0 || !scConfig) {
+        console.log(` ${scName} Erroneously skipped!!!!!!`)
+        continue
+      }
 
       const collectionPath = `residents/${residentId}/${scName}`
       console.log(`	Streaming ${items.length} items from ${collectionPath}`)
