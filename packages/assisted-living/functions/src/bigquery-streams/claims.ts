@@ -10,6 +10,7 @@ export const onClaimWritten = onDocumentWritten(
   {
     database: 'staging-beta',
     document: 'providers/{providerId}/residents/{residentId}/claims/{claimId}',
+    region: 'europe-west1',
   },
   (event) =>
     streamToBigQuery(

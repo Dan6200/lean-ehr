@@ -1,37 +1,21 @@
 import { KeyManagementServiceClient } from '@google-cloud/kms'
 import * as crypto from 'crypto'
-import * as functions from 'firebase-functions'
 
-// Configuration for KMS from Firebase runtime config
-const kmsConfig = functions.config().kms
-
-if (!kmsConfig) {
+// Helper function to get config value from process.env
+function getEnvConfig(envVarName: string): string {
+  if (process.env[envVarName]) {
+    return process.env[envVarName]!
+  }
   throw new Error(
-    "KMS configuration not found in Firebase functions config. Run 'firebase functions:config:set kms.project_id=...' etc.",
+    `KMS config: Environment variable ${envVarName} is not set. Please ensure it's defined in your .env file or deployment environment.`,
   )
 }
 
-// Not needed as it's already included in the kek paths
-// const KMS_PROJECT_ID = kmsConfig.project_id
-// const KMS_LOCATION = kmsConfig.location
-// const KMS_KEY_RING = kmsConfig.key_ring
-
-export const KEK_GENERAL_PATH = kmsConfig.kek_general_path
-export const KEK_CONTACT_PATH = kmsConfig.kek_contact_path
-export const KEK_CLINICAL_PATH = kmsConfig.kek_clinical_path
-export const KEK_FINANCIAL_PATH = kmsConfig.kek_financial_path
-
-// Validate that all paths are loaded
-if (
-  !KEK_GENERAL_PATH ||
-  !KEK_CONTACT_PATH ||
-  !KEK_CLINICAL_PATH ||
-  !KEK_FINANCIAL_PATH
-) {
-  throw new Error(
-    'One or more KEK paths are missing from Firebase functions config.',
-  )
-}
+// Configuration for KMS from environment variables
+export const KEK_GENERAL_PATH = getEnvConfig('KEK_GENERAL_PATH')
+export const KEK_CONTACT_PATH = getEnvConfig('KEK_CONTACT_PATH')
+export const KEK_CLINICAL_PATH = getEnvConfig('KEK_CLINICAL_PATH')
+export const KEK_FINANCIAL_PATH = getEnvConfig('KEK_FINANCIAL_PATH')
 
 const kmsClient = new KeyManagementServiceClient()
 

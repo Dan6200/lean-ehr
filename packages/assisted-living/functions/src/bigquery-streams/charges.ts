@@ -11,6 +11,7 @@ export const onChargeWritten = onDocumentWritten(
     database: 'staging-beta',
     document:
       'providers/{providerId}/residents/{residentId}/charges/{chargeId}',
+    region: 'europe-west1',
   },
   (event) =>
     streamToBigQuery(

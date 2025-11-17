@@ -10,6 +10,7 @@ export const onResidentWritten = onDocumentWritten(
   {
     database: 'staging-beta',
     document: 'providers/{providerId}/residents/{residentId}',
+    region: 'europe-west1',
   },
   (event) =>
     streamToBigQuery(
