@@ -25,7 +25,9 @@ export async function decryptProcedure(
       // Handle partially encrypted performer object
       decryptedData.performer = {
         id: data.performer.id,
-        name: decryptData(data.performer.encrypted_name, dek),
+        name: data.performer.encrypted_name
+          ? decryptData(data.performer.encrypted_name, dek)
+          : null,
         period: JSON.parse(decryptData(data.performer.encrypted_period, dek)),
       }
     } else if (
