@@ -18,7 +18,11 @@ import {
   decryptCharge,
   decryptClaim,
 } from '@/types/converters'
-import { KEK_GENERAL_PATH, KEK_FINANCIAL_PATH } from '@/lib/encryption'
+import {
+  KEK_GENERAL_PATH,
+  KEK_CONTACT_PATH,
+  KEK_FINANCIAL_PATH,
+} from '@/lib/encryption'
 
 // --- Configuration ---
 const PROVIDER_ID = 'GYRHOME' // Specify the provider to backfill
@@ -30,6 +34,7 @@ async function backfill() {
 
   const kekPaths = {
     KEK_GENERAL_PATH,
+    KEK_CONTACT_PATH,
     KEK_FINANCIAL_PATH,
   }
   admin.initializeApp()
@@ -39,7 +44,7 @@ async function backfill() {
 
   const COLLECTIONS_TO_BACKFILL = {
     residents: {
-      kekPath: 'complex', // Not a single KEK path
+      kekPath: 'complex',
       parent: null,
       decryptor: (doc: any) => decryptResidentData(doc, ['ADMIN'], kekPaths),
     },
