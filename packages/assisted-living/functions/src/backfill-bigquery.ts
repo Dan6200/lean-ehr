@@ -18,7 +18,7 @@ import {
   decryptCharge,
   decryptClaim,
 } from '@/types/converters'
-import { getKekPaths } from '@/lib/encryption' // Re-use the encryption logic from functions
+import { KEK_GENERAL_PATH, KEK_FINANCIAL_PATH } from '@/lib/encryption'
 
 // --- Configuration ---
 const PROVIDER_ID = 'GYRHOME' // Specify the provider to backfill
@@ -28,7 +28,10 @@ const BATCH_SIZE = 500 // Number of documents to process and insert at a time
 async function backfill() {
   console.log('--- Starting BigQuery Backfill Script ---')
 
-  const kekPaths = getKekPaths()
+  const kekPaths = {
+    KEK_GENERAL_PATH,
+    KEK_FINANCIAL_PATH,
+  }
   admin.initializeApp()
   const firestore = getFirestore()
   firestore.settings({ databaseId: 'staging-beta' })
