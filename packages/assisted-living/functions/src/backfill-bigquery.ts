@@ -8,7 +8,7 @@
  * ts-node dev-utils/backfill-bigquery.ts
  */
 
-import { initializeApp } from 'firebase-admin'
+import admin from 'firebase-admin'
 import { getFirestore } from 'firebase-admin/firestore'
 import bigqueryClient from './lib/bigquery' // Re-use the client from functions
 import { decryptData, decryptDataKey, getKekPaths } from './lib/encryption' // Re-use the encryption logic from functions
@@ -55,7 +55,7 @@ async function backfill() {
     // observations: { kekPath: KEK_CLINICAL_PATH, parent: 'residents' },
   }
 
-  initializeApp()
+  admin.initializeApp()
   const firestore = getFirestore()
   firestore.settings({ databaseId: 'staging' })
   const db = firestore
