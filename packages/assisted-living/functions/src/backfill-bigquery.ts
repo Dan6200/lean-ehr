@@ -17,7 +17,7 @@ import {
   decryptAdjustment,
   decryptCharge,
   decryptClaim,
-} from './lib/decryptors'
+} from './types/converters'
 import { getKekPaths } from './lib/encryption' // Re-use the encryption logic from functions
 
 // --- Configuration ---

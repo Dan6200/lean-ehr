@@ -9,7 +9,10 @@
     "sourceMap": true,
     "strict": true,
     "target": "es2017",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["./*"]
+    }
   },
   "compileOnSave": true,
   "include": ["src"]

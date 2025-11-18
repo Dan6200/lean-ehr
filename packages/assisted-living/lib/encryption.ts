@@ -4,26 +4,34 @@ import { execSync } from 'child_process'
 
 // Helper function to get config value from env or gcloud fallback
 function getKmsConfig(envVarName: string, gcloudCommand: string): string {
+  // In a deployed Google Cloud environment (Functions, Run), variables are set.
+  if (process.env.FUNCTION_TARGET || process.env.K_SERVICE) {
+    if (process.env[envVarName]) {
+      return process.env[envVarName]!
+    }
+    throw new Error(
+      `KMS config: In a Google Cloud environment, but the environment variable ${envVarName} is not set.`,
+    )
+  }
+
+  // For local development, try env var first, then gcloud fallback.
   if (process.env[envVarName]) {
     return process.env[envVarName]!
   }
 
-  if (process.env.NODE_ENV === 'development') {
-    try {
-      const value = execSync(gcloudCommand).toString().trim()
-      if (value) {
-        console.warn(`KMS config: Fetched ${envVarName} from gcloud: ${value}`)
-        return value
-      }
-    } catch (e: any) {
-      console.warn(
-        `KMS config: Failed to fetch ${envVarName} from gcloud: ${e.message}`,
-      )
+  try {
+    const value = execSync(gcloudCommand).toString().trim()
+    if (value) {
+      console.warn(`KMS config: Fetched ${envVarName} from gcloud: ${value}`)
+      return value
     }
+  } catch (e: any) {
+    // This is expected to fail in environments without gcloud, like the functions build server.
+    // We will fall through to the final error.
   }
 
   throw new Error(
-    `KMS config: Environment variable ${envVarName} is not set and could not be fetched from gcloud.`,
+    `KMS config: Environment variable ${envVarName} is not set and could not be fetched via gcloud fallback.`,
   )
 }
 
