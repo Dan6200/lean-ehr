@@ -31,7 +31,7 @@ export async function encryptResident(
     await generateDataKey(KEK_CONTACT_PATH)
   const { plaintextDek: clinicalDek, encryptedDek: encryptedDekClinical } =
     await generateDataKey(KEK_CLINICAL_PATH)
-  const { plaintextDek: financialDek, encryptedDek: encryptedDekFinancial } =
+  const { encryptedDek: encryptedDekFinancial } =
     await generateDataKey(KEK_FINANCIAL_PATH)
 
   encryptedData.encrypted_dek_general = encryptedDekGeneral.toString('base64')
