@@ -4,7 +4,7 @@ import {
   PaginationItem,
   PaginationNext,
   PaginationPrevious,
-} from '#/components/ui/pagination' //shadcn ui
+} from '#root/components/ui/pagination' //shadcn ui
 
 interface ServerPaginationProps {
   nextCursor?: string

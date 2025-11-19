@@ -1,6 +1,11 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '#root/components/ui/card'
 import {
   Table,
   TableBody,
@@ -8,7 +13,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '#/components/ui/table'
+} from '#root/components/ui/table'
 import {
   Account,
   Charge,
@@ -16,8 +21,8 @@ import {
   Payment,
   Adjustment,
   Coverage,
-} from '#/types/schemas'
-import { Badge } from '#/components/ui/badge'
+} from '#root/types/schemas'
+import { Badge } from '#root/components/ui/badge'
 
 type BillingClientProps = {
   accounts: Account[]

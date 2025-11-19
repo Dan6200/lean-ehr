@@ -1,11 +1,11 @@
 'use server'
-import { decryptDataKey, decryptData } from '#/lib/encryption'
+import { decryptDataKey, decryptData } from '#lib/lib/encryption'
 import {
   DocumentData,
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from 'firebase-admin/firestore'
-import { EncryptedObservationSchema, ObservationSchema } from '#/types'
+import { EncryptedObservationSchema, ObservationSchema } from '#lib/types'
 import z from 'zod'
 
 export async function decryptObservation(

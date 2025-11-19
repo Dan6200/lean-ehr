@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { EpisodeStatusTypeEnum } from '#/types/enums'
+import { EpisodeStatusTypeEnum } from '#lib/types/enums'
 import {
   EncounterDiagnosisUseCode,
   EncounterReasonUseCode,

@@ -1,14 +1,19 @@
 'use client'
 
-import { Card, CardContent, CardHeader, CardTitle } from '#/components/ui/card'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '#root/components/ui/card'
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from '#/components/ui/accordion'
-import { Badge } from '#/components/ui/badge'
-import { CarePlan, Goal } from '#/types/schemas'
+} from '#root/components/ui/accordion'
+import { Badge } from '#root/components/ui/badge'
+import { CarePlan, Goal } from '#root/types/schemas'
 
 type CarePlanClientProps = {
   carePlans: CarePlan[]

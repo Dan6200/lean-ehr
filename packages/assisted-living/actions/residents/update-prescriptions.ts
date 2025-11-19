@@ -1,11 +1,11 @@
-import { getAdminDb } from '#/firebase/admin'
-import { Prescription, EncryptedPrescriptionSchema } from '#/types'
-import { verifySession } from '#/auth/server/definitions'
+import { getAdminDb } from '#root/firebase/admin'
+import { Prescription, EncryptedPrescriptionSchema } from '#root/types'
+import { verifySession } from '#root/auth/server/definitions'
 import {
   decryptDataKey,
   encryptData,
   KEK_CLINICAL_PATH,
-} from '#/lib/encryption'
+} from '#root/lib/encryption'
 
 export async function updatePrescriptions(
   prescriptions: Prescription[],

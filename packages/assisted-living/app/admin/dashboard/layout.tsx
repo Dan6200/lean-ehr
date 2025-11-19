@@ -1,6 +1,6 @@
-import { AppSidebar } from '#/components/dashboard/app-sidebar'
-import { SiteHeader } from '#/components/dashboard/site-header'
-import { SidebarProvider, SidebarInset } from '#/components/ui/sidebar'
+import { AppSidebar } from '#lib/components/dashboard/app-sidebar'
+import { SiteHeader } from '#lib/components/dashboard/site-header'
+import { SidebarProvider, SidebarInset } from '#lib/components/ui/sidebar'
 
 export default function DashboardLayout({
   children,

@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation'
-import { getResidentData } from '#/actions/residents/get'
-import EmergencyContacts from '#/components/emergency-contacts'
+import { getResidentData } from '#lib/actions/residents/get'
+import EmergencyContacts from '#lib/components/emergency-contacts'
 
 export default async function EmergencyContactsPage({
   params,

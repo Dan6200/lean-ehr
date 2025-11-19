@@ -1,6 +1,6 @@
-import { getResidentData } from '#/actions/residents/get'
-import { ResidentInfoRow } from '#/components/resident-info'
-import { Button } from '#/components/ui/button'
+import { getResidentData } from '#lib/actions/residents/get'
+import { ResidentInfoRow } from '#lib/components/resident-info'
+import { Button } from '#lib/components/ui/button'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 

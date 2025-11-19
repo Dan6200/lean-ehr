@@ -2,10 +2,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
-import { toast } from '#/components/ui/use-toast'
-import { isError } from '#/app/utils'
-import { DiagnosticHistorySchema, ResidentData } from '#/types'
-import { Button } from '#/components/ui/button'
+import { toast } from '#lib/components/ui/use-toast'
+import { isError } from '#lib/app/utils'
+import { DiagnosticHistorySchema, ResidentData } from '#lib/types'
+import { Button } from '#lib/components/ui/button'
 import {
   Form,
   FormControl,
@@ -13,13 +13,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '#/components/ui/form'
-import { Input } from '#/components/ui/input'
-import { Textarea } from '#/components/ui/textarea'
+} from '#lib/components/ui/form'
+import { Input } from '#lib/components/ui/input'
+import { Textarea } from '#lib/components/ui/textarea'
 import { Trash2 } from 'lucide-react'
-import { updateDiagnosticHistory } from '#/actions/residents/update-diagnostic-history'
-import { Autocomplete } from '#/components/ui/autocomplete'
-import { searchSnomed } from '#/actions/lookups/search-snomed'
+import { updateDiagnosticHistory } from '#lib/actions/residents/update-diagnostic-history'
+import { Autocomplete } from '#lib/components/ui/autocomplete'
+import { searchSnomed } from '#lib/actions/lookups/search-snomed'
 
 import * as React from 'react'
 

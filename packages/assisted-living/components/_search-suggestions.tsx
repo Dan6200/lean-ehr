@@ -1,6 +1,6 @@
 export {}
-//import { Card, CardContent } from "#/components/ui/card";
-//import type { Resident } from "#/types";
+//import { Card, CardContent } from "#root/components/ui/card";
+//import type { Resident } from "#root/types";
 //import Link from "next/link";
 //import { X } from "lucide-react";
 //import { Dispatch, SetStateAction } from "react";

@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useFieldArray } from 'react-hook-form'
 import { z } from 'zod'
 import { useRouter } from 'next/navigation'
-import { toast } from '#/components/ui/use-toast'
-import { isError } from '#/app/utils'
-import { AllergySchema, ResidentData } from '#/types'
-import { Button } from '#/components/ui/button'
+import { toast } from '#root/components/ui/use-toast'
+import { isError } from '#root/app/utils'
+import { AllergySchema, ResidentData } from '#root/types'
+import { Button } from '#root/components/ui/button'
 import {
   Form,
   FormControl,
@@ -15,13 +15,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '#/components/ui/form'
-import { Input } from '#/components/ui/input'
+} from '#root/components/ui/form'
+import { Input } from '#root/components/ui/input'
 import { Trash2 } from 'lucide-react'
-import { updateAllergies } from '#/actions/residents/update-allergies'
+import { updateAllergies } from '#root/actions/residents/update-allergies'
 
-import { Autocomplete } from '#/components/ui/autocomplete'
-import { searchSnomed } from '#/actions/lookups/search-snomed'
+import { Autocomplete } from '#root/components/ui/autocomplete'
+import { searchSnomed } from '#root/actions/lookups/search-snomed'
 
 import * as React from 'react'
 

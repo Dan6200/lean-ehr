@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { cn } from '#/components/lib/utils'
+import { cn } from '#root/components/lib/utils'
 
 const PulsingDiv = React.forwardRef<
   HTMLDivElement,

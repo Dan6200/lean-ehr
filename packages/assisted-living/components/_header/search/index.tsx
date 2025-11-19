@@ -1,9 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { Suggestions } from '#/components/header/search/suggestions'
-import { ResidentData } from '#/types'
+import { Suggestions } from '#root/components/header/search/suggestions'
+import { ResidentData } from '#root/types'
 import { SearchBar } from './search-bar'
-import { cn } from '#/components/lib/utils'
+import { cn } from '#root/components/lib/utils'
 
 interface SearchProps {
   residentsData: ResidentData[] | null

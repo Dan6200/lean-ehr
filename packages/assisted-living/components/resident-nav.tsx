@@ -5,15 +5,15 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 
-import { cn } from '#/components/lib/utils'
-import { Button } from '#/components/ui/button'
+import { cn } from '#root/components/lib/utils'
+import { Button } from '#root/components/ui/button'
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   navigationMenuTriggerStyle,
-} from '#/components/ui/navigation-menu'
+} from '#root/components/ui/navigation-menu'
 
 const navLinks = [
   { name: 'Information', href: '/information' },

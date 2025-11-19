@@ -1,24 +1,24 @@
 'use client'
 
 import * as React from 'react'
-import { useIsMobile } from '#/hooks/use-mobile'
-import { Button } from '#/components/ui/button'
-import { ResidentFormEdit } from '#/components/residents/form/ResidentFormEdit'
+import { useIsMobile } from '#lib/hooks/use-mobile'
+import { Button } from '#lib/components/ui/button'
+import { ResidentFormEdit } from '#lib/components/residents/form/ResidentFormEdit'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '#/components/ui/dialog'
+} from '#lib/components/ui/dialog'
 import {
   Drawer,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '#/components/ui/drawer'
-import { ResidentData } from '#/types'
+} from '#lib/components/ui/drawer'
+import { ResidentData } from '#lib/types'
 
 export function EditResidentDialog({
   residentData,

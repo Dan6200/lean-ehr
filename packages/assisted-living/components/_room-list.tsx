@@ -8,9 +8,9 @@ export {}
 //   TableHead,
 //   TableHeader,
 //   TableRow,
-// } from '#/components/ui/table'
-// import { auth } from '#/firebase/client/config'
-// import { Facility } from '#/types'
+// } from '#root/components/ui/table'
+// import { auth } from '#root/firebase/client/config'
+// import { Facility } from '#root/types'
 // import { onAuthStateChanged, User } from 'firebase/auth'
 // import Link from 'next/link'
 // import { useEffect, useState } from 'react'

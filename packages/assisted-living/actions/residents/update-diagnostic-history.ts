@@ -1,11 +1,14 @@
-import { getAdminDb } from '#/firebase/admin'
-import { DiagnosticHistory, EncryptedDiagnosticHistorySchema } from '#/types'
-import { verifySession } from '#/auth/server/definitions'
+import { getAdminDb } from '#root/firebase/admin'
+import {
+  DiagnosticHistory,
+  EncryptedDiagnosticHistorySchema,
+} from '#root/types'
+import { verifySession } from '#root/auth/server/definitions'
 import {
   decryptDataKey,
   encryptData,
   KEK_CLINICAL_PATH,
-} from '#/lib/encryption'
+} from '#root/lib/encryption'
 
 export async function updateDiagnosticHistory(
   records: (DiagnosticHistory & { id: string })[],

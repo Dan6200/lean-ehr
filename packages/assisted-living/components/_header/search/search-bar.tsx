@@ -3,9 +3,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Dispatch, SetStateAction, useEffect, useRef } from 'react'
-import { Form, FormControl, FormField, FormItem } from '#/components/ui/form'
-import { Input } from '#/components/ui/input'
-import { ResidentData } from '#/types'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+} from '#root/components/ui/form'
+import { Input } from '#root/components/ui/input'
+import { ResidentData } from '#root/types'
 import { Search } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 

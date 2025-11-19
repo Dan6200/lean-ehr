@@ -1,5 +1,5 @@
-import { getNestedResidentData } from '#/actions/residents/get'
-import { BillingClient } from '#/components/residents/billing-client'
+import { getNestedResidentData } from '#root/actions/residents/get'
+import { BillingClient } from '#root/components/residents/billing-client'
 import {
   Account,
   Charge,
@@ -7,7 +7,7 @@ import {
   Payment,
   Adjustment,
   Coverage,
-} from '#/types/schemas'
+} from '#root/types/schemas'
 
 type BillingPageProps = {
   params: {

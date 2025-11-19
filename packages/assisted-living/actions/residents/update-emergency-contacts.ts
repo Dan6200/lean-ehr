@@ -1,7 +1,11 @@
-import { getAdminDb } from '#/firebase/admin'
-import { EmergencyContact, EncryptedEmergencyContactSchema } from '#/types'
-import { verifySession } from '#/auth/server/definitions'
-import { decryptDataKey, encryptData, KEK_CONTACT_PATH } from '#/lib/encryption'
+import { getAdminDb } from '#root/firebase/admin'
+import { EmergencyContact, EncryptedEmergencyContactSchema } from '#root/types'
+import { verifySession } from '#root/auth/server/definitions'
+import {
+  decryptDataKey,
+  encryptData,
+  KEK_CONTACT_PATH,
+} from '#root/lib/encryption'
 
 export async function updateEmergencyContacts(
   contacts: (EmergencyContact & { id: string })[],

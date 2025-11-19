@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Toaster } from '#/components/ui/toaster'
+import { Toaster } from '#root/components/ui/toaster'
 // Replacing with Google Analytics...
 // import { Analytics } from '@vercel/analytics/react'
 import './globals.css'
-import { ThemeProvider } from '#/components/theme-provider'
-import { AuthProvider } from '#/auth/client/auth-context'
+import { ThemeProvider } from '#root/components/theme-provider'
+import { AuthProvider } from '#root/auth/client/auth-context'
 
 import { Inter } from 'next/font/google'
 

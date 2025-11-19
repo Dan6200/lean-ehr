@@ -1,5 +1,5 @@
-import { ResidentSkeleton } from '#/components/resident-skeleton'
-import { PulsingDiv } from '#/components/ui/pulsing-div'
+import { ResidentSkeleton } from '#lib/components/resident-skeleton'
+import { PulsingDiv } from '#lib/components/ui/pulsing-div'
 
 export function ResidentLayoutSkeleton() {
   return (

@@ -1,12 +1,12 @@
 'use server'
 
-import { verifySession } from '#/auth/server/definitions'
-import { collectionWrapper, getDocsWrapper } from '#/firebase/admin'
+import { verifySession } from '#root/auth/server/definitions'
+import { collectionWrapper, getDocsWrapper } from '#root/firebase/admin'
 import {
   SubCollectionKey,
   subCollectionMap,
   SubCollectionMapType,
-} from '#/types'
+} from '#root/types'
 import { FirestoreDataConverter } from 'firebase-admin/firestore'
 import { redirect } from 'next/navigation'
 import z from 'zod'
@@ -15,7 +15,7 @@ import {
   KEK_FINANCIAL_PATH,
   KEK_CLINICAL_PATH,
   KEK_CONTACT_PATH,
-} from '#/lib/encryption'
+} from '#root/lib/encryption'
 
 async function getSubcollection<T, U>(
   providerId: string,

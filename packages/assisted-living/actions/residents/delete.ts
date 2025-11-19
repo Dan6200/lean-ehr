@@ -3,10 +3,10 @@ import {
   collectionWrapper,
   deleteDocWrapper,
   docWrapper,
-} from '#/firebase/admin'
-import { verifySession } from '#/auth/server/definitions'
-import { EncryptedResident } from '#/types'
-import { getResidentConverter } from '#/types/converters'
+} from '#root/firebase/admin'
+import { verifySession } from '#root/auth/server/definitions'
+import { EncryptedResident } from '#root/types'
+import { getResidentConverter } from '#root/types/converters'
 
 export async function deleteResidentData(documentId: string) {
   try {

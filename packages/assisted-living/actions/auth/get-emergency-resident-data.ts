@@ -1,15 +1,15 @@
 'use server'
 
-import { getAuthenticatedAppAndClaims } from '#/auth/server/definitions'
+import { getAuthenticatedAppAndClaims } from '#root/auth/server/definitions'
 import { collection, doc, getDoc } from 'firebase/firestore'
 import {
   KEK_RESPONDER_PATH,
   decryptDataKey,
   decryptData,
-} from '#/lib/encryption'
-import { logger } from '#/lib/logger'
-import { EncryptedResident, ResidentDataSchema } from '#/types'
-import { getResidentConverter } from '#/types/converters'
+} from '#root/lib/encryption'
+import { logger } from '#root/lib/logger'
+import { EncryptedResident, ResidentDataSchema } from '#root/types'
+import { getResidentConverter } from '#root/types/converters'
 
 /**
  * Decrypts and returns critical resident data using a temporary emergency access token.
