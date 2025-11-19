@@ -1,65 +1,63 @@
-# Dashboard Aggregation Strategy: From Firestore to BigQuery
+# Dashboard Aggregation Strategy: From Firestore to BigQuery via Cloud Functions
 
-This document outlines the plan to refactor the dashboard's data aggregation logic to resolve `RESOURCE_EXHAUSTED` errors and create a scalable, efficient architecture.
-
----
-
-## 1. The Problem: In-Memory Aggregation is Not Scalable
-
-The current implementation of the `getChartData` function in `app/admin/dashboard/page.tsx` follows a "fetch-then-aggregate" pattern:
-
-1.  It fetches a list of all residents.
-2.  For each resident, it fetches all documents from four separate subcollections (`charges`, `claims`, `payments`, `adjustments`).
-3.  It loads all of this raw data into the memory of the serverless function.
-4.  It then aggregates the data in JavaScript.
-
-This approach leads to a "N+1" query explosion. For 100 residents, this results in over 400 individual database reads and pulls tens of thousands of documents into memory. This is the direct cause of the `RESOURCE_EXHAUSTED: Bandwidth exhausted or memory limit exceeded` error and is not a sustainable architecture.
+This document outlines the plan to refactor the dashboard's data aggregation logic to resolve `RESOURCE_EXHAUSTED` errors and create a scalable, efficient architecture that supports our multi-database environment.
 
 ---
 
-## 2. The Solution: Offload Aggregation to BigQuery
+## 1. The Problem: Multiple Issues with an In-App Approach
 
-The correct solution is to move the aggregation logic from the application layer to the database layer. While Firestore is not designed for complex `GROUP BY` and `SUM` operations, **Google Cloud BigQuery** is built for exactly this purpose.
+The original "fetch-then-aggregate" pattern in the dashboard was not scalable. However, the initial proposed solution of using the official "Stream to BigQuery" Firebase Extension also presented critical blockers.
 
-We will leverage the official **Firebase Extension: Stream Collections to BigQuery** to create a real-time, read-only replica of our financial data in BigQuery. Our application will then run a single, powerful SQL query against BigQuery to get the pre-aggregated data for the dashboard.
+### Problem A: In-Memory Aggregation is Not Scalable
+
+The `getChartData` function was fetching all documents from multiple collections for every resident, loading them into memory, and then aggregating. This leads to a "N+1" query explosion, causing `RESOURCE_EXHAUSTED` errors as data grows.
+
+### Problem B: Official Extension Lacks Essential Features
+
+The standard "Stream to BigQuery" Firebase Extension is insufficient for our needs for two key reasons:
+
+1.  **No Support for Multiple Databases:** The extension cannot be configured to listen to a specific named database (e.g., `staging-beta`), making it unusable for our multi-environment setup.
+2.  **No Decryption Step:** The extension streams raw, encrypted data to BigQuery. This would force us to perform complex and costly decryption within our BigQuery queries, which is inefficient and a poor security practice.
+
+---
+
+## 2. The Solution: Custom Cloud Functions as a Decryption & Streaming Pipeline
+
+The correct solution is to build our own data pipeline using **Firebase Cloud Functions** with **Firestore Triggers**. This approach gives us full control over the data streaming process and solves all the identified problems.
+
+We will create a set of Cloud Functions that trigger on any document write (`onDocumentWritten`) in our specified Firestore collections. Each function will then decrypt the data and stream the plaintext result into the appropriate BigQuery table.
 
 ### Benefits of this Approach:
 
-- **Massive Performance Gain:** Replaces hundreds of Firestore reads with a single, highly optimized BigQuery query.
-- **Eliminates Resource Exhaustion:** The application's memory and bandwidth usage will be minimal, as it will only fetch a small, pre-aggregated result set.
-- **Scalability:** BigQuery is designed to handle massive datasets, ensuring the dashboard remains fast and reliable as the number of residents and transactions grows.
-- **Separation of Concerns:** The application server is no longer responsible for heavy data processing, which is offloaded to a dedicated analytics engine.
+- **Multi-Database Support:** Cloud Functions can be explicitly configured to trigger on a specific database ID (e.g., `staging-beta`).
+- **Pre-Processing and Decryption:** We control the code, allowing us to decrypt the data on the fly before it ever reaches BigQuery. This means BigQuery tables will contain clean, plaintext data, making queries simpler and faster.
+- **Eliminates Resource Exhaustion:** The application's dashboard will run a single query against BigQuery instead of hundreds of reads against Firestore.
+- **Scalability:** Both Cloud Functions and BigQuery are highly scalable, ensuring the entire pipeline remains efficient as data volume grows.
 
 ---
 
 ## 3. Implementation Plan
 
-### Phase 1: Infrastructure Setup
+### Phase 1: Infrastructure & Backend
 
-1.  **Install the BigQuery Extension:**
-    - From the Firebase console, install the **[Stream Collections to BigQuery](https://firebase.google.com/products/extensions/firestore-bigquery-export)** extension.
-    - Configure the extension to monitor the following collections: `charges`, `claims`, `payments`, `adjustments`, and `residents` (for the `created_at` field).
-    - This will create corresponding tables in a new BigQuery dataset (e.g., `firestore_export`).
+1.  **Create Custom Cloud Functions:**
+    - In the `functions/` directory, create a separate trigger function for each collection we need to stream (e.g., `charges`, `claims`, `residents`).
+    - Each function will be configured with `{database: 'staging-beta', document: 'path/to/{docId}'}` to listen to the correct database and collection.
+    - A helper function (`helper.ts`) will contain the core logic for receiving the event, decrypting the data using the appropriate KEK, and inserting the plaintext data into the corresponding BigQuery table.
 
-2.  **Create a BigQuery Client:**
-    - A file at `lib/bigquery.ts` will be created to instantiate and export a singleton BigQuery client, similar to the Firestore admin client.
+2.  **Create a Backfill Script:**
+    - A one-time script (`backfill-bigquery.ts`) is required to process all _existing_ documents in Firestore.
+    - This script will iterate through the collections, decrypt each document, and bulk-insert them into the BigQuery tables.
 
-### Phase 2: Backend Refactoring
+3.  **Create the Aggregation SQL Query:**
+    - A file at `lib/bigquery/queries.ts` will house the SQL query.
+    - Because the data in BigQuery is now clean, the query will be simpler. It will `UNION ALL` the tables, `GROUP BY` date, and `SUM` the amounts.
 
-1.  **Create the Aggregation SQL Query:**
-    - A new file, `lib/bigquery/queries.ts`, will be created to house the SQL query.
-    - The query will perform the following actions:
-      - `UNION ALL` the `charges`, `claims`, `payments`, and `adjustments` tables.
-      - `GROUP BY` date.
-      - `SUM()` the amounts for each financial type.
-      - The query will be parameterized to accept a time range.
+### Phase 2: Application Layer Refactoring
 
-2.  **Rewrite `getChartData`:**
-    - The `getChartData` function in `app/admin/dashboard/page.tsx` will be completely rewritten.
-    - It will no longer call `getAllResidents` or `getNestedResidentData`.
-    - Instead, it will call the BigQuery client, execute the aggregation SQL query, and return the formatted results.
-    - A similar query will be written to calculate user growth based on the `residents` table in BigQuery.
+1.  **Rewrite `getChartData`:**
+    - The `getChartData` function in `app/admin/dashboard/page.tsx` will be rewritten to use the `bigqueryClient` and execute the new, simpler aggregation query.
 
 ### Phase 3: Frontend (No Changes Needed)
 
-The frontend components (`DashboardClient`, `SectionCards`, `ChartAreaInteractive`) will require **no changes**. They will continue to receive the `FormattedChartData` and `residents` props as they do now, but the data will be sourced from BigQuery instead of Firestore.
+The frontend components (`DashboardClient`, `SectionCards`, `ChartAreaInteractive`) will require **no changes**, as they will receive the same data structure as before.
