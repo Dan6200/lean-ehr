@@ -1,0 +1,53 @@
+[
+  {
+    "name": "document_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "resident_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "claim_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "coverage_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "amount",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "value",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "currency",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "payor",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "occurrence_datetime",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "method",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]

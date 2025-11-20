@@ -1,0 +1,43 @@
+[
+  {
+    "name": "document_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "resident_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "claim_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "reason",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "approved_amount",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "value",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "currency",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "authored_on",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  }
+]

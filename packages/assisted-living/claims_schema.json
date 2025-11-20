@@ -1,0 +1,48 @@
+[
+  {
+    "name": "document_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "resident_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "authored_on",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "status",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "coverage_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "charge_ids",
+    "type": "STRING",
+    "mode": "REPEATED"
+  },
+  {
+    "name": "total",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "value",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "currency",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  }
+]

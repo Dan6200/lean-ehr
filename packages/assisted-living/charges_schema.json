@@ -1,0 +1,53 @@
+[
+  {
+    "name": "document_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "resident_id",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "service",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "quantity",
+    "type": "INTEGER",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "unit_price",
+    "type": "RECORD",
+    "fields": [
+      {
+        "name": "value",
+        "type": "NUMERIC",
+        "mode": "NULLABLE"
+      },
+      {
+        "name": "currency",
+        "type": "STRING",
+        "mode": "NULLABLE"
+      }
+    ]
+  },
+  {
+    "name": "occurrence_datetime",
+    "type": "TIMESTAMP",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "code",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  },
+  {
+    "name": "description",
+    "type": "STRING",
+    "mode": "NULLABLE"
+  }
+]
