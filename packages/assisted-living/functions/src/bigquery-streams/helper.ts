@@ -18,7 +18,7 @@ import {
   KEK_FINANCIAL_PATH,
 } from '#root/lib/encryption'
 
-const DATASET_ID = 'firestore_export'
+const DATASET_ID = process.env.BQ_DATASET_ID || 'firestore_export_staging'
 
 const residentKekPaths = {
   KEK_GENERAL_PATH,
@@ -65,8 +65,10 @@ export async function streamToBigQuery(
   event: FirestoreEvent<Change<QueryDocumentSnapshot> | undefined>,
 ) {
   const documentId = event.params[Object.keys(event.params)[0]]
-  // I don't understand your reasoning for this =>   const documentId = event.params.adjustmentId || event.params.paymentId || event.params.claimId || event.params.chargeId || event.params.residentId;
-  const tableId = `${collectionName}_raw`
+
+  collectionName === 'residents'
+    ? 'resident_timestamps_raw'
+    : `${collectionName.replace(/-/g, '_')}_raw`
 
   if (!event.data) {
     console.log(
@@ -102,7 +104,7 @@ export async function streamToBigQuery(
 
   try {
     const decryptedObject = await decryptor(
-      { document_id: documentId, ...encryptedFirestoreDocument },
+      { id: documentId, ...encryptedFirestoreDocument },
       (kekPath === 'complex' ? residentKekPaths : kekPath) as any,
     )
 

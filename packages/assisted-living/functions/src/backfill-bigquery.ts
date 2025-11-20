@@ -27,7 +27,7 @@ import {
 
 // --- Configuration ---
 const PROVIDER_ID = 'GYRHOME' // Specify the provider to backfill
-const DATASET_ID = 'firestore_export'
+const DATASET_ID = process.env.BQ_DATASET_ID || 'firestore_export_staging'
 const BATCH_SIZE = 500 // Number of documents to process and insert at a time
 
 async function backfill() {
@@ -40,7 +40,7 @@ async function backfill() {
   }
   admin.initializeApp()
   const firestore = getFirestore()
-  firestore.settings({ databaseId: 'staging-beta' })
+  firestore.settings({ databaseId: 'staging' })
   const db = firestore
 
   const COLLECTIONS_TO_BACKFILL = {
@@ -76,7 +76,10 @@ async function backfill() {
     COLLECTIONS_TO_BACKFILL,
   )) {
     console.log(`\nProcessing collection: ${collectionName}...`)
-    const tableId = `${collectionName.replace(/-/g, '_')}_raw`
+    const tableId =
+      collectionName === 'residents'
+        ? 'resident_timestamps_raw'
+        : `${collectionName.replace(/-/g, '_')}_raw`
     const table = bigqueryClient.dataset(DATASET_ID).table(tableId)
     let totalDocsProcessed = 0
 
@@ -113,7 +116,7 @@ async function backfill() {
           const decryptedObject =
             collectionName === 'residents'
               ? await decryptor(doc.data())
-              : await decryptor({ document_id: doc.id, ...doc.data() }, kekPath)
+              : await decryptor({ id: doc.id, ...doc.data() }, kekPath)
 
           batch.push(decryptedObject)
 
