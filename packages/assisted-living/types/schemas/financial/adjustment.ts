@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const AdjustmentSchema = z.object({
-  document_id: z.string(),
+  id: z.string(),
   claim_id: z.string(),
   reason: z.string(),
   approved_amount: z.object({

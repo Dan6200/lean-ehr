@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { ClaimStatusEnum } from '#root/types/enums'
 
 export const ClaimSchema = z.object({
-  document_id: z.string(),
+  id: z.string(),
   authored_on: z.string(),
   status: ClaimStatusEnum,
   coverage_id: z.string().nullable().optional(),
