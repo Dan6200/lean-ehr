@@ -46,7 +46,7 @@ export function SectionCards({
         currency={metrics.currency}
       />
       <MetricCard
-        title="New Residents"
+        title="Net Resident Growth"
         metric={metrics.growth}
         periodText={periodText}
         amountType="decimal"
