@@ -113,9 +113,9 @@ async function backfill() {
           const decryptedObject =
             // collectionName === 'residents'
             //   ? await decryptor(doc.data()) :
-            await decryptor(doc.data(), kekPath)
+            await decryptor({ document_id: doc.id, ...doc.data() }, kekPath)
 
-          batch.push({ document_id: doc.id, ...decryptedObject })
+          batch.push(decryptedObject)
 
           if (batch.length >= BATCH_SIZE) {
             await table.insert(batch)
