@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 export const ChargeSchema = z.object({
-  id: z.string(),
+  document_id: z.string(),
   resident_id: z.string(),
   service: z.string(),
   code: z.string().nullable().optional(),
