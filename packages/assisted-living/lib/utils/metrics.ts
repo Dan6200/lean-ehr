@@ -71,7 +71,11 @@ export function calculateMetrics(
   const claimsChange = calculatePercentageChange(currentClaims, previousClaims)
 
   // --- Growth Metrics Calculation ---
-  const filterResidentsByDate = (res: Resident[], start: Date, end: Date) => {
+  const filterNewResidentsByDate = (
+    res: Resident[],
+    start: Date,
+    end: Date,
+  ) => {
     return res.filter((resident) => {
       if (!resident.created_at) return false
       const residentDate = new Date(resident.created_at)
@@ -79,22 +83,46 @@ export function calculateMetrics(
     })
   }
 
-  const currentPeriodResidents = filterResidentsByDate(
+  const filterDeactivatedResidentsByDate = (
+    res: Resident[],
+    start: Date,
+    end: Date,
+  ) => {
+    return res.filter((resident) => {
+      if (!resident.deactivated_at) return false
+      const residentDate = new Date(resident.deactivated_at)
+      return residentDate >= start && residentDate <= end
+    })
+  }
+
+  const currentPeriodNew = filterNewResidentsByDate(
     residents,
     startDate,
     endDate,
-  )
-  const previousPeriodResidents = filterResidentsByDate(
+  ).length
+  const previousPeriodNew = filterNewResidentsByDate(
     residents,
     prevStartDate,
     prevEndDate,
-  )
+  ).length
 
-  const currentPeriodCount = currentPeriodResidents.length
-  const previousPeriodCount = previousPeriodResidents.length
+  const currentPeriodDeactivated = filterDeactivatedResidentsByDate(
+    residents,
+    startDate,
+    endDate,
+  ).length
+  const previousPeriodDeactivated = filterDeactivatedResidentsByDate(
+    residents,
+    prevStartDate,
+    prevEndDate,
+  ).length
+
+  const currentNetGrowth = currentPeriodNew - currentPeriodDeactivated
+  const previousNetGrowth = previousPeriodNew - previousPeriodDeactivated
+
   const growthRate = calculatePercentageChange(
-    currentPeriodCount,
-    previousPeriodCount,
+    currentNetGrowth,
+    previousNetGrowth,
   )
 
   return {
@@ -102,7 +130,7 @@ export function calculateMetrics(
     payments: { amount: currentPayments, change: paymentsChange },
     adjustments: { amount: currentAdjustments, change: adjustmentsChange },
     claims: { amount: currentClaims, change: claimsChange },
-    growth: { amount: currentPeriodCount, change: growthRate },
+    growth: { amount: currentNetGrowth, change: growthRate },
     currency:
       currentPeriodData.length > 0 ? currentPeriodData[0].currency : 'NGN',
   }
