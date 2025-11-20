@@ -103,7 +103,7 @@ export async function streamToBigQuery(
   try {
     const decryptedObject = await decryptor(
       { document_id: documentId, ...encryptedFirestoreDocument },
-      kekPath === 'complex' ? residentKekPaths : kekPath,
+      (kekPath === 'complex' ? residentKekPaths : kekPath) as any,
     )
 
     await bigqueryClient
