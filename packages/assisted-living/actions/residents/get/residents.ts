@@ -150,6 +150,7 @@ export async function getAllResidents({
 
     let query: Query<z.infer<typeof EncryptedResidentSchema>> =
       residentsCollection
+        .where('deactivated_at', '==', null)
         .orderBy('facility_id')
         .orderBy('encrypted_resident_name')
 
