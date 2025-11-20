@@ -31,8 +31,6 @@ export async function decryptCharge(
     }
   }
 
-  console.log('****Debugging: Decrypted Data *****')
-  console.log(decryptedData)
   if (decryptedData.unit_price) {
     decryptedData.unit_price = JSON.parse(decryptedData.unit_price)
   }
@@ -40,6 +38,8 @@ export async function decryptCharge(
     decryptedData.quantity = parseInt(decryptedData.quantity, 10)
   }
 
+  console.log('****Debugging: Decrypted Data *****')
+  console.log(decryptedData)
   return ChargeSchema.parse(decryptedData)
 }
 
