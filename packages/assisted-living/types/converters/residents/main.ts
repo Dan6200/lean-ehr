@@ -24,6 +24,12 @@ export async function encryptResident(
   const encryptedData: any = {}
 
   encryptedData.facility_id = dataToEncrypt.facility_id
+  if (dataToEncrypt.created_at) {
+    encryptedData.created_at = dataToEncrypt.created_at
+  }
+  if (dataToEncrypt.deactivated_at) {
+    encryptedData.deactivated_at = dataToEncrypt.deactivated_at
+  }
 
   const { plaintextDek: generalDek, encryptedDek: encryptedDekGeneral } =
     await generateDataKey(KEK_GENERAL_PATH)
@@ -109,6 +115,13 @@ export async function decryptResidentData(
 ): Promise<Omit<Resident, 'created_at' | 'viewed_at' | 'updated_at'>> {
   const decryptedData: Partial<Resident> = {}
   decryptedData.facility_id = data.facility_id
+
+  if (data.created_at) {
+    decryptedData.created_at = data.created_at
+  }
+  if (data.deactivated_at) {
+    decryptedData.deactivated_at = data.deactivated_at
+  }
 
   let generalDek: Buffer | string | Uint8Array | undefined
   let contactDek: Buffer | string | Uint8Array | undefined

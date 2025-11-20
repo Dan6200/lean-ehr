@@ -119,6 +119,8 @@ export const EncryptedEmergencyContactSchema = z.object({
 export const EncryptedResidentSchema = z.object({
   // Unencrypted fields
   facility_id: z.string(),
+  created_at: z.string().optional(),
+  deactivated_at: z.string().nullable().optional(),
 
   // Encrypted DEKs
   encrypted_dek_general: z.string(),
