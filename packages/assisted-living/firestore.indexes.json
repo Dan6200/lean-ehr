@@ -4,10 +4,19 @@
       "collectionGroup": "residents",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "facility_id", "order": "ASCENDING" },
-        { "fieldPath": "encrypted_resident_name", "order": "ASCENDING" }
+        {
+          "fieldPath": "deactivated_at",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "facility_id",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "encrypted_resident_name",
+          "order": "ASCENDING"
+        }
       ]
     }
-  ],
-  "fieldOverrides": []
+  ]
 }
