@@ -110,10 +110,8 @@ async function backfill() {
               deactivated_at: residentData.deactivated_at,
             }
           } else {
-            objectToInsert = await decryptor(
-              { id: doc.id, ...doc.data() },
-              kekPath,
-            )
+            objectToInsert = await (decryptor &&
+              decryptor({ id: doc.id, ...doc.data() }, kekPath))
           }
 
           batch.push(objectToInsert)
