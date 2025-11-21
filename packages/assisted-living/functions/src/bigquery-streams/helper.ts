@@ -29,28 +29,23 @@ const residentKekPaths = {
 const COLLECTIONS_MAP = {
   residents: {
     kekPath: 'complex',
-    parent: null,
     decryptor: (doc: any) =>
       decryptResidentData(doc, ['ADMIN'], residentKekPaths),
   },
   charges: {
     kekPath: KEK_FINANCIAL_PATH,
-    parent: 'residents',
     decryptor: decryptCharge,
   },
   payments: {
     kekPath: KEK_FINANCIAL_PATH,
-    parent: 'residents',
     decryptor: decryptPayment,
   },
   claims: {
     kekPath: KEK_FINANCIAL_PATH,
-    parent: 'residents',
     decryptor: decryptClaim,
   },
   adjustments: {
     kekPath: KEK_FINANCIAL_PATH,
-    parent: 'residents',
     decryptor: decryptAdjustment,
   },
 }
@@ -65,10 +60,6 @@ export async function streamToBigQuery(
   event: FirestoreEvent<Change<QueryDocumentSnapshot> | undefined>,
 ) {
   const documentId = event.params[Object.keys(event.params)[0]]
-
-  collectionName === 'residents'
-    ? 'resident_timestamps_raw'
-    : `${collectionName.replace(/-/g, '_')}_raw`
 
   if (!event.data) {
     console.log(
@@ -94,28 +85,41 @@ export async function streamToBigQuery(
     return null
   }
 
-  const { kekPath, decryptor } = COLLECTIONS_MAP[collectionName]
-  if (!decryptor) {
+  const config = COLLECTIONS_MAP[collectionName]
+  if (!config || !config.decryptor) {
     console.warn(
-      `No decryptor found for collection: ${collectionName}. Skipping.`,
+      `No decryptor configuration found for collection: ${collectionName}. Skipping.`,
     )
     return null
   }
 
   try {
-    const decryptedObject = await decryptor(
-      { id: documentId, ...encryptedFirestoreDocument },
-      (kekPath === 'complex' ? residentKekPaths : kekPath) as any,
-    )
+    let objectToInsert: any
     const tableId =
       collectionName === 'residents'
         ? 'resident_timestamps_raw'
         : `${collectionName.replace(/-/g, '_')}_raw`
 
+    if (collectionName === 'residents') {
+      const decryptedResident = await config.decryptor(
+        encryptedFirestoreDocument,
+      ) // Pass encrypted data directly
+      objectToInsert = {
+        id: documentId,
+        created_at: decryptedResident.created_at,
+        deactivated_at: decryptedResident.deactivated_at,
+      }
+    } else {
+      objectToInsert = await config.decryptor(
+        { id: documentId, ...encryptedFirestoreDocument },
+        config.kekPath as string,
+      )
+    }
+
     await bigqueryClient
       .dataset(DATASET_ID)
       .table(tableId)
-      .insert([decryptedObject])
+      .insert([objectToInsert])
     console.log(
       `Successfully decrypted and streamed document ${documentId} from ${collectionName} to BigQuery.`,
     )

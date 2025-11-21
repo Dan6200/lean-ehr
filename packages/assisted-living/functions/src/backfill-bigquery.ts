@@ -18,12 +18,7 @@ import {
   decryptCharge,
   decryptClaim,
 } from '#root/types/converters'
-import {
-  KEK_GENERAL_PATH,
-  KEK_CONTACT_PATH,
-  KEK_CLINICAL_PATH,
-  KEK_FINANCIAL_PATH,
-} from '#root/lib/encryption'
+import { KEK_FINANCIAL_PATH } from '#root/lib/encryption'
 
 // --- Configuration ---
 const PROVIDER_ID = 'GYRHOME' // Specify the provider to backfill
@@ -33,11 +28,6 @@ const BATCH_SIZE = 500 // Number of documents to process and insert at a time
 async function backfill() {
   console.log('--- Starting BigQuery Backfill Script ---')
 
-  const residentKekPaths = {
-    KEK_GENERAL_PATH,
-    KEK_CONTACT_PATH,
-    KEK_CLINICAL_PATH,
-  }
   admin.initializeApp()
   const firestore = getFirestore()
   firestore.settings({ databaseId: 'staging' })
@@ -47,8 +37,7 @@ async function backfill() {
     residents: {
       kekPath: 'complex',
       parent: null,
-      decryptor: (doc: any) =>
-        decryptResidentData(doc, ['ADMIN'], residentKekPaths),
+      decryptor: () => null,
     },
     charges: {
       kekPath: KEK_FINANCIAL_PATH,
@@ -113,12 +102,22 @@ async function backfill() {
 
         let batch: any[] = []
         for (const doc of snapshot.docs) {
-          const decryptedObject =
-            collectionName === 'residents'
-              ? await decryptor(doc.data())
-              : await decryptor({ id: doc.id, ...doc.data() }, kekPath)
+          let objectToInsert: any
+          if (collectionName === 'residents') {
+            const residentData = doc.data()
+            objectToInsert = {
+              id: doc.id,
+              created_at: residentData.created_at,
+              deactivated_at: residentData.deactivated_at,
+            }
+          } else {
+            objectToInsert = await decryptor(
+              { id: doc.id, ...doc.data() },
+              kekPath,
+            )
+          }
 
-          batch.push(decryptedObject)
+          batch.push(objectToInsert)
 
           if (batch.length >= BATCH_SIZE) {
             await table.insert(batch)
