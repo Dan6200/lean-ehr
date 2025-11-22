@@ -17,6 +17,7 @@ function getKmsConfig(envVarName: string, gcloudCommand: string): string {
 
   // For local development, try env var first, then gcloud fallback.
   if (process.env[envVarName]) {
+    console.log('uses env vars but does not detect Cloud Run environment')
     return process.env[envVarName]!
   }
 
