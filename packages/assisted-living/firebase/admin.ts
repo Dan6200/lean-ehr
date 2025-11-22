@@ -29,10 +29,13 @@ export async function getAdminDb(): Promise<Firestore> {
   if (db) {
     return db
   }
+  if (process.env.NEXT_PUBLIC_DATABASE_ID)
+    throw new Error('Must set DATABASE_ID.')
   await initializeAdminApp()
   // Apply settings *before* the first use
   const firestore = admin.firestore()
-  if (!firestore._settingsFrozen) firestore.settings({ databaseId: 'staging' })
+  if (!firestore._settingsFrozen)
+    firestore.settings({ databaseId: process.env.NEXT_PUBLIC_DATABASE_ID })
   db = firestore
   return db
 }
