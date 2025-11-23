@@ -13,7 +13,7 @@ function calculatePercentageChange(current: number, previous: number): number {
 export function calculateMetrics(
   data: any[],
   timeRange: string,
-  residents: Resident[],
+  residents: Pick<Resident, 'created_at' | 'deactivated_at'>[],
 ) {
   // --- Date Range Calculation ---
   const now = new Date()
@@ -72,7 +72,7 @@ export function calculateMetrics(
 
   // --- Growth Metrics Calculation ---
   const filterNewResidentsByDate = (
-    res: Resident[],
+    res: Pick<Resident, 'created_at' | 'deactivated_at'>[],
     start: Date,
     end: Date,
   ) => {
@@ -84,7 +84,7 @@ export function calculateMetrics(
   }
 
   const filterDeactivatedResidentsByDate = (
-    res: Resident[],
+    res: Pick<Resident, 'created_at' | 'deactivated_at'>[],
     start: Date,
     end: Date,
   ) => {
