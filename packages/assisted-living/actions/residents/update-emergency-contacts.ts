@@ -12,12 +12,12 @@ export async function updateEmergencyContacts(
   residentId: string,
   deletedContactIds: string[] = [],
 ): Promise<{ success: boolean; message: string }> {
-  await verifySession()
+  const { provider_id } = await verifySession()
 
   try {
     const adminDb = await getAdminDb()
     const residentRef = adminDb
-      .collection('providers/GYRHOME/residents')
+      .collection(`providers/${provider_id}/residents`)
       .doc(residentId)
     const residentSnap = await residentRef.get()
     if (!residentSnap.exists) {

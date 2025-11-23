@@ -10,10 +10,12 @@ import { getResidentConverter } from '#root/types/converters'
 
 export async function deleteResidentData(documentId: string) {
   try {
-    await verifySession() // Authenticate the request first
+    const { provider_id } = await verifySession() // Authenticate the request first
 
     const residentsCollection = (
-      await collectionWrapper<EncryptedResident>('providers/GYRHOME/residents')
+      await collectionWrapper<EncryptedResident>(
+        `providers/${provider_id}/residents`,
+      )
     ).withConverter(await getResidentConverter())
 
     const residentDocRef = await docWrapper(residentsCollection, documentId)

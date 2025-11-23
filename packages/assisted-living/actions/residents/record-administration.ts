@@ -16,13 +16,13 @@ export async function recordAdministration(
   residentId: string,
   administration: EmarRecord,
 ): Promise<{ success: boolean; message: string }> {
-  await verifySession()
+  const { provider_id } = await verifySession()
 
   try {
     const adminDb = await getAdminDb()
     // 1. Get the resident's document to retrieve the shared clinical DEK
     const residentRef = adminDb
-      .collection('providers/GYRHOME/residents')
+      .collection(`providers/${provider_id}/residents`)
       .doc(residentId)
     const residentSnap = await residentRef.get()
     if (!residentSnap.exists) {
@@ -69,7 +69,7 @@ export async function recordAdministration(
 
     // 3. Add the new encrypted document to the 'emar' subcollection
     const emarCollectionRef = await collectionWrapper(
-      `providers/GYRHOME/residents/${residentId}/emar`,
+      `providers/${provider_id}/residents/${residentId}/emar`,
     )
     await addDocWrapper(emarCollectionRef, parsedRecord)
 

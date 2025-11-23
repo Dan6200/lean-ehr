@@ -8,14 +8,16 @@ export async function addNewResident(
   residentData: Omit<Resident, 'resident_id'>,
 ) {
   try {
-    await verifySession() // Authenticate the request first
+    const { provider_id } = await verifySession() // Authenticate the request first
 
     const resident: Resident = residentData
 
     const encryptedResident = await encryptResident(resident)
 
     const residentsCollection = (
-      await collectionWrapper<EncryptedResident>('providers/GYRHOME/residents')
+      await collectionWrapper<EncryptedResident>(
+        `providers/${provider_id}/residents`,
+      )
     ).withConverter(await getResidentConverter())
 
     await addDocWrapper(residentsCollection, encryptedResident)

@@ -39,13 +39,12 @@ export async function getResidentData(
   ...subCollections: K[]
 ): Promise<z.infer<typeof ResidentDataSchema>> {
   try {
-    const idToken = await verifySession()
-    const userRoles: string[] = (idToken?.roles as string[]) || []
+    const { provider_id, roles: userRoles = [] } = await verifySession()
     const kekPaths = { KEK_GENERAL_PATH, KEK_CONTACT_PATH, KEK_CLINICAL_PATH }
 
     const residentsCollection = (
       await collectionWrapper<z.infer<typeof EncryptedResidentSchema>>(
-        `providers/GYRHOME/residents`,
+        `providers/${provider_id}/residents`,
       )
     ).withConverter(await getResidentConverter())
 
@@ -68,7 +67,7 @@ export async function getResidentData(
     // Fetch and decrypt subcollections in parallel
     const nestedData = await Promise.all(
       subCollections.map((subCol) =>
-        getNestedResidentData('GYRHOME', documentId, subCol),
+        getNestedResidentData(provider_id, documentId, subCol),
       ),
     )
 
@@ -102,13 +101,12 @@ export async function getResidentData(
 
 export async function getResidents(): Promise<Resident[]> {
   try {
-    const idToken = await verifySession()
-    const userRoles: string[] = (idToken.roles as string[]) || []
+    const { provider_id, roles: userRoles = [] } = await verifySession()
     const kekPaths = { KEK_GENERAL_PATH, KEK_CONTACT_PATH, KEK_CLINICAL_PATH }
 
     const residentsCollection = (
       await collectionWrapper<z.infer<typeof EncryptedResidentSchema>>(
-        'providers/GYRHOME/residents',
+        `providers/${provider_id}/residents`,
       )
     ).withConverter(await getResidentConverter())
     const residentsSnap = await getDocsWrapper(residentsCollection)
@@ -138,13 +136,12 @@ export async function getAllResidents({
   prevCursorId?: string
 }) {
   try {
-    const idToken = await verifySession()
-    const userRoles: string[] = (idToken?.roles as string[]) || []
+    const { provider_id, roles: userRoles = [] } = await verifySession()
     const kekPaths = { KEK_GENERAL_PATH, KEK_CONTACT_PATH, KEK_CLINICAL_PATH }
 
     const residentsCollection = (
       await collectionWrapper<z.infer<typeof EncryptedResidentSchema>>(
-        `providers/GYRHOME/residents`,
+        `providers/${provider_id}/residents`,
       )
     ).withConverter(await getResidentConverter())
 

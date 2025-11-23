@@ -1,9 +1,11 @@
 'use server'
 import { getResidentData } from './get'
+import { verifySession } from '#root/auth/server/definitions'
 
 export async function calculateRevenue(residentId: string): Promise<number> {
   try {
-    const residentData = await getResidentData(residentId)
+    const { provider_id } = await verifySession()
+    const residentData = await getResidentData(provider_id, residentId)
     const { financials } = residentData
 
     if (!financials || financials.length === 0) {
