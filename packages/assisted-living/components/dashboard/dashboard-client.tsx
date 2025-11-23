@@ -11,7 +11,7 @@ export function DashboardClient({
   residents,
 }: {
   chartData: FormattedChartData
-  residents: Resident[]
+  residents: Pick<Resident, 'created_at' | 'deactivated_at'>[]
 }) {
   const [timeRange, setTimeRange] = React.useState('90d')
 

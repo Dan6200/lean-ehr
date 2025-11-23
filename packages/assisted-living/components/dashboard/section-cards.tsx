@@ -8,7 +8,7 @@ import { MetricCard } from './metric-card'
 interface SectionCardsProps {
   chartData: any[]
   timeRange: string
-  residents: Resident[]
+  residents: Pick<Resident, 'created_at' | 'deactivated_at'>[]
 }
 
 export function SectionCards({
