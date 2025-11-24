@@ -29,7 +29,7 @@ export async function getAdminDb(): Promise<Firestore> {
   if (db) {
     return db
   }
-  if (process.env.NEXT_PUBLIC_DATABASE_ID)
+  if (!process.env.NEXT_PUBLIC_DATABASE_ID)
     throw new Error('Must set DATABASE_ID.')
   await initializeAdminApp()
   // Apply settings *before* the first use
