@@ -38,48 +38,57 @@ export function calculateMetrics(
     })
   }
 
-  const currentPeriodData = filterDataByDate(data, startDate, endDate)
-  const previousPeriodData = filterDataByDate(data, prevStartDate, prevEndDate)
+  // If timeRange is 'all', we want all data for currentPeriod and no data for previousPeriod
+  const currentPeriodData =
+    timeRange === 'all' ? data : filterDataByDate(data, startDate, endDate)
+  const previousPeriodData =
+    timeRange === 'all'
+      ? []
+      : filterDataByDate(data, prevStartDate, prevEndDate)
 
   // --- Financial Metrics Calculation ---
   const sum = (d: any[], key: string) =>
-    d.reduce((acc, item) => acc + parseFloat(item[key]), 0)
+    d.reduce((acc, item) => acc + item[key], 0)
 
   const currentCharges = sum(currentPeriodData, 'charges')
   const previousCharges = sum(previousPeriodData, 'charges')
-  const chargesChange = calculatePercentageChange(
-    currentCharges,
-    previousCharges,
-  )
+  const chargesChange =
+    timeRange === 'all'
+      ? 0
+      : calculatePercentageChange(currentCharges, previousCharges)
 
   const currentPayments = sum(currentPeriodData, 'payments')
   const previousPayments = sum(previousPeriodData, 'payments')
-  const paymentsChange = calculatePercentageChange(
-    currentPayments,
-    previousPayments,
-  )
+  const paymentsChange =
+    timeRange === 'all'
+      ? 0
+      : calculatePercentageChange(currentPayments, previousPayments)
 
   const currentAdjustments = sum(currentPeriodData, 'adjustments')
   const previousAdjustments = sum(previousPeriodData, 'adjustments')
-  const adjustmentsChange = calculatePercentageChange(
-    currentAdjustments,
-    previousAdjustments,
-  )
+  const adjustmentsChange =
+    timeRange === 'all'
+      ? 0
+      : calculatePercentageChange(currentAdjustments, previousAdjustments)
 
   const currentClaims = sum(currentPeriodData, 'claims')
   const previousClaims = sum(previousPeriodData, 'claims')
-  const claimsChange = calculatePercentageChange(currentClaims, previousClaims)
+  const claimsChange =
+    timeRange === 'all'
+      ? 0
+      : calculatePercentageChange(currentClaims, previousClaims)
 
   // --- Growth Metrics Calculation ---
   const filterNewResidentsByDate = (
     res: Pick<Resident, 'created_at' | 'deactivated_at'>[],
     start: Date,
     end: Date,
+    allTime: boolean,
   ) => {
     return res.filter((resident) => {
       if (!resident.created_at) return false
       const residentDate = new Date(resident.created_at)
-      return residentDate >= start && residentDate <= end
+      return allTime ? true : residentDate >= start && residentDate <= end
     })
   }
 
@@ -87,11 +96,12 @@ export function calculateMetrics(
     res: Pick<Resident, 'created_at' | 'deactivated_at'>[],
     start: Date,
     end: Date,
+    allTime: boolean,
   ) => {
     return res.filter((resident) => {
       if (!resident.deactivated_at) return false
       const residentDate = new Date(resident.deactivated_at)
-      return residentDate >= start && residentDate <= end
+      return allTime ? true : residentDate >= start && residentDate <= end
     })
   }
 
@@ -99,31 +109,37 @@ export function calculateMetrics(
     residents,
     startDate,
     endDate,
+    timeRange === 'all',
   ).length
-  const previousPeriodNew = filterNewResidentsByDate(
-    residents,
-    prevStartDate,
-    prevEndDate,
-  ).length
+  const previousPeriodNew =
+    timeRange === 'all'
+      ? 0
+      : filterNewResidentsByDate(residents, prevStartDate, prevEndDate, false)
+          .length
 
   const currentPeriodDeactivated = filterDeactivatedResidentsByDate(
     residents,
     startDate,
     endDate,
+    timeRange === 'all',
   ).length
-  const previousPeriodDeactivated = filterDeactivatedResidentsByDate(
-    residents,
-    prevStartDate,
-    prevEndDate,
-  ).length
+  const previousPeriodDeactivated =
+    timeRange === 'all'
+      ? 0
+      : filterDeactivatedResidentsByDate(
+          residents,
+          prevStartDate,
+          prevEndDate,
+          false,
+        ).length
 
   const currentNetGrowth = currentPeriodNew - currentPeriodDeactivated
   const previousNetGrowth = previousPeriodNew - previousPeriodDeactivated
 
-  const growthRate = calculatePercentageChange(
-    currentNetGrowth,
-    previousNetGrowth,
-  )
+  const growthRate =
+    timeRange === 'all'
+      ? 0
+      : calculatePercentageChange(currentNetGrowth, previousNetGrowth)
 
   return {
     charges: { amount: currentCharges, change: chargesChange },

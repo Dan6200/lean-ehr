@@ -127,7 +127,7 @@ export async function getResidents(): Promise<Resident[]> {
 }
 
 export async function getAllResidents({
-  limit,
+  limit = 100,
   nextCursorId,
   prevCursorId,
 }: {

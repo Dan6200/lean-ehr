@@ -67,6 +67,10 @@ export function ChartAreaInteractive({
   }, [isMobile])
 
   const filteredData = chartData.filter((item, index) => {
+    if (timeRange === 'all') {
+      return true
+    }
+
     const date = new Date(`${item.date}T00:00:00`)
     const now = new Date()
     let daysToSubtract = 180
@@ -102,6 +106,7 @@ export function ChartAreaInteractive({
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
           >
+            <ToggleGroupItem value="all">All-time</ToggleGroupItem>
             <ToggleGroupItem value="365d">Year-To-Date</ToggleGroupItem>
             <ToggleGroupItem value="180d">Last 6 months</ToggleGroupItem>
             <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
@@ -116,6 +121,9 @@ export function ChartAreaInteractive({
               <SelectValue placeholder="Last 3 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
+              <SelectItem value="all" className="rounded-lg">
+                All-time
+              </SelectItem>
               <SelectItem value="365d" className="rounded-lg">
                 Last year
               </SelectItem>
