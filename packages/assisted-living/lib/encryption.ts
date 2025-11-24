@@ -1,72 +1,21 @@
+'server-only'
 import { KeyManagementServiceClient } from '@google-cloud/kms'
 import * as crypto from 'crypto'
-import { execSync } from 'child_process'
+export const KEK_GENERAL_PATH = process.env.KEK_GENERAL_PATH!
+export const KEK_CONTACT_PATH = process.env.KEK_CONTACT_PATH!
+export const KEK_CLINICAL_PATH = process.env.KEK_CLINICAL_PATH!
+export const KEK_FINANCIAL_PATH = process.env.KEK_FINANCIAL_PATH!
 
-// Helper function to get config value from env or gcloud fallback
-function getKmsConfig(envVarName: string, gcloudCommand: string): string {
-  // In a deployed Google Cloud environment (Functions, Run), variables are set.
-  if (process.env.K_SERVICE || process.env.FUNCTION_TARGET) {
-    if (process.env[envVarName]) {
-      return process.env[envVarName]!
-    }
-    throw new Error(
-      `KMS config: In a Google Cloud environment, but the environment variable ${envVarName} is not set.`,
-    )
-  }
-
-  // For local development, try env var first, then gcloud fallback.
-  if (process.env[envVarName]) {
-    return process.env[envVarName]!
-  }
-
-  try {
-    const value = execSync(gcloudCommand).toString().trim()
-    if (value) {
-      console.warn(`KMS config: Fetched ${envVarName} from gcloud: ${value}`)
-      return value
-    }
-  } catch (e: any) {
-    // This is expected to fail in environments without gcloud, like the functions build server.
-    // We will fall through to the final error.
-  }
-
-  throw new Error(
-    `KMS config: Environment variable ${envVarName} is not set and could not be fetched via gcloud fallback.`,
+if (
+  !KEK_GENERAL_PATH ||
+  !KEK_CONTACT_PATH ||
+  !KEK_CLINICAL_PATH ||
+  !KEK_FINANCIAL_PATH
+) {
+  console.warn(
+    'One or more KEK_PATH environment variables are not set. Decryption/Encryption may fail in deployed environments if these are not explicitly provided.',
   )
 }
-
-// Configuration for KMS
-const KMS_PROJECT_ID = getKmsConfig(
-  'GCP_PROJECT_ID',
-  'gcloud config get-value project',
-)
-const KMS_LOCATION = getKmsConfig('KMS_LOCATION', 'echo europe-west1')
-const KMS_KEY_RING = getKmsConfig(
-  'KMS_KEY_RING',
-  `gcloud kms keyrings list --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:assisted-living" --format="value(name)"`,
-)
-
-export const KEK_GENERAL_PATH = getKmsConfig(
-  'KEK_GENERAL_PATH',
-  `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-general" --format="value(name)"`,
-)
-export const KEK_CONTACT_PATH = getKmsConfig(
-  'KEK_CONTACT_PATH',
-  `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-contact" --format="value(name)"`,
-)
-export const KEK_CLINICAL_PATH = getKmsConfig(
-  'KEK_CLINICAL_PATH',
-  `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-clinical" --format="value(name)"`,
-)
-export const KEK_FINANCIAL_PATH = getKmsConfig(
-  'KEK_FINANCIAL_PATH',
-  `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-financial" --format="value(name)"`,
-)
-
-// export const KEK_RESPONDER_PATH = getKmsConfig(
-//   'KEK_RESPONDER_PATH',
-//   `gcloud kms keys list --keyring=${KMS_KEY_RING} --location=${KMS_LOCATION} --project=${KMS_PROJECT_ID} --filter="name:kek-responder" --format="value(name)"`,
-// )
 
 const kmsClient = new KeyManagementServiceClient()
 
