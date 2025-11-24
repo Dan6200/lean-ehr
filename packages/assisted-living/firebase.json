@@ -34,7 +34,7 @@
     "rules": "storage.rules"
   },
   "firestore": {
-    "database": "staging",
+    "database": "staging-beta",
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   }
