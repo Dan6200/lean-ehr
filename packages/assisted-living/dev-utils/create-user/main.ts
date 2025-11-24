@@ -18,9 +18,10 @@ async function createAdminUser(
   email: string,
   password: string,
   roles: string[],
+  providerId: string,
 ) {
   console.log(
-    `Attempting to create user: ${email} with roles: ${roles.join(', ')}`,
+    `Attempting to create user: ${email} with roles: ${roles.join(', ')} for provider: ${providerId}`,
   )
 
   // Validate roles
@@ -44,11 +45,14 @@ async function createAdminUser(
 
     console.log(`Successfully created new user with UID: ${userRecord.uid}`)
 
-    // Set custom claims for the specified roles
-    await admin.auth().setCustomUserClaims(userRecord.uid, { roles: roles })
+    // Set custom claims for the specified roles and provider ID
+    await admin.auth().setCustomUserClaims(userRecord.uid, {
+      roles: roles,
+      provider_id: providerId,
+    })
 
     console.log(
-      `Successfully set roles [${roles.join(', ')}] for user: ${userRecord.uid}`,
+      `Successfully set roles [${roles.join(', ')}] and provider_id '${providerId}' for user: ${userRecord.uid}`,
     )
     console.log('User setup complete!')
   } catch (error: any) {
@@ -71,14 +75,15 @@ async function createAdminUser(
 
 const email = process.argv[2]
 const password = process.argv[3]
-const rolesArg = process.argv[4] // Expects a comma-separated string, e.g., "ADMIN,CLINICIAN"
+const providerId = process.argv[4] // Now providerId is the 4th argument
+const rolesArg = process.argv[5] // Roles is now the 5th argument, and optional
 
-if (!email || !password) {
+if (!email || !password || !providerId) {
   console.error(
-    'Usage: pnpm ts-node dev-utils/create-admin-user.ts <email> <password> [roles]',
+    'Usage: pnpm ts-node dev-utils/create-user/main.ts <email> <password> <providerId> [roles]',
   )
   console.error(
-    'Example: pnpm ts-node dev-utils/create-admin-user.ts user@example.com StrongPass1! ADMIN,CAREGIVER',
+    'Example: pnpm ts-node dev-utils/create-user/main.ts user@example.com StrongPass1! GYRHOME ADMIN,CAREGIVER',
   )
   process.exit(1)
 }
@@ -88,4 +93,4 @@ const roles = rolesArg
   ? rolesArg.split(',').map((role) => role.trim().toUpperCase())
   : ['VIEWER']
 
-createAdminUser(email, password, roles)
+createAdminUser(email, password, roles, providerId)
