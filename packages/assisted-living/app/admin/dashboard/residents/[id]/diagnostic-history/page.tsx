@@ -8,17 +8,16 @@ import {
   TableHeader,
   TableRow,
 } from '#root/components/ui/table'
-import { DiagnosticHistory } from '#root/types'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 
 export default async function DiagnosticHistoryPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
   const residentData = await getResidentData(
-    params.id,
+    (await params).id,
     'diagnostic_history',
   ).catch((e) => {
     if (e.message.match(/not_found/i)) notFound()
@@ -61,7 +60,9 @@ export default async function DiagnosticHistoryPage({
                   <TableCell>{record.onset_datetime ?? 'N/A'}</TableCell>
                   <TableCell>{record.abatement_datetime ?? 'N/A'}</TableCell>
                   <TableCell>{record.title ?? 'N/A'}</TableCell>
-                  <TableCell>{record.coding.text ?? 'N/A'}</TableCell>
+                  <TableCell>
+                    {record.CodeableConceptSchema.coding[0].display ?? 'N/A'}
+                  </TableCell>
                   <TableCell>{record.clinical_status}</TableCell>
                   <TableCell>{record.recorded_date}</TableCell>
                   <TableCell>{record.recorder_id}</TableCell>

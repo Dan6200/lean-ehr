@@ -11,48 +11,66 @@ import {
 import { Observation } from '#root/types'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
+import { verifySession } from '#root/auth/server/definitions'
 
 export default async function ObservationsPage({
   params,
 }: {
-  params: { id: string }
+  params: Promise<{ id: string }>
 }) {
-  const residentData = await getResidentData(params.id).catch((e) => {
+  const { id: residentId } = await params
+  const { provider_id } = await verifySession()
+
+  const residentData = await getResidentData(
+    provider_id,
+    residentId,
+    'observations',
+  ).catch((e) => {
     if (e.message.match(/not_found/i)) notFound()
     throw new Error(
       `Unable to fetch resident data for observations page: ${e.message}`,
     )
   })
 
-  const { observations, id } = residentData
+  const observations = residentData.observations || []
 
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-2 mb-8">
         <h2 className="text-xl font-semibold">Observations</h2>
         <Button asChild>
-          <Link href={`/admin/dashboard/residents/${id}/observations/edit`}>
+          <Link
+            href={`/admin/dashboard/residents/${residentId}/observations/edit`}
+          >
             Edit Observations
           </Link>
         </Button>
       </div>
-      {observations && observations.length > 0 ? (
+      {observations.length > 0 ? (
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Date</TableHead>
-              <TableHead>Observation (LOINC)</TableHead>
+              <TableHead>Observation</TableHead>
               <TableHead>Value</TableHead>
               <TableHead>Unit</TableHead>
+              <TableHead>Status</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {observations.map((observation: Observation, index: number) => (
-              <TableRow key={index}>
-                <TableCell>{observation.date}</TableCell>
-                <TableCell>{observation.loinc_code}</TableCell>
-                <TableCell>{observation.value}</TableCell>
-                <TableCell>{observation.unit || 'N/A'}</TableCell>
+            {observations.map((observation: Observation) => (
+              <TableRow key={observation.id}>
+                <TableCell>
+                  {new Date(
+                    observation.effective_datetime,
+                  ).toLocaleDateString()}
+                </TableCell>
+                <TableCell>{observation.code.text}</TableCell>
+                <TableCell>{observation.value_quantity.value}</TableCell>
+                <TableCell>
+                  {observation.value_quantity.unit || 'N/A'}
+                </TableCell>
+                <TableCell>{observation.status}</TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -1,27 +1,25 @@
 import { getNestedResidentData } from '#root/actions/residents/get'
 import { CarePlanClient } from '#root/components/residents/care-plan-client'
-import { CarePlan, Goal } from '#root/types/schemas'
+import { verifySession } from '#root/auth/server/definitions'
 
 type CarePlanPageProps = {
-  params: {
-    residentId: string
-  }
+  params: Promise<{
+    id: string
+  }>
 }
 
 export default async function CarePlanPage({ params }: CarePlanPageProps) {
-  const { residentId } = params
+  const { id: residentId } = await params
+  const { provider_id } = await verifySession()
 
   const [carePlans, goals] = await Promise.all([
-    getNestedResidentData(residentId, 'care_plans'),
-    getNestedResidentData(residentId, 'goals'),
+    getNestedResidentData(provider_id, residentId, 'care_plans'),
+    getNestedResidentData(provider_id, residentId, 'goals'),
   ])
 
   return (
     <div className="space-y-4">
-      <CarePlanClient
-        carePlans={carePlans as CarePlan[]}
-        goals={goals as Goal[]}
-      />
+      <CarePlanClient carePlans={carePlans || []} goals={goals || []} />
     </div>
   )
 }
