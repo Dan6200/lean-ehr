@@ -61,7 +61,7 @@ export default async function DiagnosticHistoryPage({
                   <TableCell>{record.abatement_datetime ?? 'N/A'}</TableCell>
                   <TableCell>{record.title ?? 'N/A'}</TableCell>
                   <TableCell>
-                    {record.CodeableConceptSchema.coding[0].display ?? 'N/A'}
+                    {record.code.coding[0].display ?? 'N/A'}
                   </TableCell>
                   <TableCell>{record.clinical_status}</TableCell>
                   <TableCell>{record.recorded_date}</TableCell>
