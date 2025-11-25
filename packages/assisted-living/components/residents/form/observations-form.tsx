@@ -31,7 +31,6 @@ import { ObservationStatusEnum } from '#root/types/enums'
 
 import * as React from 'react'
 
-export const dynamic = 'force-dynamic'
 const FormSchema = z.object({
   observations: z
     .array(

@@ -19,20 +19,46 @@ import {
 import { Input } from '#root/components/ui/input'
 import { Trash2 } from 'lucide-react'
 import { updatePrescriptions } from '#root/actions/residents/update-prescriptions'
-
 import { Autocomplete } from '#root/components/ui/autocomplete'
 import { searchRxNorm } from '#root/actions/lookups/search-rxnorm'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#root/components/ui/select'
+import {
+  PrescriptionStatusEnum,
+  PrescriptionAdherenceStatusEnum,
+} from '#root/types/enums'
 
 import * as React from 'react'
 
+export const dynamic = 'force-dynamic'
 const FormSchema = z.object({
-  prescriptions: z.array(PrescriptionSchema).nullable().optional(),
+  prescriptions: z
+    .array(
+      PrescriptionSchema.omit({
+        id: true,
+        resident_id: true,
+        recorder_id: true,
+      }),
+    )
+    .nullable()
+    .optional(),
 })
 
 export function PrescriptionsForm({
   residentData,
+  updatePrescriptions,
 }: {
   residentData: ResidentData
+  updatePrescriptions: (
+    prescriptions: any[],
+    residentId: string,
+    deletedIds: string[],
+  ) => Promise<{ success: boolean; message: string }>
 }) {
   const router = useRouter()
   const [deletedPrescriptionIds, setDeletedPrescriptionIds] = React.useState<
@@ -61,8 +87,15 @@ export function PrescriptionsForm({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
+      const prescriptionsWithIds = (data.prescriptions || []).map(
+        (p, index) => ({
+          ...p,
+          id: residentData.prescriptions?.[index]?.id || '',
+        }),
+      )
+
       const { message, success } = await updatePrescriptions(
-        data.prescriptions || [],
+        prescriptionsWithIds,
         residentData.id!,
         deletedPrescriptionIds,
       )
@@ -83,66 +116,27 @@ export function PrescriptionsForm({
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className="flex items-end gap-4 p-4 border rounded-md"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4 border rounded-md relative"
           >
             <FormField
               control={form.control}
-              name={`prescriptions.${index}.name`}
+              name={`prescriptions.${index}.medication`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Prescription Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Lisinopril" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`prescriptions.${index}.dosage`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Dosage</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 10mg" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`prescriptions.${index}.frequency`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Frequency</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., Daily" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`prescriptions.${index}.rxnorm_code`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>RxNorm Code</FormLabel>
+                  <FormLabel>Medication (RxNorm)</FormLabel>
                   <FormControl>
                     <Autocomplete
-                      value={field.value || ''}
+                      value={field.value?.code?.code || ''}
                       onValueChange={(option) => {
                         if (option) {
-                          form.setValue(
-                            `prescriptions.${index}.rxnorm_code`,
-                            option.value,
-                          )
-                          form.setValue(
-                            `prescriptions.${index}.name`,
-                            option.label,
-                          )
+                          form.setValue(`prescriptions.${index}.medication`, {
+                            code: {
+                              system:
+                                'http://www.nlm.nih.gov/research/umls/rxnorm',
+                              code: option.value,
+                              text: option.label,
+                            },
+                          })
                         }
                       }}
                       onSearch={searchRxNorm}
@@ -154,20 +148,116 @@ export function PrescriptionsForm({
                 </FormItem>
               )}
             />
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={() => handleRemove(index)}
-            >
-              <Trash2 />
-            </Button>
+            <FormField
+              control={form.control}
+              name={`prescriptions.${index}.status`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PrescriptionStatusEnum.options.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`prescriptions.${index}.adherence`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Adherence</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select adherence" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {PrescriptionAdherenceStatusEnum.options.map((s) => (
+                        <SelectItem key={s} value={s}>
+                          {s}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`prescriptions.${index}.period.start`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Start Date</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`prescriptions.${index}.period.end`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>End Date</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* TODO: Add Dosage Instruction fields */}
+            <div className="absolute top-2 right-2">
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                onClick={() => handleRemove(index)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         ))}
         <Button
           type="button"
           variant="outline"
           onClick={() =>
-            append({ name: '', dosage: '', frequency: '', rxnorm_code: '' })
+            append({
+              period: { start: new Date().toISOString() },
+              status: 'active',
+              adherence: 'not-applicable',
+              medication: {
+                code: {
+                  system: 'http://www.nlm.nih.gov/research/umls/rxnorm',
+                  code: '',
+                  text: '',
+                },
+              },
+              dosage_instruction: [],
+            })
           }
         >
           Add Prescription
