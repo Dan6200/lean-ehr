@@ -1,7 +1,7 @@
 'use server'
 import { redirect } from 'next/navigation'
 import { DashboardClient } from '#root/components/dashboard/dashboard-client'
-import bigqueryClient from '#root/lib/bigquery'
+import { bigqueryClient } from '#root/lib/bigquery'
 import {
   getFinancialSummaryQuery,
   getResidentGrowthQuery,
