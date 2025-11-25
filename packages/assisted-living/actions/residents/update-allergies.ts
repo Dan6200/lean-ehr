@@ -9,7 +9,7 @@ import {
 } from '#root/lib/encryption'
 
 export async function updateAllergies(
-  allergies: (Allergy & { id: string })[],
+  allergies: (Omit<Allergy, 'resident_id' | 'recorder_id'> & { id?: string })[],
   residentId: string,
   deletedAllergyIds: string[] = [],
 ): Promise<{ success: boolean; message: string }> {
@@ -47,19 +47,40 @@ export async function updateAllergies(
       const docRef = id ? allergiesRef.doc(id) : allergiesRef.doc()
 
       const encryptedAllergy: any = {}
-      if (allergyData.name)
-        encryptedAllergy.encrypted_name = encryptData(
-          allergyData.name,
+
+      if (allergyData.clinical_status)
+        encryptedAllergy.encrypted_clinical_status = encryptData(
+          allergyData.clinical_status,
           clinicalDek,
         )
-      if (allergyData.snomed_code)
-        encryptedAllergy.encrypted_snomed_code = encryptData(
-          allergyData.snomed_code,
+      if (allergyData.verification_status)
+        encryptedAllergy.encrypted_verification_status = encryptData(
+          allergyData.verification_status,
+          clinicalDek,
+        )
+      if (allergyData.type)
+        encryptedAllergy.encrypted_type = encryptData(
+          allergyData.type,
+          clinicalDek,
+        )
+      if (allergyData.name)
+        encryptedAllergy.encrypted_name = encryptData(
+          JSON.stringify(allergyData.name),
+          clinicalDek,
+        )
+      if (allergyData.recorded_date)
+        encryptedAllergy.encrypted_recorded_date = encryptData(
+          allergyData.recorded_date,
+          clinicalDek,
+        )
+      if (allergyData.substance)
+        encryptedAllergy.encrypted_substance = encryptData(
+          JSON.stringify(allergyData.substance),
           clinicalDek,
         )
       if (allergyData.reaction)
         encryptedAllergy.encrypted_reaction = encryptData(
-          allergyData.reaction,
+          JSON.stringify(allergyData.reaction),
           clinicalDek,
         )
 
