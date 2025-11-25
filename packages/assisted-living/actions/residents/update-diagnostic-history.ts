@@ -1,3 +1,4 @@
+'use server'
 import { getAdminDb } from '#root/firebase/admin'
 import {
   DiagnosticHistory,

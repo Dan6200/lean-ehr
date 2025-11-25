@@ -1,3 +1,4 @@
+'use server'
 import { getAdminDb } from '#root/firebase/admin'
 import { Prescription, EncryptedPrescriptionSchema } from '#root/types'
 import { verifySession } from '#root/auth/server/definitions'

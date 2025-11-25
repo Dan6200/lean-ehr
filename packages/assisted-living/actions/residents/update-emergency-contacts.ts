@@ -1,3 +1,4 @@
+'use server'
 import { getAdminDb } from '#root/firebase/admin'
 import { EmergencyContact, EncryptedEmergencyContactSchema } from '#root/types'
 import { verifySession } from '#root/auth/server/definitions'
