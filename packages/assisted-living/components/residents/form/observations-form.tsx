@@ -18,11 +18,31 @@ import {
 import { Input } from '#root/components/ui/input'
 import { Trash2 } from 'lucide-react'
 import { updateObservations } from '#root/actions/residents/update-observations'
+import { Autocomplete } from '#root/components/ui/autocomplete'
+import { searchLoinc } from '#root/actions/lookups/search-loinc'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#root/components/ui/select'
+import { ObservationStatusEnum } from '#root/types/enums'
 
 import * as React from 'react'
 
+export const dynamic = 'force-dynamic'
 const FormSchema = z.object({
-  observations: z.array(ObservationSchema).nullable().optional(),
+  observations: z
+    .array(
+      ObservationSchema.omit({
+        id: true,
+        resident_id: true,
+        recorder_id: true,
+      }),
+    )
+    .nullable()
+    .optional(),
 })
 
 export function ObservationsForm({
@@ -57,8 +77,15 @@ export function ObservationsForm({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
+      const observationsWithIds = (data.observations || []).map(
+        (obs, index) => ({
+          ...obs,
+          id: residentData.observations?.[index]?.id || '',
+        }),
+      )
+
       const { message, success } = await updateObservations(
-        data.observations || [],
+        observationsWithIds,
         residentData.id!,
         deletedObservationIds,
       )
@@ -79,16 +106,30 @@ export function ObservationsForm({
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className="flex items-end gap-4 p-4 border rounded-md"
+            className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 border rounded-md"
           >
             <FormField
               control={form.control}
-              name={`observations.${index}.date`}
+              name={`observations.${index}.code`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Date</FormLabel>
+                  <FormLabel>Observation (LOINC)</FormLabel>
                   <FormControl>
-                    <Input type="date" {...field} />
+                    <Autocomplete
+                      value={field.value?.code || ''}
+                      onValueChange={(option) => {
+                        if (option) {
+                          form.setValue(`observations.${index}.code`, {
+                            code: option.value,
+                            text: option.label,
+                            system: 'http://loinc.org',
+                          })
+                        }
+                      }}
+                      onSearch={searchLoinc}
+                      placeholder="Search LOINC code..."
+                      options={[]}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -96,25 +137,19 @@ export function ObservationsForm({
             />
             <FormField
               control={form.control}
-              name={`observations.${index}.loinc_code`}
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>LOINC Code</FormLabel>
-                  <FormControl>
-                    <Input placeholder="e.g., 8310-5" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name={`observations.${index}.value`}
+              name={`observations.${index}.value_quantity.value`}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Value</FormLabel>
                   <FormControl>
-                    <Input placeholder="e.g., 98.6" {...field} />
+                    <Input
+                      type="number"
+                      placeholder="e.g., 98.6"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -122,7 +157,7 @@ export function ObservationsForm({
             />
             <FormField
               control={form.control}
-              name={`observations.${index}.unit`}
+              name={`observations.${index}.value_quantity.unit`}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Unit</FormLabel>
@@ -133,13 +168,55 @@ export function ObservationsForm({
                 </FormItem>
               )}
             />
-            <Button
-              type="button"
-              variant="destructive"
-              onClick={() => handleRemove(index)}
-            >
-              <Trash2 />
-            </Button>
+            <FormField
+              control={form.control}
+              name={`observations.${index}.status`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {ObservationStatusEnum.options.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`observations.${index}.effective_datetime`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Effective Date</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="flex items-end">
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => handleRemove(index)}
+              >
+                <Trash2 />
+              </Button>
+            </div>
           </div>
         ))}
         <Button
@@ -147,11 +224,14 @@ export function ObservationsForm({
           variant="outline"
           onClick={() =>
             append({
-              date: new Date().toISOString().split('T')[0],
-              loinc_code: '',
-              name: '',
-              value: '',
-              unit: '',
+              status: 'final',
+              category: [],
+              code: { system: '', code: '', text: '' },
+              effective_datetime: new Date().toISOString(),
+              value_quantity: { value: 0, unit: '' },
+              body_site: { system: '', code: '', text: '' },
+              method: { system: '', code: '', text: '' },
+              device: { system: '', code: '', text: '' },
             })
           }
         >
