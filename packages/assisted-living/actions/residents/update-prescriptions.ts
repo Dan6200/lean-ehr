@@ -9,7 +9,9 @@ import {
 } from '#root/lib/encryption'
 
 export async function updatePrescriptions(
-  prescriptions: Prescription[],
+  prescriptions: (Omit<Prescription, 'resident_id' | 'recorder_id'> & {
+    id?: string
+  })[],
   residentId: string,
   deletedPrescriptionIds: string[] = [],
 ): Promise<{ success: boolean; message: string }> {
@@ -42,16 +44,11 @@ export async function updatePrescriptions(
       const { id, ...prescriptionData } = prescription
       const docRef = id ? prescriptionsRef.doc(id) : prescriptionsRef.doc()
 
-      const encryptedPrescription: any = { encrypted_dek: encryptedDek }
+      const encryptedPrescription: any = {}
 
-      if (prescriptionData.effective_period_start)
-        encryptedPrescription.encrypted_effective_period_start = encryptData(
-          prescriptionData.effective_period_start,
-          clinicalDek,
-        )
-      if (prescriptionData.effective_period_end)
-        encryptedPrescription.encrypted_effective_period_end = encryptData(
-          prescriptionData.effective_period_end,
+      if (prescriptionData.period)
+        encryptedPrescription.encrypted_period = encryptData(
+          JSON.stringify(prescriptionData.period),
           clinicalDek,
         )
       if (prescriptionData.status)
@@ -69,9 +66,9 @@ export async function updatePrescriptions(
           JSON.stringify(prescriptionData.medication),
           clinicalDek,
         )
-      if (prescriptionData.dosageInstruction)
-        encryptedPrescription.encrypted_dosageInstruction = encryptData(
-          JSON.stringify(prescriptionData.dosageInstruction),
+      if (prescriptionData.dosage_instruction)
+        encryptedPrescription.encrypted_dosage_instruction = encryptData(
+          JSON.stringify(prescriptionData.dosage_instruction),
           clinicalDek,
         )
 

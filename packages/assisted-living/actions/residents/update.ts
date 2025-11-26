@@ -4,9 +4,10 @@ import {
   docWrapper,
   updateDocWrapper,
 } from '#root/firebase/admin'
-import { Resident, EncryptedResident } from '#root/types'
+import { Resident, EncryptedResidentSchema } from '#root/types'
 import { verifySession } from '#root/auth/server/definitions'
 import { encryptResident, getResidentConverter } from '#root/types/converters'
+import { z } from 'zod'
 
 export async function updateResident(
   newResidentData: Resident,
@@ -18,7 +19,7 @@ export async function updateResident(
     const encryptedResident = await encryptResident(newResidentData)
 
     const residentsCollection = (
-      await collectionWrapper<EncryptedResident>(
+      await collectionWrapper<z.infer<typeof EncryptedResidentSchema>>(
         `providers/${provider_id}/residents`,
       )
     ).withConverter(await getResidentConverter())
