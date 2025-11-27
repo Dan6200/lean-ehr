@@ -1,7 +1,6 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { onAuthStateChanged } from 'firebase/auth'
@@ -14,8 +13,12 @@ import { ResidentFormBase } from './ResidentFormBase'
 import { type Resident, ResidentSchema } from '#root/types'
 
 export function ResidentFormEdit({
-  ...residentData
-}: Omit<Resident, 'address'> & { id: string }) {
+  residentData,
+  onFinished,
+}: {
+  residentData: Omit<Resident, 'address'>
+  onFinished?: () => void
+}) {
   const router = useRouter()
   const [idToken, setIdToken] = useState<string | null>(null)
   const [newAvatarUrl, setNewAvatarUrl] = useState<string | null>(null)
@@ -86,12 +89,14 @@ export function ResidentFormEdit({
 
     try {
       if (!residentData.id) throw new Error("Can't find the resource to edit")
+      if (!id) throw new Error("Must provide resident's document id")
       const { message, success } = await updateResident(residentUpdateData, id)
       toast({
         title: message,
         variant: success ? 'default' : 'destructive',
       })
       if (success) {
+        onFinished && onFinished()
         router.refresh()
       }
     } catch (err) {

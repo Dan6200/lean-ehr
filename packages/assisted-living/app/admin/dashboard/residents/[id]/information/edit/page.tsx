@@ -18,7 +18,7 @@ export default async function ResidentEditPage({
 
   return (
     <div className="py-8">
-      <ResidentFormEdit {...dataToEdit} />
+      <ResidentFormEdit residentData={dataToEdit} />
     </div>
   )
 }

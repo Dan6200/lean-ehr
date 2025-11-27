@@ -47,7 +47,7 @@ export function EmergencyContactsFormEdit({
         variant: success ? 'default' : 'destructive',
       })
       if (success) {
-        onFinished()
+        onFinished && onFinished()
         router.refresh()
       }
     } catch (err) {

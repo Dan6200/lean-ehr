@@ -43,7 +43,10 @@ export function EditResidentDialog({
             <DrawerTitle>Edit Resident Information</DrawerTitle>
           </DrawerHeader>
           <div className="p-4 overflow-y-auto max-h-[80vh]">
-            <ResidentFormEdit {...residentData} onFinished={handleFinished} />
+            <ResidentFormEdit
+              residentData={residentData}
+              onFinished={handleFinished}
+            />
           </div>
         </DrawerContent>
       </Drawer>
@@ -59,7 +62,10 @@ export function EditResidentDialog({
         <DialogHeader>
           <DialogTitle>Edit Resident Information</DialogTitle>
         </DialogHeader>
-        <ResidentFormEdit {...residentData} onFinished={handleFinished} />
+        <ResidentFormEdit
+          residentData={residentData}
+          onFinished={handleFinished}
+        />
       </DialogContent>
     </Dialog>
   )

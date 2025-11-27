@@ -15,22 +15,23 @@ import {
   TableRow,
 } from '#root/components/ui/table'
 import {
-  Account,
-  Charge,
-  Claim,
-  Payment,
-  Adjustment,
-  Coverage,
+  AccountSchema,
+  ChargeSchema,
+  ClaimSchema,
+  PaymentSchema,
+  AdjustmentSchema,
+  CoverageSchema,
 } from '#root/types/schemas'
 import { Badge } from '#root/components/ui/badge'
+import { z } from 'zod'
 
 type BillingClientProps = {
-  accounts: Account[]
-  charges: Charge[]
-  claims: Claim[]
-  payments: Payment[]
-  adjustments: Adjustment[]
-  coverages: Coverage[]
+  accounts: z.infer<typeof AccountSchema>[]
+  charges: z.infer<typeof ChargeSchema>[]
+  claims: z.infer<typeof ClaimSchema>[]
+  payments: z.infer<typeof PaymentSchema>[]
+  adjustments: z.infer<typeof AdjustmentSchema>[]
+  coverages: z.infer<typeof CoverageSchema>[]
 }
 
 function formatCurrency(amount: number, currency: string = 'NGN') {
@@ -46,7 +47,6 @@ export function BillingClient({
   claims,
   payments,
   adjustments,
-  coverages,
 }: BillingClientProps) {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
