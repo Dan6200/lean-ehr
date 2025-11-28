@@ -12,7 +12,6 @@ import {
   ResidentDataSchema,
   ResidentSchema,
   EncryptedResidentSchema,
-  SubCollectionMapType,
 } from '#root/types'
 import {
   decryptResidentData,
@@ -21,7 +20,6 @@ import {
 import { notFound, redirect } from 'next/navigation'
 import { z } from 'zod'
 import { Query } from 'firebase-admin/firestore'
-import { getNestedResidentData } from './subcollections'
 import { getAllFacilities } from './facilities'
 import {
   KEK_GENERAL_PATH,
@@ -29,12 +27,9 @@ import {
   KEK_CLINICAL_PATH,
 } from '#root/lib/encryption'
 
-type K = keyof SubCollectionMapType
-
 // Use a DTO for resident data
 export async function getResidentData(
   documentId: string,
-  ...subCollections: K[]
 ): Promise<z.infer<typeof ResidentDataSchema>> {
   try {
     const { provider_id, roles: userRoles = [] } = await verifySession()
@@ -62,34 +57,10 @@ export async function getResidentData(
     const facility = allFacilities.find((f) => f.id === resident.facility_id)
     const address = facility ? facility.address : 'Address not found'
 
-    // Fetch and decrypt subcollections in parallel
-    const nestedData = await Promise.all(
-      subCollections.map((subCol) =>
-        getNestedResidentData(provider_id, documentId, subCol),
-      ),
-    )
-
-    const nestedDataMapped = nestedData.reduce(
-      (bucket, data, index) => {
-        const filteredData = (data || []).filter(
-          (item): item is NonNullable<typeof item> => item !== undefined,
-        )
-
-        bucket[subCollections[index]] = filteredData as any
-        return bucket
-      },
-      {} as {
-        [P in keyof SubCollectionMapType]: z.infer<
-          SubCollectionMapType[P]['schema']
-        >[]
-      },
-    )
-
     return ResidentDataSchema.parse({
       ...resident,
       id: residentSnap.id,
       address,
-      ...nestedDataMapped,
     })
   } catch (error: any) {
     console.error(error)
