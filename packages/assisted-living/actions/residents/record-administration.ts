@@ -67,9 +67,9 @@ export async function recordAdministration(
 
     const parsedRecord = EncryptedEmarRecordSchema.parse(encryptedAdminRecord)
 
-    // 3. Add the new encrypted document to the 'emar' subcollection
+    // 3. Add the new encrypted document to the 'prescription_administration' subcollection
     const emarCollectionRef = await collectionWrapper(
-      `providers/${provider_id}/residents/${residentId}/emar`,
+      `providers/${provider_id}/residents/${residentId}/prescription_administration`,
     )
     await addDocWrapper(emarCollectionRef, parsedRecord)
 
