@@ -80,7 +80,21 @@ export const EncryptedCarePlanSchema = z.object({
   encrypted_title: EncryptedFieldSchema,
   encrypted_author_id: EncryptedFieldSchema,
   encrypted_created_date: EncryptedFieldSchema,
-  encrypted_activities: EncryptedFieldSchema, // Activities are now nested and encrypted
+  encrypted_activities: EncryptedFieldSchema.optional(), // Activities are now nested and encrypted
+})
+
+export const EncryptedCarePlanActivitySchema = z.object({
+  careplan_id: z.string(),
+  encrypted_dek: z.string(),
+  encrypted_code: EncryptedFieldSchema,
+  encrypted_status: EncryptedFieldSchema,
+  encrypted_timing: EncryptedFieldSchema,
+  performer: z.object({
+    id: z.string(), // Plaintext for querying
+    encrypted_name: EncryptedFieldSchema.optional(),
+    encrypted_period: EncryptedFieldSchema,
+  }),
+  encrypted_staff_instructions: EncryptedFieldSchema,
 })
 
 export const EncryptedGoalSchema = z.object({

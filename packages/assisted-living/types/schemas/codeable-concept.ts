@@ -1,8 +1,10 @@
 import { z } from 'zod'
 
 const SnomedCodeSystem = z.literal('http://snomed.info/sct')
-const RxNormCodeSystem = z.literal('http://snomed.info/sct')
-const LoincCodeSystem = z.literal('http://snomed.info/sct')
+const RxNormCodeSystem = z.literal(
+  'http://www.nlm.nih.gov/research/umls/rxnorm',
+)
+const LoincCodeSystem = z.literal('http://loinc.org')
 const UCUMCodeSystem = z.literal('http://unitsofmeasure.org')
 const GUDIDCodeSystem = z.literal('http://hl7.org/fhir/NamingSystem/gudid')
 const TaskCodeSystem = z.literal('http://hl7.org/fhir/ValueSet/task-code')

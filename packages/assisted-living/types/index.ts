@@ -34,19 +34,6 @@ export type EpisodeOfCare = z.infer<typeof EpisodesOfCareSchema>
 export type CarePlan = z.infer<typeof CarePlanSchema>
 export type Facility = z.infer<typeof FacilitySchema>
 
-// --- Combined ResidentData Schema ---
-export const ResidentDataSchema = ResidentSchema.extend({
-  id: z.string().optional(),
-  address: z.string(),
-  allergies: AllergySchema.array().optional(),
-  prescriptions: PrescriptionSchema.array().optional(),
-  observations: ObservationSchema.array().optional(),
-  diagnostic_history: DiagnosticHistorySchema.array().optional(),
-  emergency_contacts: EmergencyContactSchema.array().optional(),
-  emar: EmarRecordSchema.array().optional(),
-})
-export type ResidentData = z.infer<typeof ResidentDataSchema>
-
 // --- Barrel Exports ---
 export * from './enums'
 export * from './schemas'
