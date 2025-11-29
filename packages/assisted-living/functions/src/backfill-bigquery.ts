@@ -10,7 +10,7 @@
 
 import admin from 'firebase-admin'
 import { getFirestore } from 'firebase-admin/firestore'
-import bigqueryClient from '#root/lib/bigquery' // Re-use the client from functions
+import { bigqueryClient } from '#root/lib/bigquery' // Re-use the client from functions
 import {
   decryptPayment,
   decryptAdjustment,
