@@ -12,14 +12,19 @@ export default async function CarePlanPage({ params }: CarePlanPageProps) {
   const { id: residentId } = await params
   const { provider_id } = await verifySession()
 
-  const [carePlans, goals] = await Promise.all([
+  const [carePlans, goals, carePlanActivities] = await Promise.all([
     getNestedResidentData(provider_id, residentId, 'care_plans'),
     getNestedResidentData(provider_id, residentId, 'goals'),
+    getNestedResidentData(provider_id, residentId, 'care_plan_activities'),
   ])
 
   return (
     <div className="space-y-4">
-      <CarePlanClient carePlans={carePlans || []} goals={goals || []} />
+      <CarePlanClient
+        carePlans={carePlans || []}
+        goals={goals || []}
+        carePlanActivities={carePlanActivities || []}
+      />
     </div>
   )
 }
