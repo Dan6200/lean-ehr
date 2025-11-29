@@ -58,9 +58,15 @@ export const CarePlanActivityStatusEnum = z.enum([
 ])
 
 export const PrescriptionStatusEnum = z.enum([
-  'recorded',
+  'active',
+  'on-hold',
+  'ended',
+  'stopped',
+  'completed',
+  'cancelled',
   'entered-in-error',
   'draft',
+  'unknown',
 ])
 
 export const PrescriptionAdherenceStatusEnum = z.enum([
