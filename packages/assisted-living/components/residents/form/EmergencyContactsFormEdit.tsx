@@ -5,16 +5,14 @@ import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { toast } from '#root/components/ui/use-toast'
 import { isError } from '#root/app/utils'
-import { EmergencyContact, ResidentDataSchema } from '#root/types'
+import { EmergencyContactSchema } from '#root/types'
 import { updateEmergencyContacts } from '#root/actions/residents/update-emergency-contacts'
 import { useRef } from 'react'
 import { EmergencyContactsFormBase } from './EmergencyContactsFormBase'
 
 // Create a schema that only validates the emergency_contacts array
 const EmergencyContactsFormSchema = z.object({
-  emergency_contacts: z.array(
-    ResidentDataSchema.shape.emergency_contacts.unwrap().element,
-  ),
+  emergency_contacts: z.array(EmergencyContactSchema),
 })
 
 export function EmergencyContactsFormEdit({
@@ -23,7 +21,7 @@ export function EmergencyContactsFormEdit({
   onFinished,
 }: {
   documentId: string
-  initialContacts?: EmergencyContact[] | null
+  initialContacts?: z.infer<typeof EmergencyContactSchema>[] | null
   onFinished?: () => void
 }) {
   const router = useRouter()

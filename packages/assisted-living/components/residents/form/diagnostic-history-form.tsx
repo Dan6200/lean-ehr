@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { toast } from '#root/components/ui/use-toast'
 import { isError } from '#root/app/utils'
-import { DiagnosticHistorySchema, ResidentData } from '#root/types'
+import { DiagnosticHistorySchema, DiagnosticHistory } from '#root/types'
 import { Button } from '#root/components/ui/button'
 import {
   Form,
@@ -16,22 +16,40 @@ import {
   FormMessage,
 } from '#root/components/ui/form'
 import { Input } from '#root/components/ui/input'
-import { Textarea } from '#root/components/ui/textarea'
 import { Trash2 } from 'lucide-react'
 import { updateDiagnosticHistory } from '#root/actions/residents/update-diagnostic-history'
 import { Autocomplete } from '#root/components/ui/autocomplete'
 import { searchSnomed } from '#root/actions/lookups/search-snomed'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '#root/components/ui/select'
+import { ConditionStatusEnum } from '#root/types/enums'
 
 import * as React from 'react'
 
 const FormSchema = z.object({
-  diagnostic_history: z.array(DiagnosticHistorySchema).nullable().optional(),
+  diagnostic_history: z
+    .array(
+      DiagnosticHistorySchema.omit({
+        id: true,
+        resident_id: true,
+        recorder_id: true,
+      }),
+    )
+    .nullable()
+    .optional(),
 })
 
 export function DiagnosticHistoryForm({
-  residentData,
+  diagnosticHistory,
+  residentId,
 }: {
-  residentData: ResidentData
+  diagnosticHistory: DiagnosticHistory[]
+  residentId: string
 }) {
   const router = useRouter()
   const [deletedRecordIds, setDeletedRecordIds] = React.useState<string[]>([])
@@ -39,7 +57,7 @@ export function DiagnosticHistoryForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      diagnostic_history: residentData.diagnostic_history || [],
+      diagnostic_history: diagnosticHistory || [],
     },
   })
 
@@ -49,7 +67,7 @@ export function DiagnosticHistoryForm({
   })
 
   const handleRemove = (index: number) => {
-    const recordId = residentData.diagnostic_history?.[index]?.id
+    const recordId = diagnosticHistory?.[index]?.id
     if (recordId) {
       setDeletedRecordIds((prev) => [...prev, recordId])
     }
@@ -58,9 +76,16 @@ export function DiagnosticHistoryForm({
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
+      const recordsWithIds = (data.diagnostic_history || []).map(
+        (rec, index) => ({
+          ...rec,
+          id: diagnosticHistory?.[index]?.id || '',
+        }),
+      )
+
       const { message, success } = await updateDiagnosticHistory(
-        data.diagnostic_history || [],
-        residentData.id!,
+        recordsWithIds,
+        residentId,
         deletedRecordIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
@@ -80,89 +105,132 @@ export function DiagnosticHistoryForm({
         {fields.map((field, index) => (
           <div
             key={field.id}
-            className="flex flex-col gap-4 p-4 border rounded-md"
+            className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-md relative"
           >
-            <div className="flex items-end gap-4">
-              <FormField
-                control={form.control}
-                name={`diagnostic_history.${index}.date`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`diagnostic_history.${index}.title`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title</FormLabel>
-                    <FormControl>
-                      <Input placeholder="e.g., Annual Checkup" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name={`diagnostic_history.${index}.snomed_code`}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Record Type (SNOMED)</FormLabel>
-                    <FormControl>
-                      <Autocomplete
-                        value={field.value || ''}
-                        onValueChange={(option) => {
-                          if (option) {
-                            form.setValue(
-                              `diagnostic_history.${index}.snomed_code`,
-                              option.value,
-                            )
-                            form.setValue(
-                              `diagnostic_history.${index}.title`,
-                              option.label,
-                            )
-                          }
-                        }}
-                        onSearch={searchSnomed}
-                        placeholder="Search SNOMED..."
-                        options={[]}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => handleRemove(index)}
-              >
-                <Trash2 />
-              </Button>
-            </div>
             <FormField
               control={form.control}
-              name={`diagnostic_history.${index}.notes`}
+              name={`diagnostic_history.${index}.code`}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Notes</FormLabel>
+                  <FormLabel>Condition (SNOMED)</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="Enter detailed notes..."
-                      {...field}
+                    <Autocomplete
+                      value={field.value?.code?.code || ''}
+                      onValueChange={(option) => {
+                        if (option) {
+                          form.setValue(`diagnostic_history.${index}.code`, {
+                            code: option.value,
+                            system: 'http://snomed.info/sct',
+                            text: option.label,
+                          })
+                          form.setValue(
+                            `diagnostic_history.${index}.title`,
+                            option.label,
+                          )
+                        }
+                      }}
+                      onSearch={searchSnomed}
+                      placeholder="Search SNOMED..."
+                      options={[]}
                     />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
+            <FormField
+              control={form.control}
+              name={`diagnostic_history.${index}.clinical_status`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Clinical Status</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {ConditionStatusEnum.options.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`diagnostic_history.${index}.recorded_date`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Recorded Date</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`diagnostic_history.${index}.onset_datetime`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Onset Date</FormLabel>
+                  <FormControl>
+                    <Input type="datetime-local" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`diagnostic_history.${index}.abatement_datetime`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Abatement Date (Optional)</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="datetime-local"
+                      {...field}
+                      value={field.value || ''}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`diagnostic_history.${index}.title`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., Hypertension" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="absolute top-2 right-2">
+              <Button
+                type="button"
+                variant="destructive"
+                size="icon"
+                onClick={() => handleRemove(index)}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
           </div>
         ))}
         <Button
@@ -170,10 +238,11 @@ export function DiagnosticHistoryForm({
           variant="outline"
           onClick={() =>
             append({
-              date: new Date().toISOString().split('T')[0],
+              recorded_date: new Date().toISOString(),
+              onset_datetime: new Date().toISOString(),
+              clinical_status: 'active',
               title: '',
-              notes: '',
-              snomed_code: '',
+              code: { code: '', system: 'http://snomed.info/sct', text: '' },
             })
           }
         >

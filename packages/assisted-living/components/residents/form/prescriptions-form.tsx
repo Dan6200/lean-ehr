@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { toast } from '#root/components/ui/use-toast'
 import { isError } from '#root/app/utils'
-import { PrescriptionSchema, ResidentData } from '#root/types'
+import { Prescription, PrescriptionSchema } from '#root/types'
 import { Button } from '#root/components/ui/button'
 import {
   Form,
@@ -35,7 +35,6 @@ import {
 
 import * as React from 'react'
 
-export const dynamic = 'force-dynamic'
 const FormSchema = z.object({
   prescriptions: z
     .array(
@@ -50,9 +49,11 @@ const FormSchema = z.object({
 })
 
 export function PrescriptionsForm({
-  residentData,
+  prescriptions,
+  residentId,
 }: {
-  residentData: ResidentData
+  prescriptions: Prescription[]
+  residentId: string
 }) {
   const router = useRouter()
   const [deletedPrescriptionIds, setDeletedPrescriptionIds] = React.useState<
@@ -62,7 +63,7 @@ export function PrescriptionsForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      prescriptions: residentData.prescriptions || [],
+      prescriptions: prescriptions || [],
     },
   })
 
@@ -72,7 +73,7 @@ export function PrescriptionsForm({
   })
 
   const handleRemove = (index: number) => {
-    const prescriptionId = residentData.prescriptions?.[index]?.id
+    const prescriptionId = prescriptions?.[index]?.id
     if (prescriptionId) {
       setDeletedPrescriptionIds((prev) => [...prev, prescriptionId])
     }
@@ -84,13 +85,13 @@ export function PrescriptionsForm({
       const prescriptionsWithIds = (data.prescriptions || []).map(
         (p, index) => ({
           ...p,
-          id: residentData.prescriptions?.[index]?.id || '',
+          id: prescriptions?.[index]?.id || '',
         }),
       )
 
       const { message, success } = await updatePrescriptions(
         prescriptionsWithIds,
-        residentData.id!,
+        residentId,
         deletedPrescriptionIds,
       )
       toast({ title: message, variant: success ? 'default' : 'destructive' })
@@ -120,14 +121,20 @@ export function PrescriptionsForm({
                   <FormLabel>Medication (RxNorm)</FormLabel>
                   <FormControl>
                     <Autocomplete
-                      value={field.value?.code?.code || ''}
+                      value={field.value?.code?.coding?.[0]?.code || ''}
                       onValueChange={(option) => {
                         if (option) {
                           form.setValue(`prescriptions.${index}.medication`, {
+                            ...field.value,
                             code: {
-                              system:
-                                'http://www.nlm.nih.gov/research/umls/rxnorm',
-                              code: option.value,
+                              coding: [
+                                {
+                                  system:
+                                    'http://www.nlm.nih.gov/research/umls/rxnorm',
+                                  code: option.value,
+                                  display: option.label,
+                                },
+                              ],
                               text: option.label,
                             },
                           })
@@ -137,6 +144,39 @@ export function PrescriptionsForm({
                       placeholder="Search RxNorm..."
                       options={[]}
                     />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`prescriptions.${index}.medication.strength.value`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Strength Value</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="number"
+                      placeholder="e.g., 10"
+                      {...field}
+                      onChange={(e) =>
+                        field.onChange(parseFloat(e.target.value))
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name={`prescriptions.${index}.medication.strength.unit`}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Strength Unit</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., mg" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -245,10 +285,10 @@ export function PrescriptionsForm({
               adherence: 'not-applicable',
               medication: {
                 code: {
-                  system: 'http://www.nlm.nih.gov/research/umls/rxnorm',
-                  code: '',
+                  coding: [],
                   text: '',
                 },
+                strength: { value: 0, unit: '' },
               },
               dosage_instruction: [],
             })

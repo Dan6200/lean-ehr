@@ -9,13 +9,13 @@ import { toast } from '#root/components/ui/use-toast'
 import { isError } from '#root/app/utils'
 import { addNewResident } from '#root/actions/residents/add'
 import { ResidentFormBase } from './ResidentFormBase'
-import type { ResidentData } from '#root/types'
-import { ResidentDataSchema } from '#root/types'
+import type { Resident } from '#root/types'
+import { ResidentSchema } from '#root/types'
 import { auth } from '#root/auth/client/config'
 
 export function ResidentFormAdd({
   facility_id,
-}: Pick<ResidentData, 'facility_id'>) {
+}: Pick<Resident, 'facility_id'>) {
   const [idToken, setIdToken] = useState<string | null>(null) // State to hold idToken
 
   useEffect(() => {
@@ -32,15 +32,14 @@ export function ResidentFormAdd({
     }
   }, [])
 
-  const form = useForm<z.infer<typeof ResidentDataSchema>>({
-    resolver: zodResolver(ResidentDataSchema),
+  const form = useForm<z.infer<typeof ResidentSchema>>({
+    resolver: zodResolver(ResidentSchema),
     defaultValues: {
       resident_name: '', // Changed from resident_name
-      emergency_contacts: [],
     },
   })
 
-  async function onSubmit(data: z.infer<typeof ResidentDataSchema>) {
+  async function onSubmit(data: z.infer<typeof ResidentSchema>) {
     if (!idToken) {
       toast({
         title: 'Authentication Error',
@@ -50,23 +49,9 @@ export function ResidentFormAdd({
       return
     }
 
-    let residentData = {} as ResidentData
+    let residentData = {} as Resident
     residentData.resident_name = data.resident_name ?? null // Changed from resident_name
     residentData.facility_id = facility_id
-
-    if (data.emergency_contacts) {
-      residentData.emergency_contacts = data.emergency_contacts.map(
-        (contact) => ({
-          work_phone: contact.work_phone ?? null, // Changed
-          home_phone: contact.home_phone ?? null, // Changed
-          contact_name: contact.contact_name ?? null, // Changed
-          relationship: contact.relationship ?? null, // Changed
-          cell_phone: contact.cell_phone, // Changed
-        }),
-      )
-    } else {
-      residentData.emergency_contacts = null
-    }
 
     try {
       const { message, success } = await addNewResident(residentData)
@@ -78,7 +63,7 @@ export function ResidentFormAdd({
         return
       }
       toast({ title: message })
-      form.reset({ resident_name: '', emergency_contacts: [] }) // Changed
+      form.reset({ resident_name: '' }) // Changed
     } catch (err) {
       if (isError(err)) toast({ title: err.message, variant: 'destructive' })
     }
