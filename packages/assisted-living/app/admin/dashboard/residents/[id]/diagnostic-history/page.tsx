@@ -1,4 +1,5 @@
-import { getResidentData } from '#root/actions/residents/get'
+import { getNestedResidentData } from '#root/actions/residents/get/subcollections'
+import { verifySession } from '#root/auth/server/definitions'
 import { Button } from '#root/components/ui/button'
 import {
   Table,
@@ -16,8 +17,12 @@ export default async function DiagnosticHistoryPage({
 }: {
   params: Promise<{ id: string }>
 }) {
-  const residentData = await getResidentData(
-    (await params).id,
+  const { id: residentId } = await params
+  const { provider_id } = await verifySession()
+
+  const diagnostic_history = await getNestedResidentData(
+    provider_id,
+    residentId,
     'diagnostic_history',
   ).catch((e) => {
     if (e.message.match(/not_found/i)) notFound()
@@ -26,15 +31,13 @@ export default async function DiagnosticHistoryPage({
     )
   })
 
-  const { diagnostic_history, id } = residentData
-
   return (
     <div className="space-y-8">
       <div className="flex flex-col md:flex-row gap-4 justify-between items-center border-b pb-2 mb-8">
         <h2 className="text-xl font-semibold">Diagnostic History</h2>
         <Button asChild>
           <Link
-            href={`/admin/dashboard/residents/${id}/diagnostic-history/edit`}
+            href={`/admin/dashboard/residents/${residentId}/diagnostic-history/edit`}
           >
             Edit Diagnostic History
           </Link>
@@ -57,19 +60,33 @@ export default async function DiagnosticHistoryPage({
             {diagnostic_history.map((record, index: number) =>
               record ? (
                 <TableRow key={record.id}>
-                  <TableCell>{record.onset_datetime ?? 'N/A'}</TableCell>
-                  <TableCell>{record.abatement_datetime ?? 'N/A'}</TableCell>
+                  <TableCell>
+                    {record.onset_datetime
+                      ? new Date(record.onset_datetime).toLocaleDateString()
+                      : 'N/A'}
+                  </TableCell>
+                  <TableCell>
+                    {record.abatement_datetime
+                      ? new Date(record.abatement_datetime).toLocaleDateString()
+                      : 'N/A'}
+                  </TableCell>
                   <TableCell>{record.title ?? 'N/A'}</TableCell>
                   <TableCell>
-                    {record.code.coding[0].display ?? 'N/A'}
+                    {record.code?.text ||
+                      record.code?.coding?.[0]?.display ||
+                      'N/A'}
                   </TableCell>
                   <TableCell>{record.clinical_status}</TableCell>
-                  <TableCell>{record.recorded_date}</TableCell>
+                  <TableCell>
+                    {record.recorded_date
+                      ? new Date(record.recorded_date).toLocaleDateString()
+                      : 'N/A'}
+                  </TableCell>
                   <TableCell>{record.recorder_id}</TableCell>
                 </TableRow>
               ) : (
                 <TableRow key={index}>
-                  <TableCell>Record Does Not Exist</TableCell>
+                  <TableCell colSpan={7}>Record Does Not Exist</TableCell>
                 </TableRow>
               ),
             )}
