@@ -115,13 +115,16 @@ export function DiagnosticHistoryForm({
                   <FormLabel>Condition (SNOMED)</FormLabel>
                   <FormControl>
                     <Autocomplete
-                      value={field.value?.code?.code || ''}
+                      value={field.value?.coding?.[0]?.code || ''}
                       options={
-                        field.value?.code?.code
+                        field.value?.coding?.[0]?.code
                           ? [
                               {
-                                value: field.value.code.code,
-                                label: field.value.code.text || '',
+                                value: field.value.coding[0].code,
+                                label:
+                                  field.value.text ||
+                                  field.value.coding[0].display ||
+                                  '',
                               },
                             ]
                           : []
@@ -129,8 +132,13 @@ export function DiagnosticHistoryForm({
                       onValueChange={(option) => {
                         if (option) {
                           form.setValue(`diagnostic_history.${index}.code`, {
-                            code: option.value,
-                            system: 'http://snomed.info/sct',
+                            coding: [
+                              {
+                                system: 'http://snomed.info/sct',
+                                code: option.value,
+                                display: option.label,
+                              },
+                            ],
                             text: option.label,
                           })
                           form.setValue(
@@ -251,7 +259,7 @@ export function DiagnosticHistoryForm({
               onset_datetime: new Date().toISOString(),
               clinical_status: 'active',
               title: '',
-              code: { code: '', system: 'http://snomed.info/sct', text: '' },
+              code: { coding: [], text: '' },
             })
           }
         >

@@ -246,7 +246,7 @@ export function ObservationsForm({
               category: [],
               code: { coding: [], text: '' },
               effective_datetime: new Date().toISOString(),
-              value_quantity: { value: 0, unit: '' },
+              value_quantity: { value: 0, code: '', system: '', unit: '' },
               body_site: { coding: [], text: '' },
               method: { coding: [], text: '' },
               device: { coding: [], text: '' },
