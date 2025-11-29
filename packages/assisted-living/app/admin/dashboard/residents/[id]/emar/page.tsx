@@ -1,7 +1,8 @@
 import { getNestedResidentData } from '#root/actions/residents/get'
 import { EmarClient } from '#root/components/residents/emar-client'
 import { verifySession } from '#root/auth/server/definitions'
-import { Prescription, EmarRecord } from '#root/types'
+import { Prescription } from '#root/types/schemas/clinical/prescription'
+import { EmarRecord } from '#root/types/schemas/clinical/emar'
 
 type EmarPageProps = {
   params: Promise<{

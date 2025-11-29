@@ -3,7 +3,7 @@ import {
   FirestoreDataConverter,
   QueryDocumentSnapshot,
 } from 'firebase-admin/firestore'
-import { FacilitySchema } from '..'
+import { FacilitySchema } from '#root/types/schemas/administrative/facility'
 import z from 'zod'
 
 export const getFacilityConverter = async (): Promise<

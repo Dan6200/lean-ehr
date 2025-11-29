@@ -6,7 +6,7 @@ import {
   getFinancialSummaryQuery,
   getResidentGrowthQuery,
 } from '#root/lib/bigquery/queries'
-import { Resident } from '#root/types'
+import { Resident } from '#root/types/schemas'
 
 export type FormattedChartData = {
   date: string

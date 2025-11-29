@@ -13,3 +13,4 @@ export const AdjustmentSchema = z.object({
   authored_on: z.string(),
   updated_at: z.string().optional(),
 })
+export type Adjustment = z.infer<typeof AdjustmentSchema>

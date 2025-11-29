@@ -18,7 +18,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '#root/components/ui/drawer'
-import { Resident } from '#root/types'
+import { Resident } from '#root/types/schemas/administrative/resident'
 
 export function EditResidentDialog({
   residentData,

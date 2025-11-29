@@ -21,3 +21,4 @@ export const AllergySchema = z.object({
     severity: z.string(),
   }),
 })
+export type Allergy = z.infer<typeof AllergySchema>

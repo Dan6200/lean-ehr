@@ -1,7 +1,7 @@
 'use client'
 
 import * as React from 'react'
-import { Resident } from '#root/types'
+import { Resident } from '#root/types/schemas/administrative/resident'
 import { calculateMetrics } from '#root/lib/utils/metrics'
 import { MetricCard } from './metric-card'
 

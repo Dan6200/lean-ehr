@@ -1,5 +1,5 @@
 'use client'
-import { EmergencyContact } from '#root/types'
+import { EmergencyContact } from '#root/types/schemas/administrative/emergency-contact'
 import { Card, CardContent } from './ui/card'
 import { PhoneCall } from 'lucide-react'
 import Link from 'next/link'

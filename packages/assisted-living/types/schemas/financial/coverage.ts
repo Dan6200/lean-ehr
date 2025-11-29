@@ -41,3 +41,4 @@ export const CoverageSchema = z.object({
   authored_on: z.string(),
   last_modified: z.string().optional(),
 })
+export type Coverage = z.infer<typeof CoverageSchema>

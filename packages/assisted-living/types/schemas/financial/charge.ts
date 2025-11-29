@@ -13,3 +13,4 @@ export const ChargeSchema = z.object({
   occurrence_datetime: z.string(),
   description: z.string().optional(),
 })
+export type Charge = z.infer<typeof ChargeSchema>

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '#root/components/ui/table'
-import { Observation } from '#root/types'
+import { Observation } from '#root/types/schemas/clinical/observation'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 

@@ -23,6 +23,8 @@ export const ResidentSchema = z.object({
   deactivated_at: z.string().nullable().optional(),
 })
 
+export type Resident = z.infer<typeof ResidentSchema>
+
 export const ResidentDataSchema = ResidentSchema.extend({
   id: z.string().optional(),
   address: z.string(),

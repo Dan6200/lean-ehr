@@ -17,7 +17,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from '#root/components/ui/drawer'
-import { EmergencyContact } from '#root/types'
+import { EmergencyContact } from '#root/types/schemas/administrative/emergency-contact'
 import { EmergencyContactsFormEdit } from '#root/components/residents/form/EmergencyContactsFormEdit'
 
 interface EditEmergencyContactsDialogProps {

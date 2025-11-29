@@ -15,3 +15,4 @@ export const PrescriptionSchema = z.object({
   medication: MedicationSchema,
   dosage_instruction: z.array(DosageInstructionSchema),
 })
+export type Prescription = z.infer<typeof PrescriptionSchema>

@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '#root/components/ui/table'
-import { Prescription } from '#root/types'
+import { Prescription } from '#root/types/schemas/clinical/prescription'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 

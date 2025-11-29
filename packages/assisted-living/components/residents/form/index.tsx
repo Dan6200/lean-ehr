@@ -1,5 +1,5 @@
 'use client'
-import { ResidentData } from '#root/types'
+import { ResidentData } from '#root/types/schemas/administrative/resident'
 import { ResidentFormAdd } from './ResidentFormAdd'
 import { ResidentFormEdit } from './ResidentFormEdit'
 

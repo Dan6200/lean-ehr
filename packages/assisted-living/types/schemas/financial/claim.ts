@@ -11,3 +11,4 @@ export const ClaimSchema = z.object({
   total: z.object({ value: z.number(), currency: z.string().default('NGN') }),
   description: z.string().optional(),
 })
+export type Claim = z.infer<typeof ClaimSchema>

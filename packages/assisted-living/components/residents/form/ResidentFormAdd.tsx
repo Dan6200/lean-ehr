@@ -9,7 +9,7 @@ import { toast } from '#root/components/ui/use-toast'
 import { isError } from '#root/app/utils'
 import { addNewResident } from '#root/actions/residents/add'
 import { ResidentFormBase } from './ResidentFormBase'
-import type { Resident } from '#root/types'
+import type { Resident } from '#root/types/schemas/administrative/resident'
 import { ResidentSchema } from '#root/types/schemas/administrative/resident'
 import { auth } from '#root/auth/client/config'
 

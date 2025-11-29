@@ -10,3 +10,4 @@ export const CarePlanSchema = z.object({
   author_id: z.string(),
   created_date: z.string(),
 })
+export type CarePlan = z.infer<typeof CarePlanSchema>

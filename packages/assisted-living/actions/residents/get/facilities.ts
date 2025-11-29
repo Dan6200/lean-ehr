@@ -2,10 +2,12 @@
 
 import { verifySession } from '#root/auth/server/definitions'
 import { collectionWrapper, getDocsWrapper } from '#root/firebase/admin'
-import { FacilitySchema } from '#root/types/schemas/administrative/facility'
+import {
+  Facility,
+  FacilitySchema,
+} from '#root/types/schemas/administrative/facility'
 import { getFacilityConverter } from '#root/types/converters'
 import { notFound } from 'next/navigation'
-import { Facility } from '#root/types'
 
 export async function getAllFacilities(): Promise<Facility[]> {
   try {

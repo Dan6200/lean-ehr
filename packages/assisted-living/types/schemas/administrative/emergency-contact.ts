@@ -28,3 +28,4 @@ export const EmergencyContactSchema = z
       ...(data.personal_relationships || []),
     ],
   }))
+export type EmergencyContact = z.infer<typeof EmergencyContactSchema>

@@ -16,3 +16,4 @@ export const ObservationSchema = z.object({
   method: CodeableConceptSchema,
   device: CodeableConceptSchema,
 })
+export type Observation = z.infer<typeof ObservationSchema>

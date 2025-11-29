@@ -3,6 +3,8 @@ import { AdministrationStatusEnum } from '#root/types/enums'
 import { MedicationSchema, StrengthSchema } from '.'
 import { CodeableConceptSchema } from '../codeable-concept'
 
+export type EmarRecord = z.infer<typeof EmarRecordSchema>
+
 export const EmarRecordSchema = z.object({
   id: z.string(),
   resident_id: z.string(),

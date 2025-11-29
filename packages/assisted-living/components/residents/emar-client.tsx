@@ -5,7 +5,8 @@ import { Button } from '#root/components/ui/button'
 import { recordAdministration } from '#root/actions/residents/record-administration'
 import { toast } from '#root/components/ui/use-toast'
 import { useAuth } from '#root/auth/client/auth-context'
-import { Prescription, EmarRecord } from '#root/types'
+import { Prescription } from '#root/types/schemas/clinical/prescription'
+import { EmarRecord } from '#root/types/schemas/clinical/emar'
 import { useRouter } from 'next/navigation'
 
 const timeSlots = ['Morning', 'Noon', 'Evening', 'Bedtime']

@@ -4,7 +4,7 @@ import * as React from 'react'
 import { ChartAreaInteractive } from '#root/components/dashboard/chart-area-interactive'
 import { SectionCards } from '#root/components/dashboard/section-cards'
 import { FormattedChartData } from '#root/app/admin/dashboard/page'
-import { Resident } from '#root/types'
+import { Resident } from '#root/types/schemas/administrative/resident'
 
 export function DashboardClient({
   chartData,

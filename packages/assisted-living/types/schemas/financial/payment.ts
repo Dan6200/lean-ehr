@@ -10,3 +10,4 @@ export const PaymentSchema = z.object({
   occurrence_datetime: z.string(),
   method: z.string().optional(), // e.g. "EFT", "cash", "check"
 })
+export type Payment = z.infer<typeof PaymentSchema>

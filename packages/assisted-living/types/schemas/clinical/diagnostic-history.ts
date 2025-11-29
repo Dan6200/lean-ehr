@@ -13,3 +13,4 @@ export const DiagnosticHistorySchema = z.object({
   title: z.string(),
   code: CodeableConceptSchema,
 })
+export type DiagnosticHistory = z.infer<typeof DiagnosticHistorySchema>

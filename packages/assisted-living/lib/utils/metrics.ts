@@ -1,4 +1,4 @@
-import { Resident } from '#root/types'
+import { Resident } from '#root/types/schemas/administrative/resident'
 
 function calculatePercentageChange(current: number, previous: number): number {
   if (previous === 0) {

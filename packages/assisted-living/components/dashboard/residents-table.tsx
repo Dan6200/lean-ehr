@@ -1,7 +1,7 @@
 'use client'
 
 import { DataTable } from '#root/components/dashboard/data-table'
-import { ResidentData } from '#root/types'
+import { ResidentData } from '#root/types/schemas/administrative/resident'
 import { ColumnDef } from '@tanstack/react-table'
 import Link from 'next/link'
 

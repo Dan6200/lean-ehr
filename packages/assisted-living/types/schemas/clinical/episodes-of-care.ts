@@ -29,3 +29,4 @@ export const EpisodesOfCareSchema = z.object({
   created_at: z.string(),
   updated_at: z.string().optional(),
 })
+export type EpisodeOfCare = z.infer<typeof EpisodesOfCareSchema>
