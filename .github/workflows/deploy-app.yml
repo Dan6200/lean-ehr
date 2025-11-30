@@ -1,0 +1,66 @@
+name: Deploy Next.js App to Cloud Run
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/assisted-living/**'
+  workflow_dispatch:
+
+jobs:
+  deploy-app:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    env:
+      PROJECT_ID: 'lean-ehr'
+      REGION: 'europe-west1'
+      SERVICE_NAME: 'assisted-living-app'
+      ARTIFACT_REPO: 'lean-ehr-repo'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: 'projects/31765765651/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'assisted-living-app@lean-ehr.iam.gserviceaccount.com'
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Fetch KMS Configuration
+        id: kms_config
+        run: |
+          KMS_LOCATION="europe-west1"
+          KEYRING_NAME=$(gcloud kms keyrings list --location=$KMS_LOCATION --project=${{ env.PROJECT_ID }} --filter="name:assisted-living" --format="value(name)")
+          echo "KMS_KEY_RING=$KEYRING_NAME" >> $GITHUB_ENV
+          echo "KEK_GENERAL_PATH=$(gcloud kms keys list --keyring=$KEYRING_NAME --location=$KMS_LOCATION --project=${{ env.PROJECT_ID }} --filter='name:kek-general' --format='value(name)')" >> $GITHUB_ENV
+          echo "KEK_CONTACT_PATH=$(gcloud kms keys list --keyring=$KEYRING_NAME --location=$KMS_LOCATION --project=${{ env.PROJECT_ID }} --filter='name:kek-contact' --format='value(name)')" >> $GITHUB_ENV
+          echo "KEK_CLINICAL_PATH=$(gcloud kms keys list --keyring=$KEYRING_NAME --location=$KMS_LOCATION --project=${{ env.PROJECT_ID }} --filter='name:kek-clinical' --format='value(name)')" >> $GITHUB_ENV
+          echo "KEK_FINANCIAL_PATH=$(gcloud kms keys list --keyring=$KEYRING_NAME --location=$KMS_LOCATION --project=${{ env.PROJECT_ID }} --filter='name:kek-financial' --format='value(name)')" >> $GITHUB_ENV
+
+      - name: Build and Push Docker Image
+        id: build
+        working-directory: ./packages/assisted-living
+        run: |
+          gcloud builds submit --tag "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}" -f Dockerfile.prod .
+
+      - name: Deploy to Cloud Run Service
+        run: |
+          gcloud run deploy ${{ env.SERVICE_NAME }} \
+            --image "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}" \
+            --region "${{ env.REGION }}" \
+            --project "${{ env.PROJECT_ID }}" \
+            --cpu 1 \
+            --memory 512Mi \
+            --min-instances 0 \
+            --max-instances 5 \
+            --allow-unauthenticated \
+            --set-env-vars="GCP_PROJECT_ID=${{ env.PROJECT_ID }},KMS_LOCATION=${{ env.REGION }},KMS_KEY_RING=${{ env.KMS_KEY_RING }},KEK_GENERAL_PATH=${{ env.KEK_GENERAL_PATH }},KEK_CONTACT_PATH=${{ env.KEK_CONTACT_PATH }},KEK_CLINICAL_PATH=${{ env.KEK_CLINICAL_PATH }},KEK_FINANCIAL_PATH=${{ env.KEK_FINANCIAL_PATH }},NEXT_PUBLIC_BQ_DATASET_ID=firestore_export"
