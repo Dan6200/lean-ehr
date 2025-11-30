@@ -6,7 +6,7 @@ import {
 } from '#root/firebase/admin'
 import { verifySession } from '#root/auth/server/definitions'
 import { EncryptedResidentSchema } from '#root/types/encrypted-schemas'
-import { getResidentConverter } from '#root/types/converters'
+import { getResidentConverter } from '#root/types/converters/residents/main'
 import { z } from 'zod'
 
 export async function deleteResidentData(documentId: string) {

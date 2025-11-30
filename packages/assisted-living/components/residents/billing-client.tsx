@@ -14,14 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from '#root/components/ui/table'
-import {
-  AccountSchema,
-  ChargeSchema,
-  ClaimSchema,
-  PaymentSchema,
-  AdjustmentSchema,
-  CoverageSchema,
-} from '#root/types/schemas'
+import { AccountSchema } from '#root/types/schemas/financial/account'
+import { ChargeSchema } from '#root/types/schemas/financial/charge'
+import { ClaimSchema } from '#root/types/schemas/financial/claim'
+import { PaymentSchema } from '#root/types/schemas/financial/payment'
+import { AdjustmentSchema } from '#root/types/schemas/financial/adjustment'
+import { CoverageSchema } from '#root/types/schemas/financial/coverage'
 import { Badge } from '#root/components/ui/badge'
 import { Button } from '#root/components/ui/button'
 import Link from 'next/link'

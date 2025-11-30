@@ -8,7 +8,7 @@ import {
   SubCollectionMapType,
 } from '#root/types/subcollection-map'
 import { FirestoreDataConverter } from 'firebase-admin/firestore'
-import z from 'zod'
+import { z } from 'zod'
 
 import {
   KEK_FINANCIAL_PATH,
@@ -27,7 +27,6 @@ async function getSubcollection<T, U>(
   await verifySession() // Authenticate and get user claims
 
   const path = `providers/${providerId}/residents/${residentId}/${collectionName}`
-  console.log(`[getSubcollection] Fetching from path: ${path}`)
 
   const subcollectionRef = (await collectionWrapper(path)).withConverter(
     await converter(),

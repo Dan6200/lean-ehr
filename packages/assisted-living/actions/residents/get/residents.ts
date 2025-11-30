@@ -16,7 +16,7 @@ import { EncryptedResidentSchema } from '#root/types/encrypted-schemas'
 import {
   decryptResidentData,
   getResidentConverter,
-} from '#root/types/converters'
+} from '#root/types/converters/residents/main'
 import { notFound, redirect } from 'next/navigation'
 import { z } from 'zod'
 import { Query } from 'firebase-admin/firestore'

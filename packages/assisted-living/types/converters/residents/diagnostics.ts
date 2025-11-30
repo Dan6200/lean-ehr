@@ -7,7 +7,7 @@ import {
 } from 'firebase-admin/firestore'
 import { EncryptedDiagnosticHistorySchema } from '#root/types/encrypted-schemas'
 import { DiagnosticHistorySchema } from '#root/types/schemas/clinical/diagnostic-history'
-import z from 'zod'
+import { z } from 'zod'
 
 export async function decryptDiagnosticHistory(
   data: z.infer<typeof EncryptedDiagnosticHistorySchema>,

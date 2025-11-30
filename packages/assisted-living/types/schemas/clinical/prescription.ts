@@ -3,7 +3,9 @@ import {
   PrescriptionStatusEnum,
   PrescriptionAdherenceStatusEnum,
 } from '#root/types/enums'
-import { PeriodSchema, MedicationSchema, DosageInstructionSchema } from '.'
+import { PeriodSchema } from './period'
+import { MedicationSchema } from './medication'
+import { DosageInstructionSchema } from './dosage'
 
 export const PrescriptionSchema = z.object({
   id: z.string(),

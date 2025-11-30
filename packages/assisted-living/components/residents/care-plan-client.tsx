@@ -13,11 +13,9 @@ import {
   AccordionTrigger,
 } from '#root/components/ui/accordion'
 import { Badge } from '#root/components/ui/badge'
-import {
-  CarePlanActivitySchema,
-  CarePlanSchema,
-  GoalSchema,
-} from '#root/types/schemas'
+import { CarePlanActivitySchema } from '#root/types/schemas/clinical/care-plan-activity'
+import { CarePlanSchema } from '#root/types/schemas/clinical/care-plan'
+import { GoalSchema } from '#root/types/schemas/clinical/goal'
 import { z } from 'zod'
 
 type CarePlanClientProps = {

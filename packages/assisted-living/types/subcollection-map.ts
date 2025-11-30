@@ -1,27 +1,29 @@
 import { z } from 'zod'
-import {
-  AllergySchema,
-  DiagnosticHistorySchema,
-  EmarRecordSchema,
-  EmergencyContactSchema,
-  AccountSchema,
-  ChargeSchema,
-  ClaimSchema,
-  CoverageSchema,
-  PaymentSchema,
-  AdjustmentSchema,
-  ObservationSchema,
-  PrescriptionSchema,
-  CarePlanSchema,
-  CarePlanActivitySchema,
-  GoalSchema,
-  ProcedureSchema,
-  TaskSchema,
-  EncounterSchema,
-  EpisodesOfCareSchema,
-  IdentifierSchema,
-  AddressSchema,
-} from './schemas'
+
+// Schema Imports
+import { AllergySchema } from './schemas/clinical/allergy'
+import { DiagnosticHistorySchema } from './schemas/clinical/diagnostic-history'
+import { EmarRecordSchema } from './schemas/clinical/emar'
+import { EmergencyContactSchema } from './schemas/administrative/emergency-contact'
+import { AccountSchema } from './schemas/financial/account'
+import { ChargeSchema } from './schemas/financial/charge'
+import { ClaimSchema } from './schemas/financial/claim'
+import { CoverageSchema } from './schemas/financial/coverage'
+import { PaymentSchema } from './schemas/financial/payment'
+import { AdjustmentSchema } from './schemas/financial/adjustment'
+import { ObservationSchema } from './schemas/clinical/observation'
+import { PrescriptionSchema } from './schemas/clinical/prescription'
+import { CarePlanSchema } from './schemas/clinical/care-plan'
+import { CarePlanActivitySchema } from './schemas/clinical/care-plan-activity'
+import { GoalSchema } from './schemas/clinical/goal'
+import { ProcedureSchema } from './schemas/clinical/procedure'
+import { TaskSchema } from './schemas/clinical/task'
+import { EncounterSchema } from './schemas/clinical/encounter'
+import { EpisodesOfCareSchema } from './schemas/clinical/episodes-of-care'
+import { IdentifierSchema } from './schemas/administrative/identifier'
+import { AddressSchema } from './schemas/administrative/address'
+
+// Encrypted Schema Imports
 import {
   EncryptedAllergySchema,
   EncryptedDiagnosticHistorySchema,
@@ -45,50 +47,83 @@ import {
   EncryptedIdentifierSchema,
   EncryptedAddressSchema,
 } from './encrypted-schemas'
+
+// Converter Imports
 import {
   decryptAllergy,
   getAllergiesConverter,
+} from './converters/residents/allergies'
+import {
   decryptDiagnosticHistory,
   getDiagnosticHistoryConverter,
+} from './converters/residents/diagnostics'
+import {
   decryptEmarRecord,
   getEmarRecordConverter,
+} from './converters/residents/emar'
+import {
   decryptEmergencyContact,
   getEmergencyContactsConverter,
+} from './converters/residents/emergencyContacts'
+import {
   decryptAccount,
   getAccountsConverter,
+} from './converters/residents/accounts'
+import {
   decryptCharge,
   getChargesConverter,
-  decryptClaim,
-  getClaimsConverter,
+} from './converters/residents/charges'
+import { decryptClaim, getClaimsConverter } from './converters/residents/claims'
+import {
   decryptCoverage,
   getCoveragesConverter,
+} from './converters/residents/coverages'
+import {
   decryptPayment,
   getPaymentsConverter,
+} from './converters/residents/payments'
+import {
   decryptAdjustment,
   getAdjustmentsConverter,
+} from './converters/residents/adjustments'
+import {
   decryptObservation,
   getObservationsConverter,
+} from './converters/residents/observations'
+import {
   decryptPrescription,
   getPrescriptionsConverter,
+} from './converters/residents/prescriptions'
+import {
   decryptCarePlan,
   getCarePlansConverter,
+} from './converters/residents/care-plans'
+import {
   decryptCarePlanActivity,
   getCarePlanActivitiesConverter,
-  decryptGoal,
-  getGoalsConverter,
+} from './converters/residents/care-plan-activities'
+import { decryptGoal, getGoalsConverter } from './converters/residents/goals'
+import {
   decryptProcedure,
   getProceduresConverter,
-  decryptTask,
-  getTasksConverter,
+} from './converters/residents/procedures'
+import { decryptTask, getTasksConverter } from './converters/residents/tasks'
+import {
   decryptEncounter,
   getEncountersConverter,
+} from './converters/residents/encounters'
+import {
   decryptEpisodesOfCare,
   getEpisodesOfCareConverter,
+} from './converters/residents/episodes-of-care'
+import {
   decryptIdentifier,
   getIdentifiersConverter,
+} from './converters/residents/identifiers'
+import {
   decryptAddress,
   getAddressesConverter,
-} from './converters'
+} from './converters/residents/addresses'
 
 export const subCollectionMap = {
   emergency_contacts: {

@@ -1,7 +1,7 @@
 import { z } from 'zod'
 import { ObservationStatusEnum } from '#root/types/enums'
 import { CodeableConceptSchema } from '../codeable-concept'
-import { ValueQuantitySchema } from '.'
+import { ValueQuantitySchema } from './value-quantity'
 
 export const ObservationSchema = z.object({
   id: z.string(),

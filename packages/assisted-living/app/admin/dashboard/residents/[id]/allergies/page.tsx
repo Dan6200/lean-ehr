@@ -11,7 +11,7 @@ import {
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { verifySession } from '#root/auth/server/definitions'
-import { Allergy } from '#root/types/schemas'
+import { Allergy } from '#root/types/schemas/clinical/allergy'
 
 export default async function AllergiesPage({
   params,

@@ -26,7 +26,7 @@ import {
   SelectValue,
 } from '#root/components/ui/select'
 import { ToggleGroup, ToggleGroupItem } from '#root/components/ui/toggle-group'
-import { FormattedChartData } from '#root/app/admin/dashboard/page'
+import { FormattedChartData } from '#root/types/dashboard'
 
 const chartConfig = {
   charges: {

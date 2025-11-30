@@ -5,7 +5,7 @@ import { Form } from '#root/components/ui/form'
 import { EditableFormField } from './EditableFormField'
 import { UploadButton } from '#root/components/cloudinary/upload-button'
 import { useEffect, useState } from 'react'
-import { getAllFacilities } from '#root/actions/residents/get'
+import { getAllFacilities } from '#root/actions/residents/get/facilities'
 import { Facility } from '#root/types/schemas/administrative/facility'
 import {
   Select,

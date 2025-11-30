@@ -7,7 +7,10 @@ import {
 import { Resident } from '#root/types/schemas/administrative/resident'
 import { EncryptedResidentSchema } from '#root/types/encrypted-schemas'
 import { verifySession } from '#root/auth/server/definitions'
-import { encryptResident, getResidentConverter } from '#root/types/converters'
+import {
+  encryptResident,
+  getResidentConverter,
+} from '#root/types/converters/residents/main'
 import { z } from 'zod'
 
 export async function updateResident(

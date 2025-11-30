@@ -6,7 +6,7 @@ import {
   Facility,
   FacilitySchema,
 } from '#root/types/schemas/administrative/facility'
-import { getFacilityConverter } from '#root/types/converters'
+import { getFacilityConverter } from '#root/types/converters/facilities'
 import { notFound } from 'next/navigation'
 
 export async function getAllFacilities(): Promise<Facility[]> {

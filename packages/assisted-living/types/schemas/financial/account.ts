@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { AccountBillingStatusConceptSchema } from '../codeable-concept'
-import { PeriodSchema } from '../clinical'
+import { PeriodSchema } from '../clinical/period'
 
 export const AccountSchema = z.object({
   id: z.string(),

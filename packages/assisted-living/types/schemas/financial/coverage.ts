@@ -1,6 +1,6 @@
 import { z } from 'zod'
 import { CoverageStatusEnum } from '#root/types/enums'
-import { PeriodSchema } from '../clinical'
+import { PeriodSchema } from '../clinical/period'
 
 export const CoverageSchema = z.object({
   id: z.string(),

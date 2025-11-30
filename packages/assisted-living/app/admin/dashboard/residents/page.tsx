@@ -1,4 +1,4 @@
-import { getAllResidents } from '#root/actions/residents/get'
+import { getAllResidents } from '#root/actions/residents/get/residents'
 import { ResidentsTable } from '#root/components/dashboard/residents-table'
 
 export default async function ResidentsPage() {

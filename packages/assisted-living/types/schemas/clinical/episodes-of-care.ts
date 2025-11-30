@@ -6,7 +6,7 @@ import {
   EpisodesOfCareTypeCode,
   SnomedConceptSchema,
 } from '../codeable-concept'
-import { PeriodSchema } from '.'
+import { PeriodSchema } from './period'
 
 export const EpisodesOfCareSchema = z.object({
   id: z.string(),

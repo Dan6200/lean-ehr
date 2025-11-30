@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import { AdministrationStatusEnum } from '#root/types/enums'
-import { MedicationSchema, StrengthSchema } from '.'
+import { MedicationSchema } from './medication'
+import { StrengthSchema } from './strength'
 import { CodeableConceptSchema } from '../codeable-concept'
 
 export type EmarRecord = z.infer<typeof EmarRecordSchema>
