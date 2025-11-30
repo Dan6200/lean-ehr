@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'packages/assisted-living/**'
+      - "packages/assisted-living/**"
   workflow_dispatch:
 
 jobs:
@@ -17,10 +17,10 @@ jobs:
       contents: read
 
     env:
-      PROJECT_ID: 'lean-ehr'
-      REGION: 'europe-west1'
-      SERVICE_NAME: 'assisted-living-app'
-      ARTIFACT_REPO: 'lean-ehr-repo'
+      PROJECT_ID: "lean-ehr"
+      REGION: "europe-west1"
+      SERVICE_NAME: "assisted-living-app"
+      ARTIFACT_REPO: "lean-ehr-repo"
 
     steps:
       - name: Checkout repository
@@ -29,8 +29,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/31765765651/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'assisted-living-app@lean-ehr.iam.gserviceaccount.com'
+          workload_identity_provider: "projects/31765765651/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          service_account: "assisted-living-app@lean-ehr.iam.gserviceaccount.com"
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -71,4 +71,7 @@ jobs:
             --min-instances 0 \
             --max-instances 5 \
             --allow-unauthenticated \
+            --network=default \
+            --subnet=default \
+            --vpc-egress=private-ranges-only \
             --set-env-vars="GCP_PROJECT_ID=${{ env.PROJECT_ID }},KMS_LOCATION=${{ env.REGION }},KMS_KEY_RING=${{ env.KMS_KEY_RING }},KEK_GENERAL_PATH=${{ env.KEK_GENERAL_PATH }},KEK_CONTACT_PATH=${{ env.KEK_CONTACT_PATH }},KEK_CLINICAL_PATH=${{ env.KEK_CLINICAL_PATH }},KEK_FINANCIAL_PATH=${{ env.KEK_FINANCIAL_PATH }},NEXT_PUBLIC_BQ_DATASET_ID=firestore_export_staging,REDIS_HOST=${{ secrets.REDIS_HOST }},REDIS_PORT=${{ secrets.REDIS_PORT }},REDIS_PASSWORD=${{ secrets.REDIS_PASSWORD }}"
