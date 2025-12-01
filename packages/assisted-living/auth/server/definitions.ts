@@ -1,7 +1,7 @@
 'use server'
 import { cookies } from 'next/headers'
 import { getAdminAuth } from '#root/firebase/admin'
-import redis from '#root/lib/redis'
+import getRedisClient from '#root/lib/redis'
 
 const STALE_COOKIE_TTL = 60 * 5 // 5 minutes
 
@@ -18,7 +18,7 @@ export async function verifySession() {
   }
 
   try {
-    const isStale = await redis.get(sessionCookie)
+    const isStale = await getRedisClient().get(sessionCookie)
     if (isStale) {
       throw new Error('Stale session cookie found in cache.')
     }
@@ -36,7 +36,7 @@ export async function verifySession() {
     return decodedClaims
   } catch (error) {
     if (!(error instanceof Error && error.message.includes('Stale'))) {
-      await redis.set(sessionCookie, 'stale', 'EX', STALE_COOKIE_TTL)
+      await getRedisClient().set(sessionCookie, 'stale', 'EX', STALE_COOKIE_TTL)
     }
     throw new Error('Invalid session cookie. Authentication failed.')
   }
@@ -49,7 +49,7 @@ export async function verifySession() {
 export async function deleteSessionCookie(): Promise<void> {
   const sessionCookie = (await cookies()).get('__session')?.value
   if (sessionCookie) {
-    await redis.set(sessionCookie, 'stale', 'EX', STALE_COOKIE_TTL)
+    await getRedisClient().set(sessionCookie, 'stale', 'EX', STALE_COOKIE_TTL)
   }
   ;(await cookies()).delete('__session')
 }

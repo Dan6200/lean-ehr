@@ -8,15 +8,23 @@
 import 'server-only'
 import Redis from 'ioredis'
 
-if (!process.env.REDIS_HOST || !process.env.REDIS_PORT) {
-  throw new Error('Redis environment variables are not set.')
+let redisClient: Redis | null = null
+
+export default function getRedisClient(): Redis {
+  if (redisClient) {
+    return redisClient
+  }
+
+  if (!process.env.REDIS_HOST || !process.env.REDIS_PORT) {
+    throw new Error('Redis environment variables are not set.')
+  }
+
+  redisClient = new Redis({
+    host: process.env.REDIS_HOST!,
+    port: parseInt(process.env.REDIS_PORT!, 10),
+    password: process.env.REDIS_PASSWORD,
+    connectTimeout: 100_000,
+  })
+
+  return redisClient
 }
-
-const redis = new Redis({
-  host: process.env.REDIS_HOST!,
-  port: parseInt(process.env.REDIS_PORT!, 10),
-  password: process.env.REDIS_PASSWORD,
-  connectTimeout: 100_000,
-})
-
-export default redis

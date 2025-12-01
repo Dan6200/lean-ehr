@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import redis from '#root/lib/redis'
+import getRedisClient from '#root/lib/redis'
 
 // Exported so we can set up GCP Memorystore with ioredis client...
 export const runtime = 'nodejs'
@@ -23,7 +23,7 @@ export async function middleware(request: NextRequest) {
 
   if (sessionCookie) {
     // Quick check against Redis deny-list.
-    const isStale = await redis.get(sessionCookie)
+    const isStale = await getRedisClient().get(sessionCookie)
     if (!isStale) {
       // If it's not in the deny-list, we can assume it's valid for middleware purposes.
       // The full verification will happen in the server action.
