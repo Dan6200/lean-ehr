@@ -21,6 +21,7 @@ jobs:
       REGION: "europe-west1"
       SERVICE_NAME: "assisted-living-app"
       ARTIFACT_REPO: "lean-ehr-repo"
+      CLOUDINARY_CLOUD_NAME: "dk6dujsds"
 
     steps:
       - name: Checkout repository
@@ -60,6 +61,7 @@ jobs:
             --build-arg NEXT_PUBLIC_FB_STORAGE_BUCKET="${{ secrets.FB_STORAGE_BUCKET }}" \
             --build-arg NEXT_PUBLIC_FB_APP_ID="${{ secrets.FB_APP_ID }}" \
             --build-arg NEXT_PUBLIC_FB_MESSAGING_SENDER_ID="${{ secrets.FB_MESSAGING_SENDER_ID }}" \
+            --build-arg NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME="${{ env.CLOUDINARY_CLOUD_NAME }}" \
             -f Dockerfile.prod .
 
       - name: Push Docker Image
