@@ -12,8 +12,6 @@ tmp_build/
 reader-for-code-snip.mjs
 shadcn-download.sh
 todo.md
-*.csv
-data/*.csv
 
 # dependencies
 /node_modules
