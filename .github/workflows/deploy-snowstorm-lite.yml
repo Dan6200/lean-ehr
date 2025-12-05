@@ -52,7 +52,5 @@ jobs:
             --project "${{ env.PROJECT_ID }}" \
             --allow-unauthenticated \
             --port ${{ env.SNOWSTORM_PORT }} \
-            --use-http2 \
-            --min-instances=1 \
             --set-env-vars="ADMIN_PASSWORD=${{ secrets.SNOWSTORM_ADMIN_PASSWORD }}" \
             --service-account="assisted-living-app@lean-ehr.iam.gserviceaccount.com" # Ensure this SA has 'roles/run.invoker' for other services to call it
