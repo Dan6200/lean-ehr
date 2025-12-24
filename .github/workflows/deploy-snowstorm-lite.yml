@@ -12,12 +12,12 @@ jobs:
       contents: read
 
     env:
-      PROJECT_ID: 'lean-ehr'
-      REGION: 'europe-west1'
-      SERVICE_NAME: 'snowstorm-lite-service'
-      ARTIFACT_REPO: 'lean-ehr-repo'
-      SNOWSTORM_IMAGE_SOURCE: 'snomedinternational/snowstorm-lite:latest'
-      SNOWSTORM_PORT: '8080' # Default port for Snowstorm-Lite
+      PROJECT_ID: "lean-ehr"
+      REGION: "europe-west1"
+      SERVICE_NAME: "snowstorm-lite-service"
+      ARTIFACT_REPO: "lean-ehr-repo"
+      SNOWSTORM_IMAGE_SOURCE: "snomedinternational/snowstorm-lite:latest"
+      SNOWSTORM_PORT: "8080" # Default port for Snowstorm-Lite
 
     steps:
       - name: Checkout repository
@@ -26,8 +26,8 @@ jobs:
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: 'projects/31765765651/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
-          service_account: 'assisted-living-app@lean-ehr.iam.gserviceaccount.com'
+          workload_identity_provider: "projects/31765765651/locations/global/workloadIdentityPools/github-pool/providers/github-provider"
+          service_account: "assisted-living-app@lean-ehr.iam.gserviceaccount.com"
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -35,14 +35,15 @@ jobs:
       - name: Configure Docker for Artifact Registry
         run: gcloud auth configure-docker ${{ env.REGION }}-docker.pkg.dev
 
-      - name: Pull and Re-tag Snowstorm-Lite Image
+      - name: Build and Push Custom Snowstorm-Lite Image
         run: |
-          docker pull ${{ env.SNOWSTORM_IMAGE_SOURCE }}
-          docker tag ${{ env.SNOWSTORM_IMAGE_SOURCE }} ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
-
-      - name: Push Snowstorm-Lite Image to Artifact Registry
-        run: |
-          docker push ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          docker build \
+            --tag "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}" \
+            --build-arg BUCKET_NAME="${{ env.BUCKET_NAME }}" \
+            --build-arg RF2_PREFIX="${{ env.RF2_PREFIX }}" \
+            --build-arg RF2_FILENAME="${{ env.RF2_FILENAME }}" \
+            -f deploy-snowstorm-lite/Dockerfile .
+          docker push "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}"
 
       - name: Deploy Snowstorm-Lite to Cloud Run
         run: |
@@ -56,7 +57,5 @@ jobs:
             --port ${{ env.SNOWSTORM_PORT }} \
             --min-instances=1 \
             --timeout=3600 \
-            --add-volume name=snomed-lite-volume,type=cloud-storage,bucket=lean-ehr-loinc-data-7776,readonly=false \
-            --add-volume-mount volume=snomed-lite-volume,mount-path=/app/lucene-index \
-            --set-env-vars="ADMIN_PASSWORD=${{ secrets.SNOWSTORM_ADMIN_PASSWORD }},INDEX_PATH=lucene-index/data" \
+            --set-env-vars="ADMIN_PASSWORD=${{ secrets.SNOWSTORM_ADMIN_PASSWORD }}" \
             --service-account="assisted-living-app@lean-ehr.iam.gserviceaccount.com" # Ensure this SA has 'roles/run.invoker' for other services to call it
