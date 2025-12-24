@@ -27,7 +27,7 @@ ENV RF2_PREFIX=snomed-packages/
 ENV RF2_FILENAME=uk_sct2cl_41.0.0_20250924000001Z.zip 
 
 # Install gcloud/gsutil in the builder stage to fetch the file
-RUN curl -sSL https://dl.google.com/dl/cloudsdk/install_google_cloud_sdk.bash | bash -s -- --install-dir=/opt/gcloud --quiet
+RUN curl -sSL https://sdk.cloud.google.com | bash -s -- --install-dir=/opt/gcloud --disable-prompts
 ENV PATH="/opt/gcloud/bin:${PATH}"
 
 # Fetch the large RF2 file directly during the build
