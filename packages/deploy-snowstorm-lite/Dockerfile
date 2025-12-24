@@ -26,6 +26,10 @@ ENV BUCKET_NAME=lean-ehr-loinc-data-7776
 ENV RF2_PREFIX=snomed-packages/
 ENV RF2_FILENAME=uk_sct2cl_41.0.0_20250924000001Z.zip 
 
+# Create user and group
+RUN addgroup --system --gid 1001 install
+RUN adduser --system --uid 1001 snowstorm
+
 # Install gcloud/gsutil in the builder stage to fetch the file
 RUN mkdir -p /opt/gcloud && curl -sSL https://sdk.cloud.google.com | bash -s -- --install-dir=/opt/gcloud --disable-prompts
 ENV PATH="/opt/gcloud/bin:${PATH}"
