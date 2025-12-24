@@ -153,6 +153,10 @@ export function PrescriptionsForm({
                               ],
                               text: option.label,
                             },
+                            strength: field.value?.strength || {
+                              value: 0,
+                              unit: '',
+                            },
                           })
                         }
                       }}
