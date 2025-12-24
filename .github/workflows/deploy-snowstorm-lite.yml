@@ -39,6 +39,7 @@ jobs:
         working-directory: ./packages/deploy-snowstorm-lite/
         run: |
           docker build \
+            --secret id=gcp_creds,src=${{ steps.auth.outputs.credentials_file_path }} \
             --tag "${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.ARTIFACT_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}" \
             --build-arg BUCKET_NAME="${{ env.BUCKET_NAME }}" \
             --build-arg RF2_PREFIX="${{ env.RF2_PREFIX }}" \

@@ -16,7 +16,10 @@ RUN curl -L -o ${JAR_FILE} \
     "https://github.com/IHTSDO/snowstorm-lite/releases/download/${SNOWSTORM_VERSION}/${JAR_FILE}"
 
 # Download Large RF2 file
-RUN mkdir -p input-rf2 && \
+RUN --mount=type=secret,id=gcp_creds \
+		export GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/gcp_creds && \
+		gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS && \
+		mkdir -p input-rf2 && \
     gsutil cp gs://${BUCKET_NAME}/${RF2_PREFIX}${RF2_FILENAME} input-rf2/
 
 # ----------------------------------------------------
